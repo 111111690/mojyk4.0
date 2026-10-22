@@ -120,6 +120,10 @@ figure .img + .img{border-top:none}
 figcaption{font-size:7.8pt;color:var(--muted);margin-top:1.5mm;line-height:1.55}
 figcaption b{color:var(--ink2)}
 .fig-no{color:var(--gold-d);font-weight:700;margin-right:1mm}
+.charts2{display:grid;grid-template-columns:1fr 1fr;gap:3mm 5mm;margin:3mm 0 1mm}
+.charts2 figure{margin:0}
+.charts2 figure .img{box-shadow:none}
+.charts2 figcaption{font-size:7.3pt;margin-top:1mm;line-height:1.5}
 
 /* 架构图 / 示意图 */
 .diagram{border:.5pt solid var(--line);border-radius:1.5mm;padding:4mm;background:#FEFCF7}
@@ -283,16 +287,16 @@ ol.num li b{color:var(--ink)}
   <h2><span class="no">·</span>目录</h2>
   <div class="toc">
     <div class="item"><span class="n">01</span><span class="t">项目背景与立项依据</span><span class="p">04</span></div>
-    <div class="item"><span class="n">02</span><span class="t">产品定义与用户价值</span><span class="p">06</span></div>
-    <div class="item"><span class="n">03</span><span class="t">技术架构与实现</span><span class="p">13</span></div>
-    <div class="item"><span class="n">04</span><span class="t">创新点与测试证据</span><span class="p">17</span></div>
-    <div class="item"><span class="n">05</span><span class="t">竞品对比与壁垒</span><span class="p">20</span></div>
-    <div class="item"><span class="n">06</span><span class="t">合规、安全与伦理</span><span class="p">21</span></div>
-    <div class="item"><span class="n">07</span><span class="t">市场与商业模式</span><span class="p">23</span></div>
-    <div class="item"><span class="n">08</span><span class="t">实施计划与团队</span><span class="p">25</span></div>
-    <div class="item"><span class="n">09</span><span class="t">社会价值与风险应对</span><span class="p">26</span></div>
-    <div class="item"><span class="n">A</span><span class="t">附录 A：数据口径速查表</span><span class="p">27</span></div>
-    <div class="item"><span class="n">B</span><span class="t">附录 B：术语、参考与演示脚本</span><span class="p">28</span></div>
+    <div class="item"><span class="n">02</span><span class="t">产品定义与用户价值</span><span class="p">07</span></div>
+    <div class="item"><span class="n">03</span><span class="t">技术架构与实现</span><span class="p">14</span></div>
+    <div class="item"><span class="n">04</span><span class="t">创新点与测试证据</span><span class="p">18</span></div>
+    <div class="item"><span class="n">05</span><span class="t">竞品对比与壁垒</span><span class="p">21</span></div>
+    <div class="item"><span class="n">06</span><span class="t">合规、安全与伦理</span><span class="p">23</span></div>
+    <div class="item"><span class="n">07</span><span class="t">市场与商业模式</span><span class="p">25</span></div>
+    <div class="item"><span class="n">08</span><span class="t">实施计划与团队</span><span class="p">27</span></div>
+    <div class="item"><span class="n">09</span><span class="t">社会价值与风险应对</span><span class="p">28</span></div>
+    <div class="item"><span class="n">A</span><span class="t">附录 A：数据口径速查表</span><span class="p">29</span></div>
+    <div class="item"><span class="n">B</span><span class="t">附录 B：术语、参考与演示脚本</span><span class="p">30</span></div>
   </div>
 
   <h3>图表索引（正文实拍与自制图）</h3>
@@ -314,6 +318,7 @@ ol.num li b{color:var(--ink)}
     <tr><td class="k">图 14</td><td>诈骗话术拦截（真实运行）</td><td>Demo 截图</td></tr>
     <tr><td class="k">图 15</td><td>风险四级处置</td><td>自制</td></tr>
   </table>
+  <p class="tiny">数据图 1—5：见 1.4 与 5.4，均为自制可视化；数据来源与口径写在图注，逐项对应附录 A。</p>
 
   <div class="note"><span class="t">阅读提示</span>第 3 章是技术评审的核心，第 4 章第 4 节是"我们怎么用测试证明自己"的完整记录，第 6 章是金融赛道的必拿分项。时间有限的评委，建议从执行摘要 → 第 4.4 节 → 第 6 章。</div>
   <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
@@ -354,10 +359,40 @@ ol.num li b{color:var(--ink)}
   <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
 </section>
 
+<section class="page compact">
+  <div class="head"><b>财小全 · 项目书</b><span>01 项目背景</span></div>
+
+  <h3>1.4 数据图解：基数、对账、保障与负债</h3>
+  <p>把前面三节的判断落到四个可核对的切面：服务对象有多大、对账差在哪、保障缺多少、负债压力有多高。图中每个数都能在附录 A 找到对应算式，口径写在图下，不用"约""左右"掩盖来源。</p>
+
+  <div class="charts2">
+    <figure>
+      <div class="img"><img src="assets/charts/market.png" alt="两组基数：个体工商户与老年人口"></div>
+      <figcaption><span class="fig-no">数据图 1</span>服务对象的基本盘。个体工商户 1.25 亿户、占经营主体近七成；60 岁及以上 3.2338 亿人、占全国人口 23.0%。来源：市场监管总局、2025 年末国家老龄事业发展公报。</figcaption>
+    </figure>
+    <figure>
+      <div class="img"><img src="assets/charts/recon.png" alt="9 月流水核对结果"></div>
+      <figcaption><span class="fig-no">数据图 2</span>对账痛点的一个真实样本。9 月 18 笔流水中 15 笔一致、2 笔缺票、1 笔金额不符；<b>单店样本，不代表总体比例</b>，只说明"对不上"的具体形态。</figcaption>
+    </figure>
+    <figure>
+      <div class="img"><img src="assets/charts/gap.png" alt="企业保障缺口"></div>
+      <figcaption><span class="fig-no">数据图 3</span>企业保障的责任口径。责任敞口 90.2 万、已有保障 16.0 万（80 万保单 × 20% 演示假设）、缺口 74.2 万；按压力口径（154.2 万 − 80 万）计算同样为 74.2 万。</figcaption>
+    </figure>
+    <figure>
+      <div class="img"><img src="assets/charts/dti.png" alt="三身份 DTI 对比"></div>
+      <figcaption><span class="fig-no">数据图 4</span>三身份 DTI（月还款 ÷ 月收入）。企业 17.6% 为净现金流口径（8.4% 仅作营收覆盖参考，不是标准 DTI）；家庭 20.1%；个人 53.3%，已越过月收入一半（虚线）。</figcaption>
+    </figure>
+  </div>
+
+  <div class="note"><span class="t">读图口径</span>四张图只回答"有多大、差在哪、缺多少、压力多高"，不推导市场规模；比例与样本不替代附录 A 的口径表。个人与家庭为 Demo 脱敏样本，企业为演示账本，均非真实客户数据。</div>
+
+  <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
+</section>
+
 <section class="page">
   <div class="head"><b>财小全 · 项目书</b><span>01 项目背景</span></div>
 
-  <h3>1.4 时机：为什么是现在</h3>
+  <h3>1.5 时机：为什么是现在</h3>
   <ul class="clean">
     <li><b>推理成本下降</b>，让"每个结论都再过一遍规则与检索"在经济上可行，而不是只做一次生成。</li>
     <li><b>RAG 工程成熟</b>，法规、条款、税率表可以版本化管理，回答能附文号而不是靠记忆。</li>
@@ -366,7 +401,7 @@ ol.num li b{color:var(--ink)}
   </ul>
   <p>四条叠加，才构成"可信财务 Agent"的窗口期。缺任何一条，产品要么算不准，要么落不了地。</p>
 
-  <h3>1.5 问题定义与项目边界</h3>
+  <h3>1.6 问题定义与项目边界</h3>
   <p>我们把问题收敛到三个 P0，其余全部放到路线图：</p>
   <table>
     <tr><th style="width:18%">P0 问题</th><th style="width:30%">可验证的定义</th><th>财小全的回答方式</th></tr>
@@ -379,7 +414,7 @@ ol.num li b{color:var(--ink)}
     不放贷、不卖保险、不代客操作、不做征信评分、不做授信额度建议、不推荐具体理财产品、不导流。这七条不是免责声明，而是写进代码的拒答模板（见 6.1 与图 12）。
   </div>
 
-  <h3>1.6 本项目的三个基本判断</h3>
+  <h3>1.7 本项目的三个基本判断</h3>
   <p><b>第一，评委不按功能数量打分，只按事实可验证度打分。</b>所以本册每个数字都给算式、给出处、能在 Demo 内复现；复现不了的，宁可删掉。</p>
   <p><b>第二，金融 AI 的价值链只有三段：算得对、说得清、管得住。</b>算得对靠规则引擎与税率表，说得清靠证据链与条款文号，管得住靠权限、审计与拒答。缺任何一段，方案都不成立。</p>
   <p><b>第三，比赛要展示一条完整可信链路，不是三个模式、九个角色。</b>所以 Demo 的演示范围明确为：<b>企业为主线、家庭为差异化亮点、个人做串联</b>；其余角色与能力写入路线图，避免范围稀释。</p>
@@ -858,6 +893,33 @@ ol.num li b{color:var(--ink)}
     <tr><td class="k">拒答模板与风险分级</td><td>前端卡片 + 关键词 / 意图规则</td><td>可迁移为合规中间件</td></tr>
   </table>
   <p>比赛提交的是 Demo，但交付的不是一次性演示：模型、权限、口径、拒答四层都可以直接进入工程化阶段，这是"可防御"的实质。</p>
+
+  <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
+</section>
+
+<section class="page compact">
+  <div class="head"><b>财小全 · 项目书</b><span>05 竞品与壁垒</span></div>
+
+  <h3>5.4 能力覆盖计分：把表 5.1 读成一张图</h3>
+  <p>计分只回答"有没有"，不衡量体验、客户基础与数据资产。<b>●</b> 计 2 分，<b>○</b> 计 1 分，<b>—</b> 计 0 分，7 个维度满分 14 分。折算结果与表 5.1 一一对应，可逐格复核。</p>
+
+  <figure>
+    <div class="img"><img src="assets/charts/competition.png" alt="竞品能力覆盖计分"></div>
+    <figcaption><span class="fig-no">数据图 5</span>能力覆盖计分。财小全 14/14；银行 App 与专业财税软件各 6 分，但强项完全不同；通用大模型与普通记账 App 均为 0 分。</figcaption>
+  </figure>
+
+  <table class="matrix" style="font-size:8.2pt">
+    <tr><th style="width:26%">产品</th><th>● 原生具备</th><th>○ 部分具备</th><th>— 不具备</th><th>得分</th></tr>
+    <tr><td class="k">财小全</td><td class="yes">7</td><td class="yes">0</td><td class="no">0</td><td class="yes"><b>14 / 14</b></td></tr>
+    <tr><td class="k">银行 App</td><td class="yes">1</td><td class="yes">4</td><td class="no">2</td><td><b>6 / 14</b></td></tr>
+    <tr><td class="k">专业财税软件</td><td class="yes">2</td><td class="yes">2</td><td class="no">3</td><td><b>6 / 14</b></td></tr>
+    <tr><td class="k">通用大模型</td><td class="no">0</td><td class="no">0</td><td class="no">7</td><td><b>0 / 14</b></td></tr>
+    <tr><td class="k">普通记账 App</td><td class="no">0</td><td class="no">0</td><td class="no">7</td><td><b>0 / 14</b></td></tr>
+  </table>
+
+  <p><b>读图三点。</b>① 财小全是唯一 7 项全具备的产品，但这是"覆盖"而非"体验领先"；② 银行 App 的 6 分集中在权限（●）与审计、健康分、四轮、适老（○），缺的是跨机构视图与家庭授权；③ 专业财税软件的 6 分集中在凭证与权限，缺的是自然语言入口与四轮闭环。</p>
+
+  <div class="note"><span class="t">计分边界</span>0 分不等于没有价值：通用大模型强在对话，记账 App 强在录入体验，只是这 7 个维度都不是它们的产品目标。本图用于说明"能力边界"，不作为市场份额或客户满意度的替代指标。</div>
 
   <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
 </section>
