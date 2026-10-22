@@ -103,9 +103,20 @@ figure{margin:4mm 0;break-inside:avoid}
 figure .img{border:.5pt solid var(--line);border-radius:1.5mm;overflow:hidden;background:#fff;
   box-shadow:0 1mm 3mm rgba(58,44,22,.08)}
 figure img{display:block;width:100%;height:auto}
-figure .img.sm{width:64%;margin:0 auto}
-figure .img.md{width:82%;margin:0 auto}
+figure .img.sm{width:58%;margin:0 auto}
+figure .img.md{width:74%;margin:0 auto}
 figure .img + .img{border-top:none}
+
+/* 紧凑页：用于内容略多的页面 */
+.page.compact p{margin-bottom:1.6mm}
+.page.compact h3{margin:4mm 0 1.5mm}
+.page.compact h4{margin:3mm 0 1mm}
+.page.compact table{margin:1.8mm 0 2.4mm}
+.page.compact td{padding:1.5mm 2mm}
+.page.compact .note,.page.compact .warn,.page.compact .ok{margin:2mm 0;padding:2.2mm 3mm}
+.page.tight table{font-size:8.1pt}
+.page.tight td{padding:1.35mm 1.8mm}
+.page.tight th{padding:1.6mm 1.8mm}
 figcaption{font-size:7.8pt;color:var(--muted);margin-top:1.5mm;line-height:1.55}
 figcaption b{color:var(--ink2)}
 .fig-no{color:var(--gold-d);font-weight:700;margin-right:1mm}
@@ -231,7 +242,7 @@ ol.num li b{color:var(--ink)}
 </section>
 
 <!-- ============ 执行摘要 ============ -->
-<section class="page">
+<section class="page compact">
   <div class="head"><b>财小全 · 项目书</b><span>执行摘要</span></div>
   <h2><span class="no">00</span>执行摘要</h2>
 
@@ -251,7 +262,7 @@ ol.num li b{color:var(--ink)}
     <div class="stat"><div class="n">7 个</div><div class="l">演示身份（3 主账号 + 4 子账号）</div><div class="s">9 类角色已定义</div></div>
   </div>
 
-  <div class="note"><span class="t">本册的写法</span>不引用无法复现的规模数字，不把用户基数当市场规模，不写"所有数据仅存本机"这类与实现矛盾的表述。凡涉及假设，均在括号内标注「演示假设」；凡涉及边界，均单列"不做什么"。</div>
+  <div class="note"><span class="t">本册的写法</span>不引用无法复现的规模数字，不把用户基数当市场规模，不写与实现矛盾的"仅存本机"。凡涉及假设，均在括号内标注「演示假设」。</div>
 
   <h3>评委四个问题，对应四章答案</h3>
   <table>
@@ -262,7 +273,7 @@ ol.num li b{color:var(--ink)}
     <tr><td class="k">能落地吗？合规吗？</td><td>单 HTML 现场演示、三端出口、不碰真实资金、四级风险处置</td><td>第 6、7 章</td></tr>
   </table>
 
-  <p class="tiny">注：本册所有截图均来自 2026-10-22 对 Demo 的真实运行测试，未做界面美化或数据篡改；截图中的数字与附录 A 口径表逐一对应。</p>
+  <p class="tiny">注：本册截图均来自 2026-10-22 对 Demo 的真实运行测试，未做美化或改数；数字与附录 A 逐一对应。</p>
   <div class="foot"><span>财小全 · 账税贷保全维财务中枢 Agent</span><span class="pn"></span></div>
 </section>
 
@@ -273,15 +284,15 @@ ol.num li b{color:var(--ink)}
   <div class="toc">
     <div class="item"><span class="n">01</span><span class="t">项目背景与立项依据</span><span class="p">04</span></div>
     <div class="item"><span class="n">02</span><span class="t">产品定义与用户价值</span><span class="p">06</span></div>
-    <div class="item"><span class="n">03</span><span class="t">技术架构与实现</span><span class="p">10</span></div>
-    <div class="item"><span class="n">04</span><span class="t">创新点与测试证据</span><span class="p">13</span></div>
-    <div class="item"><span class="n">05</span><span class="t">竞品对比与壁垒</span><span class="p">16</span></div>
-    <div class="item"><span class="n">06</span><span class="t">合规、安全与伦理</span><span class="p">17</span></div>
-    <div class="item"><span class="n">07</span><span class="t">市场与商业模式</span><span class="p">19</span></div>
-    <div class="item"><span class="n">08</span><span class="t">实施计划与团队</span><span class="p">20</span></div>
-    <div class="item"><span class="n">09</span><span class="t">社会价值与风险应对</span><span class="p">21</span></div>
-    <div class="item"><span class="n">A</span><span class="t">附录 A：数据口径速查表</span><span class="p">22</span></div>
-    <div class="item"><span class="n">B</span><span class="t">附录 B：术语、参考与演示脚本</span><span class="p">23</span></div>
+    <div class="item"><span class="n">03</span><span class="t">技术架构与实现</span><span class="p">13</span></div>
+    <div class="item"><span class="n">04</span><span class="t">创新点与测试证据</span><span class="p">17</span></div>
+    <div class="item"><span class="n">05</span><span class="t">竞品对比与壁垒</span><span class="p">20</span></div>
+    <div class="item"><span class="n">06</span><span class="t">合规、安全与伦理</span><span class="p">21</span></div>
+    <div class="item"><span class="n">07</span><span class="t">市场与商业模式</span><span class="p">23</span></div>
+    <div class="item"><span class="n">08</span><span class="t">实施计划与团队</span><span class="p">25</span></div>
+    <div class="item"><span class="n">09</span><span class="t">社会价值与风险应对</span><span class="p">26</span></div>
+    <div class="item"><span class="n">A</span><span class="t">附录 A：数据口径速查表</span><span class="p">27</span></div>
+    <div class="item"><span class="n">B</span><span class="t">附录 B：术语、参考与演示脚本</span><span class="p">28</span></div>
   </div>
 
   <h3>图表索引（正文实拍与自制图）</h3>
@@ -459,11 +470,26 @@ ol.num li b{color:var(--ink)}
     <figcaption><span class="fig-no">图 3</span><b>9 月收支速览（真实运行）。</b>9 笔收入合计 ¥120,000、9 笔支出合计 ¥62,500、净流入 ¥57,500；下方直接列出 3 项待核对：A004（¥9,600）缺票、A018（¥6,800）缺票、A007 与发票差 ¥100，并提供流水号区间与账期。</figcaption>
   </figure>
 
+  <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
+</section>
+
+<section class="page">
+  <div class="head"><b>财小全 · 项目书</b><span>02 产品定义</span></div>
+
   <figure>
     <div class="img sm"><img src="assets/screenshots/q2-top-crop.png" alt="Q3增值税提问与税负速览"></div>
     <div class="img sm"><img src="assets/screenshots/q2-bot-crop.png" alt="Q3增值税结论与依据"></div>
     <figcaption><span class="fig-no">图 4</span><b>Q3 增值税测算（真实运行，上、下为同一回答的连续两屏）。</b>用户问"我这个季度要交多少增值税"，系统先给税负速览（季度销售额 ¥342,500、起征点 ¥300,000 已超过、征收率 3% 减按 1%），再给结论 ¥3,425 与算式 342,500 × 1%，并附《2026 年第 10 号公告》第一条、第三条（三）6 的条款位置。</figcaption>
   </figure>
+
+  <h3>2.5.1 三步演示，三步都要有据</h3>
+  <table>
+    <tr><th style="width:14%">步骤</th><th style="width:28%">用户看到什么</th><th>对应的证据</th></tr>
+    <tr><td class="k">看板</td><td>净流入 ¥57,500、Q3 增值税 ¥3,425</td><td>四张指标卡；柱状图标注"7/8 月为假设、9 月为流水实计"</td></tr>
+    <tr><td class="k">对账</td><td>3 项待核对（两笔缺票、一笔差 ¥100）</td><td>凭证编号、缺票标记、流水号区间与账期</td></tr>
+    <tr><td class="k">税务</td><td>应缴 ¥3,425</td><td>算式 342,500 × 1%、起征点判断、条款文号</td></tr>
+  </table>
+  <p>三步连起来，才构成"从一笔流水到一份税额"的完整链路。单独看任何一步都只是功能，连起来才是可审计的流程。</p>
 
   <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
 </section>
@@ -639,13 +665,8 @@ ol.num li b{color:var(--ink)}
   <div class="head"><b>财小全 · 项目书</b><span>03 技术架构</span></div>
 
   <figure>
-    <div class="img"><img src="assets/screenshots/members-2-c.png" alt="成员与权限矩阵"></div>
+    <div class="img md"><img src="assets/screenshots/members-2-c.png" alt="成员与权限矩阵"></div>
     <figcaption><span class="fig-no">图 10</span><b>成员与权限（真实运行）。</b>3 条待审批申请（财税顾问、消费成员、长辈关怀），每条写明申请加入的模式与查看范围；已授权 5 人；下方实时权限矩阵按"子账号 × 数据类型"给出可见性。页脚写清：子账号由本人申请、主账号审批，主账号的权限是"审批与授权"，不是"代建与代办"。</figcaption>
-  </figure>
-
-  <figure>
-    <div class="img"><img src="assets/screenshots/audit-2-c.png" alt="审计回放"></div>
-    <figcaption><span class="fig-no">图 11</span><b>审计回放（真实运行）。</b>顶部汇总授权 0 次、查询 2 次、计算 0 次、视图切换 5 次、异常 0 次；下方按时间倒序列出 7 条操作（打开视图、打开场景、切换身份、载入演示用户、系统就绪），每条带身份与 key，底部可导出审计报告。</figcaption>
   </figure>
 
   <h3>3.6 部署方案：演示版与生产版必须分开说</h3>
@@ -657,6 +678,17 @@ ol.num li b{color:var(--ink)}
     <tr><td class="k">数据源</td><td>脱敏模拟账本与票据</td><td>银行开放 API、税务/发票接口、OCR 服务</td></tr>
     <tr><td class="k">选型理由</td><td>比赛现场可验证、零部署、断网可用</td><td>不改变上层编排，只替换数据源与存储</td></tr>
   </table>
+
+  <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
+</section>
+
+<section class="page">
+  <div class="head"><b>财小全 · 项目书</b><span>03 技术架构</span></div>
+
+  <figure>
+    <div class="img md"><img src="assets/screenshots/audit-2-c.png" alt="审计回放"></div>
+    <figcaption><span class="fig-no">图 11</span><b>审计回放（真实运行）。</b>顶部汇总授权 0 次、查询 2 次、计算 0 次、视图切换 5 次、异常 0 次；下方按时间倒序列出 7 条操作（打开视图、打开场景、切换身份、载入演示用户、系统就绪），每条带身份与 key，底部可导出审计报告。</figcaption>
+  </figure>
 
   <h3>3.7 数据流向的诚实表述</h3>
   <div class="warn"><span class="t">不写"所有数据仅存本机、不上传"</span>
@@ -679,7 +711,7 @@ ol.num li b{color:var(--ink)}
 </section>
 
 <!-- ============ 第 4 章 ============ -->
-<section class="page">
+<section class="page compact">
   <div class="head"><b>财小全 · 项目书</b><span>04 创新点</span></div>
   <h2><span class="no">04</span>创新点与测试证据</h2>
   <p>原方案列了 8 个"创新点"，其中"四轮驱动""权限生效""适老"容易被评委归为产品设计。本章收敛为<b>4 个可证伪的核心创新 + 4 个支撑特性</b>，每个创新都给出对比基线与现场判据。</p>
@@ -722,7 +754,7 @@ ol.num li b{color:var(--ink)}
   <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
 </section>
 
-<section class="page">
+<section class="page compact">
   <div class="head"><b>财小全 · 项目书</b><span>04 创新点</span></div>
 
   <h3>4.3 与通用大模型的本质区别</h3>
@@ -791,7 +823,7 @@ ol.num li b{color:var(--ink)}
 </section>
 
 <!-- ============ 第 5 章 ============ -->
-<section class="page">
+<section class="page compact">
   <div class="head"><b>财小全 · 项目书</b><span>05 竞品与壁垒</span></div>
   <h2><span class="no">05</span>竞品对比与壁垒</h2>
 
@@ -909,7 +941,7 @@ ol.num li b{color:var(--ink)}
 </section>
 
 <!-- ============ 第 7 章 ============ -->
-<section class="page">
+<section class="page compact">
   <div class="head"><b>财小全 · 项目书</b><span>07 市场与商业</span></div>
   <h2><span class="no">07</span>市场与商业模式</h2>
 
@@ -930,6 +962,12 @@ ol.num li b{color:var(--ink)}
     <tr><td class="k">银行 / 代账机构</td><td>可审计的 AI 能力，降低人工复核与合规成本</td><td>技术服务费（License + 实施）</td></tr>
     <tr><td class="k">家庭</td><td>老人账单看护、授权可收回、异常可推送</td><td>个人版基础免费 + 高级订阅</td></tr>
   </table>
+
+  <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
+</section>
+
+<section class="page">
+  <div class="head"><b>财小全 · 项目书</b><span>07 市场与商业</span></div>
 
   <h3>7.3 收入模式（与"不推荐、不导流"一致）</h3>
   <table>
@@ -1033,7 +1071,7 @@ ol.num li b{color:var(--ink)}
 </section>
 
 <!-- ============ 附录 A ============ -->
-<section class="page">
+<section class="page compact tight">
   <div class="head"><b>财小全 · 项目书</b><span>附录 A 口径速查</span></div>
   <h2><span class="no">A</span>附录 A：数据口径速查表</h2>
   <p>下表是本册与 Demo 的唯一数字来源。任何引用与此表冲突，以本表为准；本表与 Demo 冲突，以 Demo 自检结果为准并回改本表。</p>
@@ -1099,6 +1137,12 @@ ol.num li b{color:var(--ink)}
     <tr><td class="k">6</td><td>《反电信网络诈骗法》</td><td>96110 指引、诈骗话术拦截</td></tr>
   </table>
   <p class="tiny">建议补充 2 篇行业报告（小微企业数字化、适老化金融），并在提交前核对政策文号与生效时间。</p>
+
+  <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
+</section>
+
+<section class="page">
+  <div class="head"><b>财小全 · 项目书</b><span>附录 B 术语与演示</span></div>
 
   <h3>B.3 五分钟演示脚本</h3>
   <table>
