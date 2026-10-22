@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>财小全 · E-R 图（单文件版）</title>
+<style>
+:root{
+  --bg:#FBF8F1; --panel:#FFF; --line:#E7DFCE; --line2:#D8CCB2;
+  --ink:#2A2418; --ink2:#6B6152; --faint:#948B78;
+  --brand:#C8901A; --brand-dark:#8A6419; --brand-soft:#FDF4DC;
+  --ent-fill:#FDF4DC; --ent-line:#C8901A;
+  --alt-fill:#E6F1FB; --alt-line:#185FA5;
+  --warn:#A32D2D; --warn-bg:#FCEBEB;
+  --der:#7F77DD; --der-bg:#F3EEFF;
+  --ok:#3B6D11; --ok-bg:#EAF3DE;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:14px;line-height:1.65}
+.wrap{max-width:1340px;margin:0 auto;padding:26px 20px 60px}
+.hero{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 26px;margin-bottom:18px}
+.hero h1{margin:0 0 6px;font-size:21px;font-weight:600}
+.hero p{margin:0;color:var(--ink2);font-size:13px}
+.stats{display:flex;flex-wrap:wrap;gap:9px;margin-top:16px}
+.stat{background:var(--brand-soft);border:1px solid #EFD9A0;border-radius:9px;padding:8px 14px;min-width:84px}
+.stat .n{font-size:19px;font-weight:600;color:var(--brand-dark);line-height:1.2}
+.stat .l{font-size:11px;color:var(--ink2)}
+.tabs{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+.tab{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:6px 15px;
+  font-size:12.5px;cursor:pointer;color:var(--ink2);font-family:inherit;transition:.15s}
+.tab:hover{border-color:var(--brand);color:var(--brand-dark)}
+.tab.on{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:500}
+.sec{margin-top:18px}
+.sec h2{font-size:16px;font-weight:600;margin:0 0 3px;display:flex;align-items:center;gap:8px}
+.sec h2::before{content:"";width:4px;height:15px;background:var(--brand);border-radius:2px}
+.sec .sub{color:var(--ink2);font-size:12.5px;margin:0 0 12px}
+.stage{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px;overflow:auto}
+.stage svg{display:block}
+.ent rect.b{fill:var(--ent-fill);stroke:var(--ent-line);stroke-width:1.5}
+.ent.alt rect.b{fill:var(--alt-fill);stroke:var(--alt-line)}
+.ent.warn rect.b{fill:var(--warn-bg);stroke:var(--warn)}
+.ent.der rect.b{fill:var(--der-bg);stroke:var(--der);stroke-dasharray:5 3}
+.ent{color:#8A6419}
+.ent.alt{color:#185FA5}
+.ent.warn{color:#A32D2D}
+.ent.der{color:#6C5FD4}
+.ent .ic{display:block}
+.ent .nm{font-size:14px;font-weight:600;fill:#2A2418;text-anchor:middle}
+.ent.warn .nm{fill:#7A2020}
+.ent.der .nm{fill:#4A3FA0}
+.ent.note rect.b{fill:#FFF9EC;stroke:#D9B96A;stroke-dasharray:6 4;stroke-width:1.4}
+.ent.note .nt-t{font-size:13px;font-weight:700;fill:#8A6419;text-anchor:middle}
+.ent.note .nt-l{font-size:11.5px;fill:#5C5236}
+
+.ent .tbl{font-size:8.5px;fill:var(--faint);text-anchor:middle;font-family:ui-monospace,Menlo,Consolas,monospace}
+.a-row{fill:#FCFAF5;stroke:#E2DAC8;stroke-width:.8}
+.a-row.p{fill:#FFF3D6;stroke:#E0BE7A}
+.a-row.f{fill:#EFF5FB;stroke:#B8D4EC}
+.at{font-size:10.5px;fill:#3A3428;dominant-baseline:central}
+.at.p{fill:#7A5A10;font-weight:600}
+.at.f{fill:#18568F;font-weight:600}
+.ak{font-size:8px;font-weight:700;fill:#B08730;letter-spacing:.2px}
+.ak.f{fill:#18568F}
+.rel-l{font-size:12.5px;font-weight:600;fill:#3A3226;text-anchor:middle}
+.rel-l.paint{paint-order:stroke;stroke:#FFF;stroke-width:5px}
+.card-l{font-size:10px;font-weight:700;fill:#7A5A10}
+.card-l.paint{paint-order:stroke;stroke:#FFF;stroke-width:5px;stroke-linejoin:round}
+.ln{fill:none;stroke:#9C9484;stroke-width:1.4}
+.cf{fill:none;stroke:#8A8071;stroke-width:1.7;stroke-linecap:round}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:12px;padding:11px 15px;background:var(--panel);
+  border:1px solid var(--line);border-radius:10px;font-size:11.5px;color:var(--ink2);align-items:center}
+.legend .li{display:flex;align-items:center;gap:6px}
+.sw{width:20px;height:13px;border-radius:3px;border:1.5px solid}
+.sw1{background:var(--ent-fill);border-color:var(--ent-line)}
+.sw2{background:var(--warn-bg);border-color:var(--warn)}
+.sw3{background:var(--der-bg);border-color:var(--der)}
+.sw4{background:#EFF5FB;border-color:var(--alt-line)}
+.sw5{background:#FFF9EC;border-color:#D9B96A;border-style:dashed}
+.note{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--brand);
+  border-radius:0 10px 10px 0;padding:12px 16px;font-size:12.5px;color:var(--ink2);margin-top:14px}
+.note b{color:var(--ink)}
+ul.plain{margin:8px 0 0;padding-left:19px;font-size:12.5px;color:var(--ink2)}
+ul.plain li{margin-bottom:4px}
+code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;
+  background:var(--brand-soft);padding:1px 5px;border-radius:4px;color:var(--brand-dark)}
+
+/* ============ 启动引导 ============ */
+.mask{position:fixed;inset:0;background:rgba(42,36,24,.55);z-index:99;
+  display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(2px)}
+.mask.hide{display:none}
+.boot{background:var(--panel);border-radius:16px;padding:28px 30px;max-width:520px;width:100%;
+  box-shadow:0 24px 60px -20px rgba(42,36,24,.5)}
+.boot h3{margin:0 0 4px;font-size:18px;font-weight:600}
+.boot .tip{color:var(--ink2);font-size:12.5px;margin-bottom:18px}
+.fld{margin-bottom:14px}
+.fld label{display:block;font-size:12.5px;font-weight:500;margin-bottom:5px}
+.fld input,.fld select,.fld textarea{width:100%;padding:9px 11px;border:1px solid var(--line2);
+  border-radius:8px;font-size:13px;font-family:inherit;color:var(--ink);background:#fff}
+.fld input:focus,.fld select:focus{outline:none;border-color:var(--brand);
+  box-shadow:0 0 0 3px rgba(200,144,26,.14)}
+.fld .hint{font-size:11px;color:var(--faint);margin-top:4px}
+.fld .hint a{color:var(--brand-dark)}
+.boot .row2{display:flex;gap:10px}
+.boot .row2>*{flex:1}
+.boot .acts{display:flex;gap:9px;margin-top:20px}
+.btn{flex:1;padding:10px 16px;border-radius:9px;font-size:13.5px;cursor:pointer;font-family:inherit;
+  border:1px solid var(--line2);background:#fff;color:var(--ink2);transition:.15s}
+.btn:hover{border-color:var(--brand);color:var(--brand-dark)}
+.btn.pri{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:500}
+.btn.pri:hover{background:var(--brand-dark);border-color:var(--brand-dark);color:#fff}
+.msg{font-size:12px;padding:8px 11px;border-radius:7px;margin-top:12px;display:none}
+.msg.show{display:block}
+.msg.err{background:var(--warn-bg);color:var(--warn);border:1px solid #F0BFBF}
+.msg.ok{background:var(--ok-bg);color:var(--ok);border:1px solid #C0DD97}
+.msg.info{background:var(--alt-fill);color:var(--alt-line);border:1px solid #B5D4F4}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:12px}
+.modeltag{font-size:11.5px;color:var(--faint);display:flex;align-items:center;gap:8px}
+.modeltag b{color:var(--brand-dark);font-weight:500}
+</style>
+</head>
+<body>
+
+<!-- ============ 启动引导 ============ -->
+<div class="mask" id="mask">
+  <div class="boot">
+    <h3>连接大模型</h3>
+    <div class="tip">本页面为单文件应用，直接双击打开即可。填写你的 API Key 后，浏览器会直连 DeepSeek，无需安装任何环境。</div>
+
+    <div class="fld">
+      <label>API Key</label>
+      <input type="password" id="apiKey" placeholder="sk-..." autocomplete="off" spellcheck="false">
+      <div class="hint">从 <a href="https://platform.deepseek.com" target="_blank">platform.deepseek.com</a> 获取。密钥仅保存在你本机浏览器，不会上传到任何服务器。</div>
+    </div>
+
+    <div class="row2">
+      <div class="fld">
+        <label>接口地址</label>
+        <input type="text" id="baseUrl" value="https://api.deepseek.com/v1" spellcheck="false">
+      </div>
+      <div class="fld">
+        <label>模型</label>
+        <select id="model">
+          <option value="deepseek-chat">deepseek-chat</option>
+          <option value="deepseek-reasoner">deepseek-reasoner</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="fld">
+      <label>测试连接（可选）</label>
+      <div class="acts" style="margin-top:0">
+        <button class="btn" id="btnTest">测试连通性</button>
+        <button class="btn" id="btnSkip">跳过，直接看图</button>
+      </div>
+      <div class="msg" id="testMsg"></div>
+    </div>
+
+    <div class="acts">
+      <button class="btn pri" id="btnSave">保存并进入</button>
+    </div>
+    <div class="msg" id="saveMsg"></div>
+  </div>
+</div>
+
+<div class="wrap" id="app" style="display:none">
+  <div class="hero">
+    <h1>财小全 · 全中文 E-R 图 <span style="font-size:11.5px;font-weight:600;background:var(--brand-soft,#FBEBC8);color:#8A6419;padding:2px 9px;border-radius:999px;vertical-align:middle;margin-left:8px">构建 v2.9 · 归集流水已置于线上</span></h1>
+    <p>面向小微个体工商户的最简权限模型：<b>不设法人与管理员</b>，用「主账号 + 子账号 + 授权范围」解决全部权限诉求。实体名、属性名、关系名全部中文，每个实体配有规范图标。</p>
+    <div class="stats">
+      <div class="stat"><div class="n" id="s-ent">-</div><div class="l">实体</div></div>
+      <div class="stat"><div class="n" id="s-rel">-</div><div class="l">关系</div></div>
+      <div class="stat"><div class="n" id="s-fig">-</div><div class="l">分图</div></div>
+      <div class="stat"><div class="n" id="s-col">-</div><div class="l">属性项</div></div>
+      <div class="stat"><div class="n" id="s-view">-</div><div class="l">派生视图</div></div>
+    </div>
+  </div>
+
+  <div class="topbar">
+    <div class="tabs" id="tabs"></div>
+    <div class="modeltag">当前模型 <b id="mtag">未配置</b> · <a href="#" id="reCfg" style="color:var(--brand-dark)">重新配置</a></div>
+  </div>
+
+  <div class="sec" style="margin-top:0">
+    <h2 id="ttl">—</h2>
+    <p class="sub" id="dsc">—</p>
+    <div class="stage"><svg id="svg" width="100%"></svg></div>
+    <div class="legend">
+      <div class="li"><span class="sw sw1"></span>数据实体（建表）</div>
+      <div class="li"><span class="sw sw3"></span>派生视图（实时计算，不建表）</div>
+      <div class="li"><span class="sw sw5"></span>举例说明（不建表）</div>
+      <div class="li" style="color:var(--faint)">金色 PK = 主键　蓝色 FK = 外键</div>
+      <div class="li"><svg viewBox="0 0 30 14" style="width:30px;height:14px"><line class="cf" x1="0" y1="7" x2="18" y2="7"/><line class="cf" x1="19" y1="2" x2="19" y2="12"/><circle cx="24" cy="7" r="3.2" fill="#8A6419"/></svg>恰好一个</div>
+      <div class="li"><svg viewBox="0 0 30 14" style="width:30px;height:14px"><line class="cf" x1="0" y1="7" x2="14" y2="7"/><path class="cf" d="M14,7 L26,1"/><path class="cf" d="M14,7 L26,13"/><path class="cf" d="M14,7 L28,7"/></svg>多个（鱼尾）</div>
+      <div class="li"><svg viewBox="0 0 30 14" style="width:30px;height:14px"><line class="cf" x1="0" y1="7" x2="18" y2="7"/><circle cx="23" cy="7" r="3.8" fill="#FFF" stroke="#8A6419" stroke-width="1.3"/></svg>零或一个</div>
+    </div>
+  </div>
+
+  <div class="note">
+    <b>小微轻量设计说明：</b>
+    <ul class="plain">
+      <li><b>不设法人</b> —— 目标用户是小微个体户，法人即经营者本人，一人兼任是常态</li>
+      <li><b>不设管理员</b> —— 小微没有专职管理员岗位，主账号自己管子账号即可</li>
+      <li><b>授权无需审批流</b> —— 主账号直接授权即可生效，随时可收回；范围支持「账本类型 / 业务域 / 单个对象」三级粒度</li>
+      <li><b>敏感动作二次确认</b> —— 导出、授权、改保单等动作需输密码，替代法人的事前把关</li>
+      <li><b>审计日志人人可查自己</b> —— 每个账号可查自己的操作记录，主账号可查全部，替代法人的追溯职责</li>
+      <li><b>紫色虚线框是数据库视图</b> —— DTI、保障缺口、健康分、有效权限全部实时算出，不建表</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+/* ============ 启动逻辑 ============ */
+const LS_KEY = 'cxq_llm_config';
+const mask = document.getElementById('mask');
+const app  = document.getElementById('app');
+
+function show(id, kind, text){
+  const el = document.getElementById(id);
+  el.className = 'msg show ' + kind;
+  el.textContent = text;
+}
+function hide(id){ document.getElementById(id).className = 'msg'; }
+
+function loadCfg(){
+  try { return JSON.parse(localStorage.getItem(LS_KEY) || 'null'); }
+  catch(e){ return null; }
+}
+function saveCfg(c){
+  localStorage.setItem(LS_KEY, JSON.stringify(c));
+}
+
+function enter(c){
+  if (c && c.key) document.getElementById('mtag').textContent = c.model || 'deepseek-chat';
+  mask.classList.add('hide');
+  app.style.display = '';
+  draw();
+}
+
+document.getElementById('btnSave').onclick = () => {
+  hide('saveMsg'); hide('testMsg');
+  const key = document.getElementById('apiKey').value.trim();
+  if (!key){ show('saveMsg','err','请填写 API Key，或点「跳过，直接看图」'); return; }
+  const cfg = {
+    key: key,
+    baseUrl: document.getElementById('baseUrl').value.trim() || 'https://api.deepseek.com/v1',
+    model: document.getElementById('model').value
+  };
+  saveCfg(cfg);
+  show('saveMsg','ok','已保存，正在进入…');
+  setTimeout(function(){ enter(cfg); }, 400);
+};
+
+document.getElementById('btnSkip').onclick = function(){ enter(null); };
+document.getElementById('reCfg').onclick = function(e){
+  e.preventDefault();
+  const c = loadCfg();
+  if (c){
+    document.getElementById('apiKey').value = c.key || '';
+    document.getElementById('baseUrl').value = c.baseUrl || 'https://api.deepseek.com/v1';
+    document.getElementById('model').value = c.model || 'deepseek-chat';
+  }
+  mask.classList.remove('hide');
+};
+
+document.getElementById('btnTest').onclick = async function(){
+  hide('testMsg'); hide('saveMsg');
+  const key = document.getElementById('apiKey').value.trim();
+  if (!key){ show('testMsg','err','请先填写 API Key'); return; }
+  const baseUrl = (document.getElementById('baseUrl').value.trim() || 'https://api.deepseek.com/v1').replace(/\/+$/,'');
+  const model = document.getElementById('model').value;
+  show('testMsg','info','正在测试连通性…');
+  try{
+    const resp = await fetch(baseUrl + '/chat/completions', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','Authorization':'Bearer ' + key},
+      body: JSON.stringify({model:model, messages:[{role:'user',content:'ping'}], max_tokens:5})
+    });
+    if (resp.ok){
+      show('testMsg','ok','连接成功，可以保存进入');
+    } else {
+      const t = await resp.text();
+      show('testMsg','err','连接失败（HTTP '+resp.status+'）：'+t.slice(0,160));
+    }
+  } catch(e){
+    show('testMsg','err','请求失败：'+e.message+'。若为跨域问题，请检查接口地址是否正确。');
+  }
+};
+
+/* 启动 */
+(function(){
+  const c = loadCfg();
+  if (c && c.key){
+    document.getElementById('apiKey').value = c.key;
+    if (c.baseUrl) document.getElementById('baseUrl').value = c.baseUrl;
+    if (c.model) document.getElementById('model').value = c.model;
+  }
+  // 仅在已配置 Key 时自动进入；首次打开必须停留在配置引导
+  if (c && c.key){
+    setTimeout(function(){ enter(c); }, 200);
+  } else {
+    setTimeout(function(){ mask.classList.remove('hide'); app.style.display = 'none'; }, 60);
+  }
+})();
+
+const ICONS = {
+ "icon": {
+  "account_identity": "<rect x=\"2\" y=\"2\" width=\"12\" height=\"12\" rx=\"1\"/><circle cx=\"6\" cy=\"6.5\" r=\"1.6\"/><path d=\"M4 11c0-1.4 1-2.2 2-2.2s2 .8 2 2.2\"/><path d=\"M9.5 6h2.5M9.5 9h2.5\"/>",
+  "book_share": "<path d=\"M2 3h4a2 2 0 012 2v8a2 2 0 00-2-2H2z\"/><path d=\"M11 5.5l2.5 2-2.5 2\"/><path d=\"M13.5 7.5H8\"/>",
+  "account": "<circle cx=\"7\" cy=\"5\" r=\"3\"/><path d=\"M2 13c0-2.8 2.2-5 5-5s5 2.2 5 5\"/>",
+  "role": "<rect x=\"2\" y=\"5\" width=\"12\" height=\"7\" rx=\"1\"/><circle cx=\"8\" cy=\"8.5\" r=\"2\"/>",
+  "permission": "<path d=\"M10 2l4 2v4c0 2.5-1.7 4.6-4 5.3C7.7 12.6 6 10.5 6 8V4z\"/>",
+  "grant_record": "<path d=\"M2 8h7M7 5l3 3-3 3\"/><circle cx=\"12\" cy=\"8\" r=\"2\"/>",
+  "sensitive_action": "<path d=\"M10 2L4 8l3 3 6-6z\"/><circle cx=\"4\" cy=\"12\" r=\"1.5\"/>",
+  "audit_log": "<path d=\"M3 3h8v11H3z\"/><path d=\"M5.5 6.5h3M5.5 9h3M5.5 11.5h2\"/>",
+  "book": "<path d=\"M2 3h5a2 2 0 012 2v9a2 2 0 00-2-2H2z\"/><path d=\"M14 3H9a2 2 0 00-2 2v9a2 2 0 012-2h5z\"/>",
+  "txn": "<path d=\"M2 5h9M8 2l3 3-3 3\"/><path d=\"M14 11H5M8 14l-3-3 3-3\"/>",
+  "receipt": "<path d=\"M3 2h10v13l-2.5-1.5L8 15l-2.5-1.5L3 15z\"/><path d=\"M5.5 6h5M5.5 9h3\"/>",
+  "invoice": "<path d=\"M3 2h10v13l-2-1.5L9 15l-2-1.5L5 15l-2-1.5z\"/><circle cx=\"8\" cy=\"7.5\" r=\"2\"/>",
+  "recon_anomaly": "<path d=\"M8 2l6 11H2z\"/><path d=\"M8 6.5v3M8 11.5v.5\"/>",
+  "evidence": "<path d=\"M6 9a2.5 2.5 0 004 0c0-1.5-2-3-2-3s-2 1.5-2 3z\"/><path d=\"M2 11h12\"/>",
+  "taxpayer": "<rect x=\"2\" y=\"3\" width=\"12\" height=\"10\" rx=\"1\"/><path d=\"M2 6h12M6 13V9\"/>",
+  "tax_type": "<circle cx=\"8\" cy=\"8\" r=\"6\"/><path d=\"M5.5 6.5h4a1.5 1.5 0 010 3h-3a1.5 1.5 0 000 3h4\"/>",
+  "rate_table": "<rect x=\"2\" y=\"3\" width=\"12\" height=\"10\" rx=\"1\"/><path d=\"M2 6.5h12M5 3v10\"/>",
+  "deduction": "<circle cx=\"8\" cy=\"8\" r=\"6\"/><path d=\"M6 6l4 4M10 6l-4 4\"/>",
+  "tax_policy": "<path d=\"M3 2h7l3 3v9H3z\"/><path d=\"M9 2v4h4\"/>",
+  "loan": "<path d=\"M2 11V7M6 11V4M10 11V8M14 11V5\"/>",
+  "insurance_policy": "<path d=\"M8 2l6 2.5v5c0 3.5-2.5 5.8-6 6.5-3.5-.7-6-3-6-6.5v-5z\"/>",
+  "coverage": "<path d=\"M8 2l6 2.5v5c0 3.5-2.5 5.8-6 6.5-3.5-.7-6-3-6-6.5v-5z\"/><path d=\"M6 8l1.5 1.5L10.5 6\"/>",
+  "skill": "<path d=\"M8 2l1.6 3.4L13 6l-2.4 2.6.6 3.6L8 10.5 4.8 12.2l.6-3.6L3 6l3.4-.6z\"/>",
+  "conversation": "<path d=\"M2 4a2 2 0 012-2h8a2 2 0 012 2v6a2 2 0 01-2 2H6l-3 3v-3a2 2 0 01-1-2z\"/>",
+  "kb_entry": "<path d=\"M3 2h6l4 4v8H3z\"/><path d=\"M9 2v4h4\"/><path d=\"M5.5 9h5M5.5 11.5h3\"/>",
+  "account_role": "<rect x=\"2\" y=\"6\" width=\"4\" height=\"4\" rx=\"1\"/><rect x=\"10\" y=\"6\" width=\"4\" height=\"4\" rx=\"1\"/><path d=\"M6 8h4M8 6v4\"/>",
+  "role_permission": "<path d=\"M10 2l4 2v4c0 2.5-1.7 4.6-4 5.3C7.7 12.6 6 10.5 6 8V4z\"/><path d=\"M7.5 8l1.5 1.5L11.5 7\"/>",
+  "bank_card": "<rect x=\"1.5\" y=\"4\" width=\"13\" height=\"9\" rx=\"1.5\"/><path d=\"M1.5 7h13M4 10.5h3\"/>",
+  "bank_auth": "<rect x=\"1.5\" y=\"4\" width=\"8\" height=\"6\" rx=\"1\"/><path d=\"M1.5 6.5h8\"/><path d=\"M11 8.5l1.5 1.5L15 7\"/>",
+  "fin_profile": "<rect x=\"1.5\" y=\"3\" width=\"13\" height=\"10\" rx=\"1.5\"/><path d=\"M4 10.5l2.5-3 2 2L12 6\"/>",
+  "visibility_rule": "<path d=\"M1.5 8s2.5-4 6.5-4 6.5 4 6.5 4-2.5 4-6.5 4-6.5-4-6.5-4z\"/><path d=\"M3 13L13 3\"/>",
+  "join_request": "<circle cx=\"6\" cy=\"6\" r=\"2.2\"/><path d=\"M2.5 13c0-1.9 1.6-3 3.5-3s3.5 1.1 3.5 3\"/><path d=\"M12 5v4M10 7h4\"/>",
+  "reminder": "<path d=\"M8 2a4 4 0 014 4v3l1.5 2.5h-11L4 9V6a4 4 0 014-4z\"/><path d=\"M6.5 12.5a1.6 1.6 0 003 0\"/>",
+  "health_rule": "<path d=\"M2.5 4h11M2.5 8h11M2.5 12h11\"/><circle cx=\"5.5\" cy=\"4\" r=\"1.3\"/><circle cx=\"10\" cy=\"8\" r=\"1.3\"/><circle cx=\"7\" cy=\"12\" r=\"1.3\"/>"
+ },
+ "view": {
+  "__credit": "<path d=\"M8 2a6 6 0 016 6\"/><path d=\"M8 14a6 6 0 01-6-6\"/><path d=\"M8 6.5v3l2 1.2\"/>",
+  "__gap": "<path d=\"M8 2v3M8 11v3M2 8h3M11 8h3\"/><circle cx=\"8\" cy=\"8\" r=\"2\"/>",
+  "__score": "<path d=\"M8 2l1.8 3.6 4 .6-2.9 2.8.7 4L8 11l-3.6 2 .7-4L2.2 6.2l4-.6z\"/>",
+  "__perm": "<path d=\"M5 7V5a3 3 0 016 0v2\"/><rect x=\"3\" y=\"7\" width=\"10\" height=\"7\" rx=\"1\"/>"
+ }
+};
+
+/* ============ 数据：全部中文 ============ */
+const GRAPH = [
+{
+tab:'图1 · 账号与身份', title:'图 1 · 账号与身份',
+sub:'对应原作 ACCOUNTS：一个人只有一个登录账号，但在 企业/个人/家庭 三种模式下各有 1 个身份（王建国就有 3 个）。身份分主账号/子账号，每个身份担任一个角色、拥有一本「自己的账本」、对话互相隔离。',
+W:1340, H:830,
+ent:[
+  {id:'account', tbl:'account', x:520, y:36, cn:'账号 = 登录的人', en:'account', cls:'sys', rows:[["账号ID", "PK", ""], ["登录标识", "", ""], ["姓名/主体名称", "", ""], ["账号类型", "", ""], ["状态", "", ""]]},
+  {id:'account_identity', tbl:'account_identity', x:520, y:300, cn:'账号身份', en:'account_identity', cls:'', rows:[["身份ID", "PK", ""], ["所属账号", "", "f"], ["模式", "", ""], ["角色", "", "f"]]},
+  {id:'role', tbl:'role', x:1000, y:300, cn:'角色', en:'role', cls:'sys', rows:[["角色ID", "PK", ""], ["角色码", "", ""], ["角色名称", "", ""], ["适用层级", "", ""], ["适用模式", "", ""]]},
+  {id:'conversation', tbl:'conversation', x:110, y:560, cn:'会话', en:'conversation', cls:'sys', rows:[["会话ID", "PK", ""], ["归属身份", "", "f"], ["会话标题", "", ""], ["更新时间", "", ""]]},
+  {id:'book', tbl:'book', x:520, y:560, cn:'自己的账本（读写）', en:'book', cls:'', rows:[["账本ID", "PK", ""], ["所有者身份", "", "f"], ["账本名称", "", ""], ["对公/对私", "", ""], ["口径", "", ""]]},
+  {id:'note1', tbl:'note1', x:900, y:520, cn:'以王建国为例', en:'', cls:'note', nw:396, rows:[["① 王建国只有 1 个登录账号（手机号 138xxxx）", "", ""], ["② 但他有 3 个身份，对应三种模式：", "", ""], ["　　企业模式 → 经营者（主账号）", "", ""], ["　　个人模式 → 本人（主账号）", "", ""], ["　　家庭模式 → 管钱者（主账号）", "", ""], ["③ 每个身份各有一本「自己的账本」，互不混淆", "", ""], ["④ 子账号同理：晨曦科技以「企业·投资人」身份，", "", ""], ["　　被授权查看他的企业账", "", ""]]}
+],
+rel:[
+  ['account','account_identity','按模式拆身份','1','N'],
+  ['account_identity','role','担任其中 1 个角色','N','1'],
+  ['account_identity','book','拥有 1 本自己的账本','1','1'],
+  ['account_identity','conversation','对话按身份隔离','1','N']
+]
+},
+
+{
+tab:'图2 · 授权链', title:'图 2 · 授权链：主账号 ↔ 子账号',
+sub:'对应原作 attach：主账号身份把自己的账本以某角色「挂载」给子账号身份，子账号只读、主账号可随时收回。可见粒度三级（完整明细 / 通俗摘要 / 测算结论，对应原作 GRAN_TICKS），脱敏规则决定每一级隐藏什么（如薪酬明细、供应商户名、逐笔凭证号、卡号）。',
+W:1450, H:880,
+ent:[
+  {id:'host', tbl:'account_identity', x:640, y:30, cn:'主账号身份', en:'host', cls:'syn', rows:[["身份ID", "PK", ""], ["所属账号", "", "f"], ["模式", "", ""], ["角色", "", "f"]]},
+  {id:'host_book', tbl:'book', x:1120, y:30, cn:'主账号的账本', en:'host_book', cls:'', rows:[["账本ID", "PK", ""], ["所有者身份", "", "f"], ["账本名称", "", ""], ["对公/对私", "", ""]]},
+  {id:'share', tbl:'book_share', x:640, y:330, cn:'账本挂载', en:'share', cls:'key', rows:[["挂载ID", "PK", ""], ["主账号身份", "", "f"], ["子账号身份", "", "f"], ["被挂载的账本", "", "f"]]},
+  {id:'guest', tbl:'account_identity', x:180, y:330, cn:'子账号身份', en:'guest', cls:'syn', rows:[["身份ID", "PK", ""], ["所属账号", "", "f"], ["模式", "", ""], ["角色", "", "f"]]},
+  {id:'guest_book', tbl:'book', x:180, y:620, cn:'子账号自己的账本', en:'guest_book', cls:'', rows:[["账本ID", "PK", ""], ["所有者身份", "", "f"], ["账本名称", "", ""], ["对公/对私", "", ""]]},
+  {id:'sensitive_action', tbl:'sensitive_action', x:1120, y:620, cn:'敏感动作', en:'sensitive_action', cls:'', rows:[["动作ID", "PK", ""], ["动作码", "", ""], ["动作名称", "", ""], ["作用对象类型", "", ""], ["确认方式", "", ""]]},
+  {id:'audit_log', tbl:'audit_log', x:640, y:620, cn:'审计日志', en:'audit_log', cls:'sys', rows:[["审计ID", "PK", ""], ["操作身份", "", "f"], ["操作动作", "", ""], ["对象类型", "", ""]]},
+  {id:'visibility_rule', tbl:'visibility_rule', x:1120, y:330, cn:'脱敏规则', en:'visibility_rule', cls:'', rows:[["规则ID", "PK", ""], ["适用账本", "", "f"], ["适用可见粒度", "", ""], ["隐藏的内容主题", "", ""]]}
+],
+rel:[
+  ['host','host_book','自己的账本（读写）','1','1'],
+  ['host','share','发起挂载：我授权你看','1','N'],
+  ['share','guest','挂载给：你来收看','N','1'],
+  ['share','host_book','挂的正是这本账','N','1'],
+  ['guest','guest_book','自己的账本（读写）','1','1'],
+  ['share','sensitive_action','敏感操作要再输一次密码','1','N'],
+  ['guest','audit_log','每次查看都留痕','1','N'],
+  ['share','visibility_rule','按粒度隐藏内容','1','N']
+]
+},
+
+{
+tab:'图3 · 权限与技能', title:'图 3 · 权限与技能门控',
+sub:'对应原作 PERMS 与 SKILLS：技能不是新增概念，原演示包就有 18 个技能（SKILLS 数组），按当前身份的权限门控（hasPerm），成员管理与权限矩阵仅主账号可用。',
+W:1380, H:1060,
+ent:[
+  {id:'account_identity', tbl:'account_identity', x:560, y:40, cn:'账号身份', en:'account_identity', cls:'', rows:[["身份ID", "PK", ""], ["所属账号", "", "f"], ["模式", "", ""], ["角色", "", "f"]]},
+  {id:'role', tbl:'role', x:560, y:230, cn:'角色', en:'role', cls:'sys', rows:[["角色ID", "PK", ""], ["角色码", "", ""], ["角色名称", "", ""], ["适用层级", "", ""], ["适用模式", "", ""]]},
+  {id:'role_permission', tbl:'role_permission', x:560, y:470, cn:'角色-权限', en:'role_permission', cls:'', rows:[["关联ID", "PK", ""], ["角色", "", "f"], ["权限", "", "f"]]},
+  {id:'permission', tbl:'permission', x:560, y:720, cn:'权限', en:'permission', cls:'sys', rows:[["权限ID", "PK", ""], ["权限码", "", ""], ["权限名称", "", ""], ["权限分组", "", ""]]},
+  {id:'skill', tbl:'skill', x:180, y:720, cn:'技能（原作 18 个）', en:'skill', cls:'sys', rows:[["技能ID", "PK", ""], ["所属业务域", "", ""], ["技能名称", "", ""], ["所需权限码", "", ""], ["输出物", "", ""]]},
+  {id:'__perm', tbl:'__perm', x:960, y:720, cn:'有效权限', en:'__perm', cls:'calc', rows:[["身份", "", ""], ["模式", "", ""], ["权限码", "", ""], ["权限名称", "", ""], ["所属角色", "", ""]]}
+],
+rel:[
+  ['account_identity','role','担任角色','N','1'],
+  ['role','role_permission','角色带哪些权限','1','N'],
+  ['role_permission','permission','对应权限','N','1'],
+  ['permission','skill','有权限才能用','1','N'],
+  ['account_identity','__perm','实时有效权限','1','N']
+]
+},
+
+{
+tab:'图4 · 账域数据流', title:'图 4 · 账域数据流',
+sub:'账是四轮唯一的数据源。流水一经导入不可编辑，只能作废冲正；票据可为空，用来表达缺票。',
+W:1420, H:1120,
+ent:[
+  {id:'book', tbl:'book', x:560, y:40, cn:'账本', en:'book', cls:'', rows:[["账本ID", "PK", ""], ["所有者身份", "", "f"], ["账本名称", "", ""], ["对公/对私", "", ""], ["口径", "", ""]]},
+  {id:'txn', tbl:'txn', x:560, y:300, cn:'银行流水', en:'txn', cls:'', rows:[["流水ID", "PK", ""], ["账本", "", "f"], ["业务流水号", "", ""], ["金额", "", ""], ["收支方向", "", ""], ["记账日期", "", ""], ["状态", "", ""]]},
+  {id:'receipt', tbl:'receipt', x:170, y:580, cn:'票据小票', en:'receipt', cls:'', rows:[["票据ID", "PK", ""], ["关联流水", "", "f"], ["账本", "", "f"], ["票据类型", "", ""], ["金额", "", ""], ["上传身份", "", "f"]]},
+  {id:'invoice', tbl:'invoice', x:170, y:830, cn:'发票', en:'invoice', cls:'', rows:[["发票ID", "PK", ""], ["关联票据", "", "f"], ["账本", "", "f"], ["发票号码", "", ""], ["价税合计", "", ""], ["税率", "", ""], ["税额", "", ""], ["认证状态", "", ""]]},
+  {id:'recon_anomaly', tbl:'recon_anomaly', x:950, y:580, cn:'对账异常', en:'recon_anomaly', cls:'', rows:[["关联流水", "", "f"], ["异常类型", "", ""], ["差额", "", ""], ["处理状态", "", ""]]},
+  {id:'evidence', tbl:'evidence', x:950, y:800, cn:'凭证证据链', en:'evidence', cls:'', rows:[["关联流水", "", "f"], ["证据类型", "", ""], ["证据来源", "", ""], ["OCR 识别置信度 %", "", ""], ["判定规则", "", ""]]}
+],
+rel:[
+  ['book','txn','归集流水','1','N'],
+  ['txn','receipt','匹配票据','1','0..1'],
+  ['receipt','invoice','对应发票','1','0..1'],
+  ['txn','recon_anomaly','标记异常','1','N'],
+  ['txn','evidence','溯源凭证','1','N']
+]
+},
+
+{
+tab:'图5 · 税务域', title:'图 5 · 税务域',
+sub:'税率表按生效期版本化，只增不改；专项附加扣除是纯个人事项，挂在个人身份下。',
+W:1420, H:940,
+ent:[
+  {id:'account_identity', tbl:'account_identity', x:620, y:40, cn:'账号身份', en:'account_identity', cls:'', rows:[["身份ID", "PK", ""], ["所属账号", "", "f"], ["模式", "", ""], ["角色", "", "f"]]},
+  {id:'taxpayer', tbl:'taxpayer', x:620, y:270, cn:'纳税人', en:'taxpayer', cls:'', rows:[["纳税人ID", "PK", ""], ["所属身份", "", "f"], ["纳税人识别号", "", ""], ["规模类型", "", ""]]},
+  {id:'tax_type', tbl:'tax_type', x:150, y:470, cn:'税种', en:'tax_type', cls:'sys', rows:[["税种ID", "PK", ""], ["税种名称", "", ""], ["税种代码", "", ""], ["默认征收率", "", ""], ["申报周期", "", ""]]},
+  {id:'rate_table', tbl:'rate_table', x:470, y:470, cn:'税率表', en:'rate_table', cls:'sys', rows:[["税率ID", "PK", ""], ["税种", "", "f"], ["适用规模", "", ""], ["税率ID", "PK", ""], ["生效日", "", ""]]},
+  {id:'deduction', tbl:'deduction', x:790, y:470, cn:'专项附加扣除', en:'deduction', cls:'sys', rows:[["扣除ID", "PK", ""], ["所属身份", "", "f"], ["项目名称", "", ""], ["扣除标准", "", ""], ["所属年度", "", ""]]},
+  {id:'tax_policy', tbl:'tax_policy', x:1110, y:470, cn:'税收政策', en:'tax_policy', cls:'sys', rows:[["政策ID", "PK", ""], ["政策编号", "", ""], ["政策名称", "", ""], ["生效日", "", ""]]},
+  {id:'kb_entry', tbl:'kb_entry', x:470, y:750, cn:'知识库条目', en:'kb_entry', cls:'sys', rows:[["分类", "", ""], ["标题", "", ""], ["来源", "", ""]]}
+],
+rel:[
+  ['account_identity','taxpayer','作为纳税人','1','0..1'],
+  ['taxpayer','tax_type','申报税种','N','M'],
+  ['tax_type','rate_table','税率取值','1','N'],
+  ['taxpayer','deduction','适用扣除','1','N'],
+  ['taxpayer','tax_policy','匹配政策','N','M'],
+  ['kb_entry','tax_type','提供依据','1','N']
+]
+},
+
+{
+tab:'图6 · 信贷与保障', title:'图 6 · 信贷与保障',
+sub:'三个指标都实时算出、不建表。DTI = 该身份全部贷款月供 ÷ 月收入；缓冲月数 = 存款余额 ÷ 月度刚性支出；保障覆盖 = 已保额 ÷ 应担责任。健康分 = 负债压力×40% + 现金缓冲×30% + 保障覆盖×30%，每一项先在 health_rule 里按区间取分（原件口径：企业 95×.4+72×.3+55×.3 ≈ 70 分）。',
+W:1460, H:1200,
+ent:[
+  {id:'account_identity', tbl:'account_identity', x:640, y:30, cn:'账号身份', en:'account_identity', cls:'', rows:[["身份ID", "PK", ""], ["所属账号", "", "f"], ["模式", "", ""], ["角色", "", "f"]]},
+  {id:'loan', tbl:'loan', x:230, y:250, cn:'贷款账户', en:'loan', cls:'', rows:[["贷款ID", "PK", ""], ["所属身份", "", "f"], ["合同号", "", ""], ["贷款机构", "", ""], ["当前余额", "", ""], ["月供", "", ""], ["年利率", "", ""]]},
+  {id:'fin_profile', tbl:'fin_profile', x:640, y:250, cn:'月度财务口径', en:'fin_profile', cls:'key', rows:[["所属身份", "", "f"], ["月收入", "", ""], ["存款余额", "", ""], ["月度刚性支出", "", ""], ["应担责任额", "", ""]]},
+  {id:'insurance_policy', tbl:'insurance_policy', x:1060, y:250, cn:'保单', en:'insurance_policy', cls:'', rows:[["保单号", "PK", ""], ["所属身份", "", "f"], ["投保人", "", ""], ["被保人/受益人", "", ""], ["保额", "", ""], ["保单状态", "", ""]]},
+  {id:'coverage', tbl:'coverage', x:1060, y:500, cn:'保障责任', en:'coverage', cls:'', rows:[["保单", "", "f"], ["责任类型", "", ""], ["保额", "", ""]]},
+  {id:'health_rule', tbl:'health_rule', x:640, y:540, cn:'健康分档规则', en:'health_rule', cls:'sys', rows:[["规则ID", "PK", ""], ["维度", "", ""], ["区间下界", "", ""], ["区间上界", "", ""], ["该区间得分", "", ""], ["维度权重", "", ""]]},
+  {id:'__credit', tbl:'__credit', x:230, y:800, cn:'信贷健康 DTI', en:'__credit', cls:'calc', rows:[["所属身份", "", ""], ["贷款账户", "", ""], ["月供", "", ""], ["月收入", "", ""], ["负债率", "", ""], ["风险等级", "", ""]]},
+  {id:'__gap', tbl:'__gap', x:1150, y:800, cn:'保障缺口', en:'__gap', cls:'calc', rows:[["所属身份", "", ""], ["已保总额", "", ""], ["责任下限", "", ""], ["保障缺口", "", ""]]},
+  {id:'__score', tbl:'__score', x:640, y:1010, cn:'健康分', en:'__score', cls:'calc', rows:[["所属身份", "", ""], ["负债压力 40%", "", ""], ["现金缓冲 30%", "", ""], ["保障覆盖 30%", "", ""], ["健康分", "", ""]]}
+],
+rel:[
+  ['account_identity','loan','持有贷款','1','N'],
+  ['account_identity','insurance_policy','持有保单','1','N'],
+  ['account_identity','fin_profile','月收入与存款口径','1','N'],
+  ['insurance_policy','coverage','保障责任','1','N'],
+  ['fin_profile','__credit','提供月收入','1','1'],
+  ['loan','__credit','汇总月供','N','1'],
+  ['coverage','__gap','汇总保额','N','1'],
+  ['fin_profile','__gap','提供应担责任','1','1'],
+  ['health_rule','__score','分档取分','N','1'],
+  ['__credit','__score','负债压力参与','1','1'],
+  ['__gap','__score','保障覆盖参与','1','1']
+]
+},
+
+{
+tab:'图7 · 银行卡与入组', title:'图 7 · 银行卡与入组',
+sub:'对应原件 CARDS / AUTHORIZED / PENDING：流水不是凭空来的——来自被授权的银行卡；子账号不是凭空来的——来自入组申请与主账号挂载。还款与账单提醒挂在贷款和信用卡上。',
+W:1460, H:1000,
+ent:[
+  {id:'account_identity', tbl:'account_identity', x:660, y:30, cn:'账号身份', en:'account_identity', cls:'', rows:[["身份ID", "PK", ""], ["所属账号", "", "f"], ["模式", "", ""], ["角色", "", "f"]]},
+  {id:'bank_card', tbl:'bank_card', x:240, y:250, cn:'银行卡', en:'bank_card', cls:'', rows:[["卡ID", "PK", ""], ["所属身份", "", "f"], ["卡类型", "", ""], ["掩码卡号", "", ""], ["银行", "", ""], ["用途", "", ""], ["同步情况", "", ""], ["账单日", "", ""]]},
+  {id:'bank_auth', tbl:'bank_auth', x:240, y:520, cn:'银企账户授权', en:'bank_auth', cls:'', rows:[["授权ID", "PK", ""], ["被授权的卡", "", "f"], ["授权方身份", "", "f"], ["授权用途", "", ""], ["授权日期", "", ""], ["状态", "", ""]]},
+  {id:'join_request', tbl:'join_request', x:660, y:250, cn:'入组申请', en:'join_request', cls:'', rows:[["申请ID", "PK", ""], ["申请人账号", "", "f"], ["目标模式", "", ""], ["目标角色", "", "f"], ["状态", "", ""], ["审批人身份", "", ""]]},
+  {id:'role', tbl:'role', x:1080, y:250, cn:'角色', en:'role', cls:'sys', rows:[["角色ID", "PK", ""], ["角色码", "", ""], ["角色名称", "", ""], ["适用层级", "", ""], ["适用模式", "", ""]]},
+  {id:'reminder', tbl:'reminder', x:1080, y:540, cn:'还款与账单提醒', en:'reminder', cls:'', rows:[["提醒ID", "PK", ""], ["所属身份", "", "f"], ["提醒对象类型", "", ""], ["每月第几日", "", ""], ["金额", "", ""], ["提醒文案", "", ""]]}
+],
+rel:[
+  ['account_identity','bank_card','名下的卡','1','N'],
+  ['bank_card','bank_auth','授权用途','1','N'],
+  ['account_identity','join_request','发起申请','1','N'],
+  ['join_request','role','申请哪个角色','N','1'],
+  ['account_identity','reminder','按时提醒','1','N'],
+  ['bank_card','reminder','账单日提醒','1','N']
+]
+}
+];
+
+/* ============ 渲染引擎 ============ */
+const NW=196, HDR=36, RH=21, PADT=9;
+
+function draw(){
+  const g = GRAPH[cur];
+  document.getElementById('ttl').textContent = g.title;
+  document.getElementById('dsc').textContent = g.sub;
+  const svg = document.getElementById('svg');
+  svg.setAttribute('viewBox','0 0 '+g.W+' '+g.H);
+  svg.style.maxWidth = g.W+'px';
+  svg.style.height = 'auto';
+  let s = '<defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">'
+    + '<path d="M2 1L8 5L2 9" fill="none" stroke="#9C9484" stroke-width="1.5" stroke-linecap="round"/></marker></defs>';
+
+  const M = {};
+  const srcSeq = {};
+  g.ent.forEach(function(e){
+    if (e.cls === 'note'){
+      e._w = e.nw || 320;
+      // 按实际字体宽度自动换行，高度随内容自适应（避免文字出框）
+      const NW2 = e._w - 40;
+      e._lines = [];
+      e.rows.forEach(function(rw){
+        wrapText(rw[0], NW2, NOTE_FONT).forEach(function(l){ e._lines.push(l); });
+      });
+      e._h = 30 + e._lines.length * 23 + 16;
+    } else {
+      e._w = NW;
+      e._h = PADT + HDR + e.rows.length*RH + 9;
+    }
+    e._cx = e.x + e._w/2;
+    M[e.id] = e;
+  });
+
+  // 所有卡片矩形（用于标签避让）
+  const RECTS = g.ent.map(function(e){ return {x:e.x, y:e.y, w:e._w, h:e._h}; });
+  function hitsAny(x, y, w, h, pad){
+    const p2 = pad || 4;
+    for (let i=0;i<RECTS.length;i++){
+      const R = RECTS[i];
+      if (!(x + w < R.x - p2 || x > R.x + R.w + p2 || y + h < R.y - p2 || y > R.y + R.h + p2)) return true;
+    }
+    return false;
+  }
+  // 文本宽度估算（中文按 1em，西文按 0.56em）
+  function textW(t, size){
+    let w = 0;
+    for (const ch of String(t)) w += (ch.charCodeAt(0) > 255 ? size : size*0.56);
+    return w;
+  }
+  // 已放置的标签矩形（避免标签之间互相叠）
+  const placedLabels = [];
+  function hitsLabel(x, y, w, h){
+    for (const L of placedLabels){
+      if (!(x + w < L.x - 5 || x > L.x + L.w + 5 || y + h < L.y - 4 || y > L.y + L.h + 4)) return true;
+    }
+    return false;
+  }
+  function noteLabel(c, txt, size){
+    const w = textW(txt, size), h = size * 1.2;
+    const x0 = c.anchor === 'middle' ? c.x - w/2 : (c.anchor === 'end' ? c.x - w : c.x);
+    placedLabels.push({ x: x0, y: c.y - h, w: w, h: h });
+  }
+  // 依次尝试候选位置，返回第一个不压卡片、也不压其它标签的
+  function place(txt, size, cands){
+    const w = textW(txt, size), h = size * 1.2;
+    for (let i=0;i<cands.length;i++){
+      const c = cands[i];
+      const x0 = c.anchor === 'middle' ? c.x - w/2 : (c.anchor === 'end' ? c.x - w : c.x);
+      if (!hitsAny(x0, c.y - h, w, h, 3) && !hitsLabel(x0, c.y - h, w, h)){ noteLabel(c, txt, size); return c; }
+    }
+    // 兜底：以首选位置为中心做网格搜索（±160px 内），尽量不压卡片
+    const base = cands[0];
+    const bw = textW(txt, size), bh = size * 1.2;
+    for (let r = 24; r <= 160; r += 20){
+      for (const dy of [0, -r, r]){
+        for (const dx of [-r, r]){
+          const x = base.x + dx, y = base.y + dy;
+          const x0 = base.anchor === 'middle' ? x - bw/2 : (base.anchor === 'end' ? x - bw : x);
+          if (!hitsAny(x0, y - bh, bw, bh, 3) && !hitsLabel(x0, y - bh, bw, bh)){
+            const c2 = {x:x, y:y, anchor:base.anchor}; noteLabel(c2, txt, size); return c2;
+          }
+        }
+      }
+    }
+    noteLabel(cands[0], txt, size);
+    return cands[0];
+  }
+
+  g.rel.forEach(function(r){
+    const a = M[r[0]], b = M[r[1]];
+    if(!a||!b) return;
+    const dx = b._cx - a._cx, dy = (b.y - a.y);
+    // 走线方向：先看两卡相对位置，再退回斜率判定。连接点与折线用同一判定，避免错位
+    const axr = a.x + a._w, bxr = b.x + b._w;
+    const ayr = a.y + a._h, byr = b.y + b._h;
+    const xOv = !(axr < b.x || a.x > bxr);      // 横向有重叠
+    const yOv = !(ayr < b.y || a.y > byr);      // 纵向有重叠
+    const hGap = Math.max(a.x - bxr, b.x - axr, 0);
+    const vGap = Math.max(a.y - byr, b.y - ayr, 0);
+    let VERT = Math.abs(dy) >= Math.abs(dx) * 0.55;
+    if (xOv && !yOv) VERT = true;               // 上下同列 → 竖着走
+    else if (yOv && !xOv) VERT = false;         // 左右同行 → 横着走
+    else if (!xOv && !yOv) VERT = !(hGap > vGap * 1.5);   // 斜向：从空隙大的方向进出，线路更短更贴卡片
+    let ax,ay,bx,by;
+    if (VERT){
+      if (dy > 0){ ax=a._cx; ay=a.y+a._h; bx=b._cx; by=b.y; }
+      else       { ax=a._cx; ay=a.y;     bx=b._cx; by=b.y+b._h; }
+    } else {
+      if (dx > 0){ ax=a._cx+a._w/2; ay=a.y+28; bx=b._cx-b._w/2; by=b.y+28; }
+      else       { ax=a._cx-a._w/2; ay=a.y+28; bx=b._cx+b._w/2; by=b.y+28; }
+    }
+    // 直角正交折线
+
+    function endMarkV(x, y, code, dxv, dyv){
+      const px = -dyv, py = dxv;
+      let gg = '';
+      if (code === '1'){
+        const cxp = x + dxv*9, cyp = y + dyv*9;
+        gg += '<line class="cf" fill="none" x1="'+(cxp-px*11)+'" y1="'+(cyp-py*11)+'" x2="'+(cxp+px*11)+'" y2="'+(cyp+py*11)+'"/>';
+        gg += '<circle cx="'+(cxp+dxv*5)+'" cy="'+(cyp+dyv*5)+'" r="4" fill="#8A6419"/>';
+      } else if (code === 'N' || code === 'M'){
+        const bx2 = x + dxv*15, by2 = y + dyv*15;
+        gg += '<path class="cf" fill="none" d="M'+x+','+y+' L'+(bx2+px*11)+','+(by2+py*11)+'"/>';
+        gg += '<path class="cf" fill="none" d="M'+x+','+y+' L'+(bx2-px*11)+','+(by2-py*11)+'"/>';
+        gg += '<path class="cf" fill="none" d="M'+x+','+y+' L'+(bx2+dxv*8)+','+(by2+dyv*8)+'"/>';
+      } else if (code && code.indexOf('0..') === 0){
+        const cxp = x + dxv*10, cyp = y + dyv*10;
+        gg += '<circle cx="'+cxp+'" cy="'+cyp+'" r="4.6" fill="#FFF" stroke="#8A6419" stroke-width="1.3"/>';
+      }
+      return gg;
+    }
+    // 直角折线生成：竖-横-竖 或 横-竖-横，拐角 9px 圆角
+    function elbow(x1,y1,x2,y2,vertical){
+      const R = 9;
+      if (vertical){
+        // 竖向间距太小 → 直接直线，别硬折（否则两端鱼尾会叠在一起）
+        if (Math.abs(y2-y1) < 40) return { d:'M'+x1+','+y1+' L'+x2+','+y2, dir:'v' };
+        const myy = (y1+y2)/2;
+        const sx = (x2>x1)?R:-R;
+        return { d:'M'+x1+','+y1+' L'+x1+','+(myy-R)+' Q'+x1+','+myy+' '+(x1+sx)+','+myy+
+                      ' L'+(x2-sx)+','+myy+' Q'+x2+','+myy+' '+x2+','+(myy+R)+
+                      ' L'+x2+','+y2, dir:'v' };
+      } else {
+        if (Math.abs(x2-x1) < 40) return { d:'M'+x1+','+y1+' L'+x2+','+y2, dir:'h' };
+        const mxx = (x1+x2)/2;
+        const sy = (y2>y1)?R:-R;
+        return { d:'M'+x1+','+y1+' L'+(x1+((x2>x1)?R:-R))+','+y1+' Q'+mxx+','+y1+' '+mxx+','+(y1+sy)+
+                      ' L'+mxx+','+(y2-sy)+' Q'+mxx+','+y2+' '+(x2-((x2>x1)?R:-R))+','+y2+
+                      ' L'+x2+','+y2, dir:'h' };
+      }
+    }
+
+    // ---- 走线避让：在候选路径里挑「不穿卡片」的那条 ----
+    function segHitsCards(segs, selfA, selfB){
+      for (let si=0; si<segs.length; si++){
+        const g2 = segs[si];
+        const n2 = Math.max(8, Math.round(Math.hypot(g2[2]-g2[0], g2[3]-g2[1]) / 8));
+        for (let k=0; k<=n2; k++){
+          const px2 = g2[0] + (g2[2]-g2[0])*k/n2, py2 = g2[1] + (g2[3]-g2[1])*k/n2;
+          for (const e2 of g.ent){
+            if (e2 === selfA || e2 === selfB) continue;
+            if (e2.cls === 'note') continue;
+            if (px2 > e2.x + 4 && px2 < e2.x + e2._w - 4 && py2 > e2.y + 4 && py2 < e2.y + e2._h - 4) return true;
+          }
+        }
+      }
+      return false;
+    }
+    function mkElbow(vertical, ax2,ay2,bx2,by2, mid){
+      const R2 = 9;
+      if (vertical){
+        // 同一列（或几乎同列）→ 直接直线，别硬折出小锯齿
+        if (Math.abs(bx2-ax2) < 8 || Math.abs(by2-ay2) < 26)
+          return { d:'M'+ax2+','+ay2+' L'+bx2+','+by2, dir:'v', segs:[[ax2,ay2,bx2,by2]] };
+        const sx = (bx2>ax2)?R2:-R2;
+        return { d:'M'+ax2+','+ay2+' L'+ax2+','+(mid-R2)+' Q'+ax2+','+mid+' '+(ax2+sx)+','+mid+
+                  ' L'+(bx2-sx)+','+mid+' Q'+bx2+','+mid+' '+bx2+','+(mid+R2)+' L'+bx2+','+by2,
+                 dir:'v', segs:[[ax2,ay2,ax2,mid],[ax2,mid,bx2,mid],[bx2,mid,bx2,by2]] };
+      }
+      if (Math.abs(by2-ay2) < 8 || Math.abs(bx2-ax2) < 26)
+        return { d:'M'+ax2+','+ay2+' L'+bx2+','+by2, dir:'h', segs:[[ax2,ay2,bx2,by2]] };
+      const sy = (by2>ay2)?R2:-R2;
+      return { d:'M'+ax2+','+ay2+' L'+(ax2+((bx2>ax2)?R2:-R2))+','+ay2+' Q'+mid+','+ay2+' '+mid+','+(ay2+sy)+
+                ' L'+mid+','+(by2-sy)+' Q'+mid+','+by2+' '+(bx2-((bx2>ax2)?R2:-R2))+','+by2+' L'+bx2+','+by2,
+               dir:'h', segs:[[ax2,ay2,mid,ay2],[mid,ay2,mid,by2],[mid,by2,bx2,by2]] };
+    }
+    let el = null;
+    // 同一源卡片的第 k 条关系：中间段向外错开，避免多条横段落在同一 y（连成一条长线）
+    const kk = (srcSeq[r[0]] = (srcSeq[r[0]] || 0) + 1) - 1;
+    // 竖向：中间横段离起始卡片 24 / 42 / 60 …px
+    const vStep = 24 + kk * 18;
+    const vDir  = (by > ay) ? 1 : -1;
+    let vm = ay + vDir * vStep;
+    if ((by - ay) * vDir < vStep + 20) vm = (ay + by) / 2;   // 空间不够就退回中点
+    el = mkElbow(true, ax, ay, bx, by, vm);
+    if (segHitsCards(el.segs, a, b)){
+      const lo = Math.min(ay, by), hi = Math.max(ay, by);
+      let best = null;
+      // 先绕开错开位置扫描，再退回中点附近扫描
+      const cands = [vm, (ay+by)/2];
+      for (let d2 = 22; d2 <= Math.max(140, (hi-lo)/2); d2 += 22){
+        cands.push(vm + d2, vm - d2, (ay+by)/2 + d2, (ay+by)/2 - d2);
+      }
+      for (const cand of cands){
+        if (cand < lo + 18 || cand > hi - 18) continue;
+        const t = mkElbow(true, ax, ay, bx, by, cand);
+        if (!segHitsCards(t.segs, a, b)) { best = t; break; }
+      }
+      if (!best){
+        // 改横向走：中间竖段按同样思路错开
+        const hStep = 28 + kk * 20;
+        const hDir  = (bx > ax) ? 1 : -1;
+        let hm = ax + hDir * hStep;
+        if ((bx - ax) * hDir < hStep + 24) hm = (ax + bx) / 2;
+        const t0 = mkElbow(false, ax, ay, bx, by, hm);
+        if (!segHitsCards(t0.segs, a, b)) best = t0;
+        else {
+          const hc = [hm, (ax+bx)/2];
+          for (let d2 = 24; d2 <= 170; d2 += 22) hc.push(hm + d2, hm - d2);
+          for (const cand of hc){
+            const t = mkElbow(false, ax, ay, bx, by, cand);
+            if (!segHitsCards(t.segs, a, b)) { best = t; break; }
+          }
+        }
+      }
+      if (best) el = best;
+    }
+    if (!el) el = mkElbow(VERT, ax, ay, bx, by, vm);
+    let e1x=0,e1y=0,e2x=0,e2y=0;
+    if (el.dir==='v'){ e1y=(by>ay)?1:-1; e2y=-e1y; }
+    else { e1x=(bx>ax)?1:-1; e2x=-e1x; }
+    s += '<path class="ln" d="'+el.d+'"/>';
+    s += endMarkV(ax, ay, r[3], e1x, e1y);
+    s += endMarkV(bx, by, r[4], e2x, e2y);
+
+    // 基数标签：先放（小、位置固定），关系名随后避让
+    const c3 = place(r[3], 10, el.dir==='v' ? [
+      {x:ax + 24, y:ay + 14, anchor:'start'}, {x:ax - 24, y:ay + 14, anchor:'end'},
+      {x:ax + 24, y:ay - 6,  anchor:'start'}, {x:ax - 24, y:ay - 6,  anchor:'end'},
+      {x:ax + 24, y:ay + 34, anchor:'start'}
+    ] : [
+      {x:ax + 18, y:ay - 10, anchor:'start'}, {x:ax + 18, y:ay + 20, anchor:'start'},
+      {x:ax - 18, y:ay - 10, anchor:'end'},   {x:ax - 18, y:ay + 20, anchor:'end'}
+    ]);
+    const c4 = place(r[4], 10, el.dir==='v' ? [
+      {x:bx + 24, y:by - 6,  anchor:'start'}, {x:bx - 24, y:by - 6,  anchor:'end'},
+      {x:bx + 24, y:by + 16, anchor:'start'}, {x:bx - 24, y:by + 16, anchor:'end'},
+      {x:bx + 24, y:by - 26, anchor:'start'}
+    ] : [
+      {x:bx - 18, y:by - 10, anchor:'end'},   {x:bx - 18, y:by + 20, anchor:'end'},
+      {x:bx + 18, y:by - 10, anchor:'start'}, {x:bx + 18, y:by + 20, anchor:'start'}
+    ]);
+    // 关系名：沿连线取多个候选点，避开卡片
+    let lc;
+    if (el.dir === 'v'){
+      const myy = (ay+by)/2, mx = (ax+bx)/2;
+      lc = place(r[2], 12.5, [
+        {x:mx,      y:myy - 8,  anchor:'middle'},
+        {x:mx,      y:myy + 18, anchor:'middle'},
+        {x:mx + 62, y:myy + 5,  anchor:'start'},
+        {x:mx - 62, y:myy + 5,  anchor:'end'},
+        {x:mx,      y:ay + 26,  anchor:'middle'},
+        {x:mx,      y:by - 12,  anchor:'middle'},
+        {x:mx + 96, y:myy + 5,  anchor:'start'},
+        {x:mx - 96, y:myy + 5,  anchor:'end'}
+      ]);
+    } else {
+      const mxx = (ax+bx)/2, top = Math.min(ay,by);
+      lc = place(r[2], 12.5, [
+        {x:mxx,      y:top - 9,  anchor:'middle'},
+        {x:mxx,      y:top + 20, anchor:'middle'},
+        {x:mxx,      y:top + 42, anchor:'middle'},
+        {x:mxx,      y:Math.max(ay,by) - 9, anchor:'middle'},
+        {x:mxx,      y:Math.max(ay,by) + 22, anchor:'middle'},
+        {x:mxx + 74, y:top + 5,  anchor:'start'},
+        {x:mxx - 74, y:top + 5,  anchor:'end'}
+      ]);
+    }
+    s += '<text class="rel-l paint" x="'+lc.x+'" y="'+lc.y+'" text-anchor="'+lc.anchor+'">'+r[2]+'</text>';
+    s += '<text class="card-l paint" x="'+c3.x+'" y="'+c3.y+'" text-anchor="'+c3.anchor+'">'+r[3]+'</text>';
+    s += '<text class="card-l paint" x="'+c4.x+'" y="'+c4.y+'" text-anchor="'+c4.anchor+'">'+r[4]+'</text>';
+  });
+
+  g.ent.forEach(function(e){
+    const x=e.x, y=e.y, w=e._w, h=e._h;
+    if (e.cls === 'note'){
+      s += '<g class="ent note">';
+      s += '<rect class="b" x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="10"/>';
+      s += '<text class="nt-t" x="'+(x+w/2)+'" y="'+(y+25)+'">'+e.cn+'</text>';
+      s += '<line x1="'+(x+18)+'" y1="'+(y+35)+'" x2="'+(x+w-18)+'" y2="'+(y+35)+'" stroke="#E7D3A0" stroke-width="1"/>';
+      (e._lines||[]).forEach(function(l,i){
+        s += '<text class="nt-l" x="'+(x+20)+'" y="'+(y+57+i*23)+'">'+l+'</text>';
+      });
+      s += '</g>';
+      return;
+    }
+    s += '<g class="ent '+e.cls+'">';
+    s += '<rect class="b" x="'+x+'" y="'+y+'" width="'+w+'" height="'+h+'" rx="9"/>';
+    // 实体图标（SVG 图形，非 emoji）
+    const lk = e.tbl || e.id; const ic = (ICONS.icon && ICONS.icon[lk]) || (ICONS.view && ICONS.view[lk]);
+    if (ic){
+      s += '<svg class="ic" x="'+(x+13)+'" y="'+(y+13)+'" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">'+ic+'</svg>';
+    }
+    const cx = x + w/2 + 11;
+    s += '<text class="nm" x="'+cx+'" y="'+(y+23)+'">'+e.cn+'</text>';
+    s += '<text class="tbl" x="'+cx+'" y="'+(y+HDR)+'">'+e.en+'</text>';
+    s += '<line x1="'+(x+13)+'" y1="'+(y+HDR+6)+'" x2="'+(x+w-13)+'" y2="'+(y+HDR+6)+'" stroke="#E8DCC0" stroke-width="1"/>';
+    e.rows.forEach(function(rw,i){
+      const ry = y+HDR+9 + (i*RH) + RH/2;
+      const isPk = rw[1]==='PK', isFk = rw[2]==='f';
+      const bx = x+10, bw = w-20, bh = RH-2;
+      s += '<rect class="a-row'+(isPk?' p':(isFk?' f':''))+'" x="'+bx+'" y="'+(ry-RH/2+1)+'" width="'+bw+'" height="'+bh+'" rx="3"/>';
+      s += '<text class="at'+(isPk?' p':(isFk?' f':''))+'" x="'+(bx+9)+'" y="'+ry+'">'+rw[0]+'</text>';
+      if (isPk||isFk) s += '<text class="ak'+(isFk?' f':'')+'" x="'+(bx+bw-9)+'" y="'+ry+'" text-anchor="end">'+(isPk?'PK':'FK')+'</text>';
+    });
+    s += '</g>';
+  });
+
+  svg.innerHTML = s;
+}
+
+
+/* ============ 文本换行（按真实字体测量，中文按字符断行） ============ */
+const NOTE_FONT = '11.5px -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif';
+const _mctx = document.createElement('canvas').getContext('2d');
+function _tw(t, font){ _mctx.font = font; return _mctx.measureText(t).width; }
+function wrapText(text, maxW, font){
+  const out = []; let line = '';
+  for (const ch of String(text)){
+    if (_tw(line + ch, font) > maxW && line){ out.push(line); line = ch; }
+    else { line += ch; }
+  }
+  if (line) out.push(line);
+  return out;
+}
+
+/* ============ tab ============ */
+var cur = 0;
+(function(){
+  const tabsEl = document.getElementById('tabs');
+  GRAPH.forEach(function(g,i){
+    const b = document.createElement('button');
+    b.className='tab'+(i===0?' on':'');
+    b.textContent=g.tab;
+    b.onclick=function(){ cur=i;
+      document.querySelectorAll('.tab').forEach(function(x,j){ x.classList.toggle('on',j===i); });
+      draw(); };
+    tabsEl.appendChild(b);
+  });
+})();
+
+/* ============ 统计 ============ */
+(function(){
+  const ids = {};
+  let rels = 0, cols = 0, views = 0;
+  GRAPH.forEach(function(g){
+    g.ent.forEach(function(e){
+      if (e.cls === 'note') return;            // 说明注释框不计入实体与属性统计
+      ids[e.id] = 1;
+      cols += e.rows.length;
+      if (e.cls === 'der' || e.cls === 'calc') views++;
+    });
+    rels += g.rel.length;
+  });
+  document.getElementById('s-ent').textContent = Object.keys(ids).length;
+  document.getElementById('s-rel').textContent = rels;
+  document.getElementById('s-fig').textContent = GRAPH.length;
+  document.getElementById('s-col').textContent = cols;
+  document.getElementById('s-view').textContent = views;
+})();
+</script>
+</body>
+</html>

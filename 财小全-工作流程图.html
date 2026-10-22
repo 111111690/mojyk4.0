@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>财小全 · 演示流程图（6 张）</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23C99B3D'/%3E%3Ctext x='16' y='22' font-size='17' text-anchor='middle' fill='%233A2C16' font-family='sans-serif' font-weight='bold'%3E%E8%B4%A2%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap">
+<style>
+  :root{
+    --ink:#3A2C16; --sub:#5C4E33; --line:#E5D8BD; --paper:#F4EFDF;
+    --card:#FFFDF7; --brand:#C99B3D; --brand-dark:#8A6419; --brand-soft:#F5E9C9;
+    --note-bg:#FBF3DE; --note-line:#C99B3D;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:"Noto Sans SC","Microsoft YaHei","PingFang SC",system-ui,sans-serif;
+    line-height:1.65;
+  }
+  .wrap{max-width:1080px; margin:0 auto; padding:36px 22px 80px;}
+  header.hero{
+    border:1px solid var(--line); background:var(--card); border-radius:14px;
+    padding:26px 28px; margin-bottom:26px;
+  }
+  .hero .kicker{color:var(--brand-dark); font-weight:700; letter-spacing:2px; font-size:13px;}
+  .hero h1{margin:6px 0 8px; font-size:26px; font-weight:900;}
+  .hero p{margin:0; color:var(--sub); font-size:14px;}
+  nav.toc{display:flex; flex-wrap:wrap; gap:8px; margin-top:16px;}
+  nav.toc a{
+    text-decoration:none; color:var(--brand-dark); background:var(--brand-soft);
+    border:1px solid #E7D3A0; border-radius:999px; padding:4px 12px; font-size:13px;
+  }
+  nav.toc a:hover{background:var(--brand-dark); color:#FFFDF7;}
+  section.fig{
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:22px 24px 18px; margin-bottom:22px; scroll-margin-top:16px;
+  }
+  .fig-head{display:flex; align-items:center; gap:12px; margin-bottom:6px;}
+  .badge{
+    flex:none; width:34px; height:34px; border-radius:9px; background:var(--brand);
+    color:#3A2C16; font-weight:900; display:flex; align-items:center; justify-content:center; font-size:15px;
+  }
+  .fig-head h2{font-size:19px; font-weight:900; margin:0;}
+  .fig-head .tag{margin-left:auto; font-size:12px; color:var(--sub); border:1px dashed var(--line); padding:2px 10px; border-radius:999px; white-space:nowrap;}
+  .mermaid{
+    background:#FFF8E6; border:1px solid var(--line); border-radius:10px;
+    padding:14px 8px; margin:10px 0 12px; text-align:center; overflow-x:auto;
+  }
+  .mermaid svg{max-width:100%; height:auto;}
+  .note{
+    background:var(--note-bg); border-left:4px solid var(--note-line);
+    border-radius:0 8px 8px 0; padding:10px 14px; font-size:14px; color:#6B5626;
+  }
+  .note b{color:var(--brand-dark);}
+  footer{color:var(--sub); font-size:12.5px; text-align:center; margin-top:10px;}
+  /* ===== 横版投屏 / 打印导出 ===== */
+  @page { size: A4 landscape; margin: 8mm; }
+  @media print {
+    html,body{background:#fff;}
+    .wrap{max-width:none; padding:0;}
+    nav.toc, footer{display:none !important;}
+    header.hero{
+      margin:0; padding:0; border:none; background:#fff; border-radius:0;
+      break-after:page; page-break-after:always;
+      display:flex; flex-direction:column; justify-content:center; min-height:180mm;
+    }
+    .hero h1{font-size:24px; margin:10px 0;}
+    .hero p{font-size:13px;}
+    section.fig{
+      break-inside:avoid; page-break-inside:avoid;
+      break-before:page; page-break-before:always;
+      break-after:page; page-break-after:always;
+      margin:0; padding:0; border:none; border-radius:0;
+      background:#fff; box-shadow:none;
+    }
+    .fig-head{
+      margin:0 0 2mm; padding:2mm 3mm; display:flex; align-items:center; gap:10px;
+      background:var(--brand-soft); border-radius:6px;
+    }
+    .fig-head .badge{width:24px; height:24px; font-size:12px; border-radius:5px; flex:none;}
+    .fig-head h2{font-size:14px; margin:0;}
+    .fig-head .tag{font-size:10px; margin-left:auto;}
+    .mermaid{
+      background:#FFF8E6; border:1px solid var(--line); border-radius:6px;
+      padding:2mm; margin:0 0 2mm; text-align:center; overflow:hidden;
+    }
+    .mermaid svg{
+      max-width:100% !important; max-height:95mm !important;
+      width:auto !important; height:auto !important;
+    }
+    .note{font-size:11px; padding:3px 8px; margin:0; line-height:1.4;}
+  }
+  @media (max-width:640px){
+    .wrap{padding:18px 12px 60px;}
+    .hero h1{font-size:21px;}
+    section.fig{padding:16px 12px;}
+    .fig-head .tag{display:none;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <div class="kicker">AI 财务参谋 AGENT · 工作流程</div>
+    <h1>财小全 · 账税贷保 · 全维财务中枢 —— 工作流程图（共 7 张）</h1>
+    <p>单个 HTML 页面 · 浏览器直连 DeepSeek · 用户自填 Key（仅存本地）· 模拟环境，不碰真实资金、不代客操作。点击下方目录可跳转对应图。</p>
+    <nav class="toc">
+      <a href="#fig7">图1 全局工作流程</a>
+      <a href="#fig1">图2 部署与请求链路</a>
+      <a href="#fig2">图3 问答主流程</a>
+      <a href="#fig3">图4 四轮驱动泳道</a>
+      <a href="#fig4">图5 子账号审批权限</a>
+      <a href="#fig5">图6 合规红线分级</a>
+      <a href="#fig6">图7 财务健康分</a>
+    </nav>
+  </header>
+  <main id="root"></main>
+  <footer>财小全工作流包 · 流程图仅用于现场讲解 · 财税结论均以知识库条款文号为准</footer>
+</div>
+
+<script src="assets/mermaid.min.js"></script>
+<script>
+const FIGURES = [
+{
+  id:"fig7", tag:"全局总览", title:"财小全·AI 财务参谋工作流程",
+  code:`flowchart TD
+    Start(["财小全·AI 财务参谋"]) --> Core
+    Start --> Guard
+    subgraph Core["核心能力"]
+        direction TB
+        c1["输入：用户一句话提问"] --> c2["账本自动归类<br/>小票 / 流水"]
+        c2 --> c3["四轮联动<br/>账 → 税 → 贷 → 保"]
+        c3 --> c4["输出：个税测算<br/>DTI负债率 / 保单缺口"]
+    end
+    subgraph Guard["安全护栏"]
+        direction TB
+        g1["提示词注入拦截"] --> g2["写操作二次确认<br/>转账 / 挂失"]
+        g2 --> g3["子账号越权拒答"]
+        g3 --> g4["已填 Key 走 DeepSeek<br/>未填走离线"]
+    end
+    Core --> Merge["智能体综合分析"]
+    Guard --> Merge
+    Merge --> Out1["结论带凭证号"]
+    Merge --> Out2["自动生成图表"]
+    Merge --> Out3["风险提示<br/>110 / 96110"]
+    Out1 --> End(["全程审计留痕<br/>不碰真实资金 · 不代客操作"])
+    Out2 --> End
+    Out3 --> End
+    classDef coreBox fill:#F5E9C9,stroke:#8A6419,stroke-width:1.5px,color:#3A2C16;
+    classDef guardBox fill:#F7EAE6,stroke:#A63A2B,stroke-width:1.5px,color:#7A342A;
+    class c1,c2,c3,c4 coreBox;
+    class g1,g2,g3,g4 guardBox`,
+  note:"全局总览：左侧核心能力从一句话提问出发，经账本归类、四轮联动输出个税/ DTI/保单缺口；右侧安全护栏并行拦截提示词注入、二次确认写操作、越权拒答，并区分在线 DeepSeek 与离线模式；两路汇入智能体综合分析后，统一输出带凭证号的结论、自动图表与风险提示，全程审计留痕、不碰真实资金。"
+},
+{
+  id:"fig1", tag:"部署架构", title:"系统部署与请求链路",
+  code:`flowchart TD
+    subgraph S1["请求链路"]
+        U(["用户<br/>电脑 / 手机"]) --> H["财小全.html<br/>单个 HTML 页面"]
+        H -->|"HTTPS 直连"| L["DeepSeek API"]
+        K["页面内置：系统提示词<br/>财税知识库<br/>多轮上下文(12轮)"] -. 内置 .-> H
+        Key["用户自填 Key<br/>仅存本地"] -.-> H
+        L -->|"回答返回"| H
+        H -->|"渲染展示"| U
+    end
+    subgraph S2["打开方式（旁支）"]
+        B(["双击 / 打开<br/>单个 HTML 文件"]) --> A1["浏览器打开<br/>无需本地服务"]
+        A1 --> A2["首次自填<br/>DeepSeek Key"]
+        A2 --> A3(["开始对话"])
+    end`,
+  note:"单个 HTML 页面，浏览器直连 DeepSeek API：Key 由用户自填、仅存本地；系统提示词与财税知识库内置在页面中，保留 12 轮多轮上下文。旁支即打开方式——双击 HTML → 浏览器直接加载 → 首次自填 Key 即可对话。"
+},
+{
+  id:"fig2", tag:"主干流程", title:"用户问答主流程",
+  code:`flowchart TD
+    A(["收到提问"]) --> B{"命中关键词<br/>快捷卡片?"}
+    B -->|"是"| C["本地编排卡片<br/>结论带凭证/条款"]
+    B -->|"否"| D["真实大模型<br/>DeepSeek"]
+    D --> E{"确认模式<br/>企业/个人/家庭"}
+    E --> F{"校验账号权限<br/>主 / 子"}
+    F -->|"越权"| X1["拒答"]
+    F -->|"通过"| G["四轮驱动引擎<br/>账→税→贷→保"]
+    G --> H{"合规红线审查"}
+    H -->|"诈骗话术"| X2["直接拦截<br/>110 / 96110 指引"]
+    H -->|"通过"| I["按输出规范生成<br/>结论→算式→条款<br/>建议→风险提示"]
+    C --> J["审计留痕"]
+    I --> J
+    X1 --> J
+    X2 --> J
+    J --> K(["结束"])
+    classDef danger fill:#F7EAE6,stroke:#A63A2B,stroke-width:1.5px,color:#7A342A;
+    class X1,X2 danger`,
+  note:"问答先判快捷卡片命中，否则走真实大模型，依次经模式确认、权限校验、四轮驱动与合规审查后按规范作答并留痕；「越权→拒答」「诈骗话术→直接拦截」两个出口是合规工作流的核心记忆点。"
+},
+{
+  id:"fig3", tag:"四泳道 · 账→税→贷→保", title:"四轮驱动业务流（泳道子图）",
+  code:`flowchart LR
+    subgraph S1["账"]
+        direction TB
+        a1["归集流水<br/>小票/发票"] --> a2["自动分类"]
+        a2 --> a3["逐笔对账"]
+        a3 --> a4[/"输出台账<br/>＋异常清单<br/>凭证#"/]
+    end
+    subgraph S2["税"]
+        direction TB
+        b1["判定所得性质"] --> b2["归集收入与扣除"]
+        b2 --> b3["套知识库税率"]
+        b3 --> b4[/"输出测算<br/>条款文号"/]
+    end
+    subgraph S3["贷"]
+        direction TB
+        c1["归集贷款"] --> c2["算 DTI<br/>月还款÷月收入"]
+        c2 --> c3{"DTI > 50%?"}
+        c3 -->|"是"| c4["提示偏高"]
+        c3 -->|"否"| c5["健康度正常"]
+        c4 --> c6["还款日提醒<br/>不代办不承诺"]
+        c5 --> c6
+    end
+    subgraph S4["保"]
+        direction TB
+        d1["归集保单"] --> d2["缺口分析<br/>家庭责任−保额"]
+        d2 --> d3["续保提醒<br/>不推销"]
+    end
+    a4 -->|"从账长出"| b1
+    a4 -->|"从账长出"| c1
+    a4 -->|"从账长出"| d1
+    b1 ~~~ c1
+    c1 ~~~ d1
+    classDef laneA fill:#F5E9C9,stroke:#8A6419,stroke-width:1.5px,color:#3A2C16;
+    classDef laneT fill:#E3E9F3,stroke:#3F5D8A,stroke-width:1.5px,color:#3A2C16;
+    classDef laneL fill:#EAE2EF,stroke:#6D4E7E,stroke-width:1.5px,color:#3A2C16;
+    classDef laneI fill:#F9E8CE,stroke:#B45309,stroke-width:1.5px,color:#3A2C16;
+    class a1,a2,a3,a4 laneA;
+    class b1,b2,b3,b4 laneT;
+    class c1,c2,c3,c4,c5,c6 laneL;
+    class d1,d2,d3 laneI`,
+  note:"四条泳道即四轮顺序（账→税→贷→保），不可颠倒；税、贷、保三环全部从「账」输出的台账与异常清单横向长出。每环边界清晰——税只测算不申报、贷只提醒不代办、保只分析不推销。"
+},
+{
+  id:"fig4", tag:"两级账号 · 7 身份", title:"子账号申请审批与权限流",
+  code:`flowchart TD
+    A(["子账号提交申请"]) --> B{"主账号审批<br/>成员与权限"}
+    B -->|"拒绝"| R1["流程终止"]
+    B -->|"同意"| C["生成授权范围<br/>＋有效期"]
+    C --> D["子账号登录<br/>只读结论级"]
+    D --> E{"请求越权?"}
+    E -->|"是"| X["拒答模板 F"]
+    E -->|"否"| G["正常使用<br/>绿=自有账本<br/>蓝=共享结论"]
+    G --> H{"主账号<br/>收回授权?"}
+    H -->|"是"| R2["授权即时失效"]
+    H -->|"否"| G
+    I["身份结构<br/>主×3 子×4<br/>read/write/main<br/>无权限技能锁定"] -.-> D
+    R1 --> Z(["结束"])
+    X --> Z
+    R2 --> Z`,
+  note:"子账号走「申请 → 主账号审批 → 授权范围与有效期 → 随时收回」闭环；7 种身份=企业(经营者主/投资人/财务/协作)、个人(本人主/顾问)、家庭(管钱者主/消费成员/长辈关怀)；权限分 read/write/main，子账号无权限技能显示锁定；登录后仅见自有账本(绿)与主账号分享结论级(蓝)，越权统一返回拒答模板 F。"
+},
+{
+  id:"fig5", tag:"风险四级处置", title:"合规红线风险分级",
+  code:`flowchart TD
+    A(["用户指令"]) --> B["意图识别"]
+    B --> C{"风险分级"}
+    C -->|"低风险<br/>小额白名单"| D["一句提醒"]
+    C -->|"中风险"| E["二次确认卡片"]
+    C -->|"高风险<br/>陌生账户"| F["实名核对"]
+    C -->|"诈骗话术"| G["直接拦死<br/>110 / 96110 指引"]
+    D --> H["生成待确认<br/>指令卡片"]
+    E --> H
+    F --> H
+    G --> Z(["结束"])
+    H --> I["本人在银行<br/>持牌渠道执行"]
+    I -. 不触碰真实资金 .-> Z
+    classDef danger fill:#F7EAE6,stroke:#A63A2B,stroke-width:1.5px,color:#7A342A;
+    class G danger`,
+  note:"低风险一句提醒、中风险二次确认、高风险实名核对，诈骗话术（如「转到安全账户」）直接拦死并给 110/96110 指引；即便放行也只生成「待确认指令卡片」，最后一击由用户本人在银行/持牌渠道完成。"
+},
+{
+  id:"fig6", tag:"五维 × 20 分", title:"财务健康分计算",
+  code:`flowchart TD
+    A(["入口<br/>我的健康分/财务体检"]) --> B[/"取本人账本"/]
+    B --> C["五维打分<br/>结余 · 负债<br/>应急金 · 保障<br/>现金流（各20分）"]
+    C --> D["逐维给算式<br/>＋来源#"]
+    D --> E["汇总 0-100 分"]
+    E --> F{"等级判定"}
+    F -->|"≥85"| G["良好"]
+    F -->|"70-84"| H["正常"]
+    F -->|"55-69"| I["需关注"]
+    F -->|"低于55"| J["压力偏高"]
+    G --> K["给可执行动作"]
+    H --> K
+    I --> K
+    J --> K
+    K --> L(["结束<br/>标注非征信评分"])`,
+  note:"健康分是「五维 ×20 分」的可复算打分模型，每维附算式与来源 #，汇总后按四档分级（≥85 良好 / 70-84 正常 / 55-69 需关注 / 低于55 压力偏高）并输出可执行动作；结尾强调为内部模拟评分、非征信评分。"
+}
+];
+
+mermaid.initialize({
+  startOnLoad:false,
+  theme:"neutral",
+  securityLevel:"loose",
+  flowchart:{ htmlLabels:true, useMaxWidth:true, curve:"basis", nodeSpacing:34, rankSpacing:46 },
+  themeVariables:{
+    fontFamily:'"Noto Sans SC","Microsoft YaHei",sans-serif', fontSize:"14px",
+    primaryColor:"#F5E9C9", primaryBorderColor:"#8A6419", primaryTextColor:"#3A2C16",
+    lineColor:"#8A6419", secondaryColor:"#E7D3A0", tertiaryColor:"#FFF8E6",
+    clusterBkg:"#FCF8EC", clusterBorder:"#D7C48F", edgeLabelBackground:"#FFFDF7"
+  }
+});
+
+const root = document.getElementById("root");
+FIGURES.forEach((f, i) => {
+  const sec = document.createElement("section");
+  sec.className = "fig";
+  sec.id = f.id;
+  sec.innerHTML = `
+    <div class="fig-head">
+      <div class="badge">${i+1}</div>
+      <h2>图 ${i+1} · ${f.title.split("· ").pop()}</h2>
+      <span class="tag">${f.tag}</span>
+    </div>
+    <div class="mermaid"></div>
+    <div class="note">${f.note}</div>`;
+  sec.querySelector(".mermaid").textContent = f.code;
+  root.appendChild(sec);
+});
+
+mermaid.run({ nodes: document.querySelectorAll(".mermaid") })
+  .catch(err => {
+    document.querySelectorAll(".mermaid").forEach(el => {
+      el.innerHTML = "<pre style='text-align:left;font-size:12px;'>" + el.textContent + "</pre>";
+    });
+    console.error("mermaid render failed:", err);
+  });
+</script>
+</body>
+</html>
