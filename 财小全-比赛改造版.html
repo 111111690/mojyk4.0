@@ -793,8 +793,21 @@
   .hero .hero-cmp .hi .k{color:var(--brand-dark);font-weight:600}
   .hero .hero-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
   /* 今日建议：横向可滑动的卡片条 */
-  .sugg{padding:10px 12px;border-bottom:1px solid var(--tan-soft);background:var(--white)}
+  .sugg{
+    padding:10px 12px;border-bottom:1px solid var(--tan-soft);background:var(--white);
+    max-height:120px;overflow-y:auto;   /* 小视口下不再挤占对话区 */
+  }
   .sugg-head{font-size:12px;color:var(--brand-dark);font-weight:600;margin-bottom:8px}
+  /* 折叠态：只留一行标题，点击可展开 */
+  .sugg.collapsed{max-height:none;overflow:visible;padding:7px 12px}
+  .sugg.collapsed .sugg-head{margin-bottom:0;cursor:pointer}
+  .sugg.collapsed .sugg-head::after{content:"　展开 ▾";color:var(--muted);font-weight:400}
+  .sugg.collapsed .sugg-row{display:none}
+  /* 对话已开始后：四轮快捷卡片收起，把高度让给对话内容 */
+  .composer.compact .quick{display:none}
+  .composer.compact{padding-top:8px}
+  .quick-toggle{display:none;font-size:11.5px;color:var(--brand-dark);background:none;border:0;cursor:pointer;padding:2px 0 6px}
+  .composer.compact .quick-toggle{display:block}
   .sugg-row{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;-webkit-overflow-scrolling:touch}
   .sugg-card{flex:0 0 244px;max-width:244px;border:1px solid var(--tan-soft);border-radius:12px;padding:11px 12px;background:var(--white);box-shadow:0 8px 18px -16px rgba(58,44,22,.6)}
   .sugg-card .s-ic{font-size:15px}
@@ -1054,8 +1067,9 @@
       </div>
       <div class="sugg" id="sugg"></div>
       <div class="stream" id="stream"><div class="stream-inner" id="streamInner"></div></div>
-      <div class="composer">
+      <div class="composer" id="composer">
         <div class="composer-inner">
+          <button class="quick-toggle" onclick="toggleQuick()">＋ 四轮快捷入口</button>
           <div class="quick" id="quick">
             <div class="quick-head" id="quickHead">账 · 税 · 贷 · 保 — 财务四轮驱动，点击任一即可快速开始
               <button class="btn ok" style="margin-left:8px;padding:3px 10px;font-size:11.5px" onclick="openImport()">📥 导入我的数据</button>
@@ -1455,16 +1469,16 @@ var SESSIONS = {
     {r:"me",t:"我下个月有哪些贷款要还？"},
     {r:"bot",c:mkCard({
       ic:"贷",color:"#6D4E7E",title:"信贷健康 · 演示",status:"只做参谋",st:"t-gray",
-      rows:[["在贷笔数","2 笔"],["经营贷","¥8,900 / 月（每月 20 日）"],["消费贷（王建国个人）","¥1,200 / 月（每月 8 日）"],["月还款合计","¥10,100"],["月均经营收入","¥120,000"]],
-      total:["DTI　10,100 ÷ 120,000","≈ 8.4%（健康）"],
-      note:"<b>提醒：</b>消费贷还款日为 3 天后（10 月 8 日）¥1,200；经营贷 10 月 20 日 ¥8,900。<br><b>通俗解释：</b>DTI = 每月要还的钱 ÷ 每月收入。这里把经营贷与消费贷都算进了分子，8.4% 说明还款压力很小（银行红线一般在 50% 以上才开始关注）。",
+      rows:[["在贷笔数","2 笔"],["经营贷","¥8,900 / 月（每月 20 日）"],["消费贷（王建国个人）","¥1,200 / 月（每月 8 日）"],["月还款合计","¥10,100"],["月净现金流","¥57,500（120,000 − 62,500）"]],
+      total:["DTI（净现金流）10,100 ÷ 57,500","≈ 17.6%（健康）　DSCR 5.69×"],
+      note:"<b>提醒：</b>消费贷还款日为 3 天后（10 月 8 日）¥1,200；经营贷 10 月 20 日 ¥8,900。<br><b>口径：</b>DTI 分母用净现金流 57,500，得 17.6%；企业偿债能力另给 DSCR = 57,500 ÷ 10,100 ≈ 5.69×。还款额 ÷ 月营收 = 8.4%，仅作营收覆盖参考，不是标准 DTI。",
       chips:["loans.json LN2025010233","loans.json LN2024030876"],
-      dis:"口径：DTI 分子取全部月还款（经营贷 8,900 + 消费贷 1,200）。本系统不放贷、不做授信决策、不承诺额度或利率。"
+      dis:"口径：DTI 分子取全部月还款（经营贷 8,900 + 消费贷 1,200），因同一还款主体而合并。本系统不放贷、不做授信决策、不承诺额度或利率。"
     })},
     {r:"me",t:"我这条件能把额度再提一提吗？"},
     {r:"bot",c:mkCard({
       ic:"审",color:"#B45309",title:"关于额度与利率",status:"不做承诺",st:"t-warn",
-      big:"额度、利率、通过率都由银行按你的征信与经营流水独立评审，<b>我不能替你判断，也不做任何承诺</b>。<br>我能做的是：把银行看重的指标先给你摆齐——近 12 个月流水稳定性、DTI 8.4%（健康）、有无欠税与逾期、经营年限。",
+      big:"额度、利率、通过率都由银行按你的征信与经营流水独立评审，<b>我不能替你判断，也不做任何承诺</b>。<br>我能做的是：把银行看重的指标先给你摆齐——近 12 个月流水稳定性、DTI 17.6%（净现金流口径）、DSCR 5.69×、有无欠税与逾期、经营年限。",
       note:"<b>建议动作：</b>① 补齐 A004 / A018 的票据，让流水与票据对得上；② 保持对公户流水连续不断档；③ 申请前先自查一次征信报告。",
       dis:"以上仅为材料清单与自查建议，不构成授信意见。具体额度以银行审批为准。"
     })}
@@ -1666,12 +1680,13 @@ var QUICK = {
         basis:"<b>依据：</b>2026年第10号公告<b>第一条</b>（起征点）、<b>第三条（三）6</b>（减按 1%）。测算：342,500 × 1%。",
         dis:"模拟测算，不构成申报依据。"},
     贷:{q:"我有哪些贷款要还",ic:"贷",color:"#6D4E7E",title:"在贷与还款日",status:"2 笔",st:"t-gray",
-        rows:[["经营贷","¥8,900 / 月（20 日）"],["消费贷","¥1,200 / 月（8 日）"],["月还款合计","¥10,100"]],
-        total:["DTI　10,100 ÷ 120,000","≈ 8.4%（健康）"],
-        note:"<b>提醒：</b>10 月 8 日扣消费贷 ¥1,200。",dis:"口径：分子含全部月还款；不代办贷款、不承诺额度。"},
+        rows:[["经营贷","¥8,900 / 月（20 日）"],["消费贷","¥1,200 / 月（8 日）"],["月还款合计","¥10,100"],["月净现金流","¥57,500"]],
+        total:["DTI（净现金流）10,100 ÷ 57,500","≈ 17.6%（健康）　DSCR 5.69×"],
+        note:"<b>提醒：</b>10 月 8 日扣消费贷 ¥1,200。<br><b>口径：</b>DTI 分母用净现金流（120,000−62,500）；还款额/月营收 8.4% 仅作营收覆盖参考，不是标准 DTI。",dis:"口径：分子含全部月还款；不代办贷款、不承诺额度。"},
     保:{q:"店里的保障够吗",ic:"保",color:"#B45309",title:"企业保障速览",status:"缺口示意",st:"t-warn",
         rows:[["已有保额","¥800,000"],["潜在用工责任（示意）","¥1,542,000"]],
         total:["缺口","≈ ¥742,000"],
+        note:"<b>口径说明：</b>本卡为压力口径（1,542,000−800,000）；健康分改用企业责任口径（902,000−160,000，保障按 80 万保单的 20% 折算），两种口径缺口均约 74 万。",
         dis:"不推荐产品、不代客投保。"}
   },
   personal:{
@@ -1773,6 +1788,15 @@ function apKey(sid){ return acctKey() + ":" + (sid || state.sess); }
 function getAppended(sid){ var k = apKey(sid); return appended[k] || (appended[k] = []); }
 var nCounter = 0;
 var AUTO_GUIDE = false;  /* 首屏改为 Hero，不再自动弹指南（仍可手动打开） */
+var SUGG_OPEN = null;    /* 今日建议展开状态：null = 跟随对话自动折叠 */
+var QUICK_FORCE_OPEN = false;  /* 用户手动展开四轮快捷入口 */
+function toggleQuick(){
+  var c = document.getElementById("composer"); if(!c) return;
+  QUICK_FORCE_OPEN = !QUICK_FORCE_OPEN;
+  c.classList.toggle("compact", !QUICK_FORCE_OPEN);
+  var b = c.querySelector(".quick-toggle");
+  if(b) b.textContent = QUICK_FORCE_OPEN ? "收起四轮快捷入口 ▴" : "＋ 四轮快捷入口";
+}
 var AUDIT = [];
 var CARDS = {
   enterprise:[
@@ -2147,7 +2171,7 @@ var PERSP_DATA = {
   operator:{
     label:"经营者视角", tag:"数据所有者",
     big:"<b>经营者视角（数据所有者）：</b>这是<b>同一份账本</b>的完整粒度——所有明细、原始凭证与卡号信息都对你可见。",
-    rows:[["经营流水明细","9 笔 · 收入 ¥120,000（含 A004 / A007 / A018）"],["员工薪酬明细","¥18,000 / 月（3 人）"],["税负结论（Q3）","应缴增值税 ¥3,425"],["对公户卡号","招商银行 **** 6789"],["融资 / 征信指标","DTI 8.4%（健康）"]]
+    rows:[["经营流水明细","9 笔 · 收入 ¥120,000（含 A004 / A007 / A018）"],["员工薪酬明细","¥18,000 / 月（3 人）"],["税负结论（Q3）","应缴增值税 ¥3,425"],["对公户卡号","招商银行 **** 6789"],["融资 / 征信指标","DTI 17.6%（净现金流）· DSCR 5.69×"]]
   },
   investor:{
     label:"投资人视角", tag:"只读 · 已通俗化",
@@ -2157,7 +2181,7 @@ var PERSP_DATA = {
   advisor:{
     label:"顾问视角", tag:"只读测算结论",
     big:"<b>顾问视角：</b>只看<b>测算结论与计算口径</b>，用于辅助判断，不含原始流水明细与薪酬。",
-    rows:[["负债压力 DTI","8.4%（健康）"],["本季税负结论","¥3,425"],["保障缺口（示意）","¥742,000"],["待核对事项","3 笔（仅提示，不看明细）"]]
+    rows:[["负债压力 DTI","17.6%（净现金流）· DSCR 5.69×"],["本季税负结论","¥3,425"],["保障缺口（示意）","¥742,000"],["待核对事项","3 笔（仅提示，不看明细）"]]
   }
 };
 var GRAN_LABELS = ["完整明细（经营者）","通俗摘要（投资人）","测算结论（顾问）"];
@@ -2348,6 +2372,12 @@ function renderChat(){
 
   document.getElementById("streamInner").innerHTML = html;
   renderSugg();
+  /* 对话一旦开始，四轮快捷卡片自动收起，把高度让给正文；用户可手动展开 */
+  var comp = document.getElementById("composer");
+  if(comp){
+    var started = ((s.msgs || []).length + getAppended().length) > 0;
+    comp.classList.toggle("compact", started && !QUICK_FORCE_OPEN);
+  }
   var st = document.getElementById("stream");
   st.scrollTop = st.scrollHeight;
 }
@@ -2362,8 +2392,9 @@ function renderAcctBody(){
     h += ACCOUNTS[m].map(function(a){
       var on = (m===state.mode && a.id===state.acct);
       var tag = a.type==="main" ? '<span class="pill-tag pt-main">主账号</span>' : '<span class="pill-tag pt-sub">子账号 · 也有自己的账本</span>';
-      var go = a.elder ? '<span class="go">进入关怀模式 →</span>' : (on ? '<span class="go">使用中</span>' : '<span class="go">切换</span>');
-      var clk = a.elder ? 'onclick="showView(\'elder\')"' : 'onclick="setAccount(\''+m+'\',\''+a.id+'\')"';
+      var go = a.elder ? '<span class="go">'+(on?"关怀模式中":"切换 · 进入关怀模式")+' →</span>' : (on ? '<span class="go">使用中</span>' : '<span class="go">切换</span>');
+      /* 长辈身份同样可切换（切过去后进入大字只读视图，并载入他自己的「我的养老金账」会话） */
+      var clk = a.elder ? 'onclick="setAccount(\''+m+'\',\''+a.id+'\');showView(\'elder\')"' : 'onclick="setAccount(\''+m+'\',\''+a.id+'\')"';
       var chain = [];
       if(a.book) chain.push('自有账本：'+a.book.org+'（可写）');
       if(a.attach && a.attach.length) chain.push('只读挂靠：'+a.attach[0].org);
@@ -2662,7 +2693,9 @@ function renderInnovationCard(){
 /* 数据口径速查表（创新点6）：集中展示关键数字的计算过程 */
 function calcSpeedTable(){
   var rows = [
-    ["企业 DTI","8.4%","(8,900 + 1,200) ÷ 120,000"],
+    ["企业 DTI（净现金流）","17.6%","10,100 ÷ 57,500（57,500 = 120,000 − 62,500）"],
+    ["企业 DSCR","5.69×","57,500 ÷ 10,100"],
+    ["还款额 / 月营收","8.4%","10,100 ÷ 120,000（营收覆盖参考，非 DTI）"],
     ["Q3 增值税","¥3,425","342,500 × 1%"],
     ["家庭保障缺口","¥740,000","1,540,000 − 800,000"],
     ["家庭个税","¥6,240","3,120 × 2"]
@@ -2675,7 +2708,7 @@ function calcSpeedTable(){
 }
 /* 社会责任亮点卡片（创新点8 + 社会价值） */
 function socialCard(){
-  return '<div class="social-card">🌏 <b>社会责任亮点：</b>中国 60 岁以上人口超 2.9 亿，金融 App 适老化是国家政策要求。本作品实现<b>大字版、语音播报、脱敏摘要、异常推送家属</b>四重适老设计；同时以「账税贷保」一站式能力赋能小微企业财税管理。</div>';
+  return '<div class="social-card">🌏 <b>社会责任亮点：</b>中国 60 岁以上人口 3.2338 亿（占 23.0%，2025 年末），金融 App 适老化是国家政策要求。本作品实现<b>大字版、语音播报、脱敏摘要、异常推送家属</b>四重适老设计；同时以「账税贷保」一站式能力赋能小微企业财税管理。</div>';
 }
 /* 产品速览：一句话定位 + 竞品对比 + 技术亮点 + 社会价值 + 行业数据 */
 function renderOverview(){
@@ -2746,17 +2779,17 @@ function openGuide(){ renderGuide(); openModal("m-guide"); logAudit("打开指�
 
 /* ==================== 我的账户总览 ==================== */
 var HEALTH = {
-  enterprise:{score:70,grade:"良好",debt:95,debtNote:"DTI 8.4% ≤ 10%，负债压力很小",cash:72,cashNote:"存款 ¥86,000 ÷ 刚性支出（房租+工资+水电）¥29,000 ≈ 3 个月",prot:35,protNote:"已有保障 ¥160,000 ÷ 应担责任 ¥902,000 ≈ 18%",concl:"负债很轻，主要扣分在现金缓冲仅约 3 个月、保障缺口偏大。"},
-  personal:{score:52,grade:"一般",debt:35,debtNote:"DTI 53.3%，月供占收入一半以上",cash:95,cashNote:"存款 ¥52,000 ÷ 月生活支出 ¥7,000 ≈ 7 个月",prot:30,protNote:"个人保障未单独测算，按示意值演示",concl:"消费贷月供占收入 53.3%，负债压力偏大；建议补一份个人保障测算。"},
+  enterprise:{score:70,grade:"良好",debt:95,debtNote:"DSCR 5.69×（57,500÷10,100）偿债能力充足；DTI（净现金流）17.6%，还款额/月营收 8.4% 仅作营收覆盖参考",cash:72,cashNote:"存款 ¥86,000 ÷ 刚性支出（房租+工资+水电）¥29,000 ≈ 3.0 个月（未含月还款 10,100）",prot:35,protNote:"已有保障 ¥160,000（按 80 万保单的 20% 计入企业责任口径）÷ 应担责任 ¥902,000 ≈ 18%",concl:"偿债能力充足（DSCR 5.69×），主要扣分在现金缓冲约 3 个月、保障覆盖仅 18%；按保单总保额 80 万的压力口径，缺口同样约 74 万。"},
+  personal:{score:52,grade:"压力偏高",debt:35,debtNote:"DTI 53.3%，月供占收入一半以上",cash:95,cashNote:"存款 ¥52,000 ÷ 月生活支出 ¥7,000 ≈ 7 个月",prot:30,protNote:"个人保障未单独测算，按示意值演示",concl:"消费贷月供占收入 53.3%，负债压力偏大；建议补一份个人保障测算。"},
   family:{score:73,grade:"良好",debt:70,debtNote:"DTI 20.1% ≤ 30%，负债适中",cash:95,cashNote:"存款 ¥96,000 ÷ 刚性支出（房贷+消费贷+生活必要）¥14,000 ≈ 7 个月",prot:55,protNote:"已有保额 ¥800,000 ÷ 应担责任 ¥1,540,000 ≈ 52%",concl:"现金流厚实、负债适中，主要扣分在保障缺口 ¥740,000。"}
 };
 
 /* 各维度「计算过程」公式（可折叠展开，展示可解释性） */
 var HEALTH_FORMULA = {
   enterprise:[
-    "DTI = (8,900 + 1,200) ÷ 120,000 = 8.4% → 按「≤10% → 95 分」档映射 = 95 分",
-    "缓冲月数 = 86,000 ÷ 29,000 ≈ 3.0 个月 → 按「3–6 个月 → 72 分」档映射 = 72 分",
-    "保障覆盖 = 160,000 ÷ 902,000 ≈ 18% → 按「<20%（企业口径）→ 35 分」档映射 = 35 分"
+    "DSCR = 57,500 ÷ 10,100 ≈ 5.69× → 按「>2× → 95 分」档映射 = 95 分（DTI 净现金流 17.6% 作辅助）",
+    "缓冲月数 = 86,000 ÷ 29,000 ≈ 3.0 个月（未含月还款）→ 按「3–6 个月 → 72 分」档映射 = 72 分；若分母含月还款 39,100，则 2.2 个月、降至 55 分",
+    "保障覆盖 = 160,000 ÷ 902,000 ≈ 18%（按 80 万保单的 20% 折算，演示假设）→ 按「<20%（企业口径）→ 35 分」档映射 = 35 分"
   ],
   personal:[
     "DTI = 8,000 ÷ 15,000 = 53.3% → 按「>50% → 35 分」档映射 = 35 分",
@@ -2774,7 +2807,10 @@ var HEALTH_COLOR = ["#C99B3D","#5F6B2F","#3F5D8A"];
 function checkCalcs(){
   var U = window.CXQ_U || {R:120000,E:62500,biz:8900,cons:1200,vat:3425,q3:342500,gap:742000,famI:39860,famE:28800,tax:6240};
   var issues = [];
-  if(Math.abs((U.biz+U.cons)/U.R*100 - 8.4) > 1.5) issues.push("企业 DTI 与月还款÷收入不一致");
+  var net = U.R - U.E;
+  if(Math.abs((U.biz+U.cons)/net*100 - 17.6) > 1.5) issues.push("企业 DTI（净现金流口径）与月还款÷净现金流不一致");
+  if(Math.abs(net/(U.biz+U.cons) - 5.69) > 0.15) issues.push("企业 DSCR 与净现金流÷月还款不一致");
+  if(Math.abs((U.biz+U.cons)/U.R*100 - 8.4) > 1.5) issues.push("企业还款额/月营收覆盖口径不一致");
   if(Math.abs(U.q3*0.01 - U.vat) > 2) issues.push("Q3 增值税与销售额×1% 不一致");
   if((U.R-U.E) <= 0) issues.push("企业净流入异常");
   if((U.famI-U.famE) <= 0) issues.push("家庭净流入异常");
@@ -2783,7 +2819,7 @@ function checkCalcs(){
   if(!el) return;
   if(issues.length===0){
     el.className = "calc-result on ok";
-    el.innerHTML = "✓ 所有页面数据口径一致：企业 DTI、Q3 增值税、家庭保障缺口与个税、净流入等关键数字均可复算。";
+    el.innerHTML = "✓ 所有页面数据口径一致：企业 DTI 17.6%（净现金流）、DSCR 5.69×、还款额/月营收 8.4%、Q3 增值税、家庭保障缺口与个税、净流入等关键数字均可复算。";
   } else {
     el.className = "calc-result on bad";
     el.innerHTML = "✗ 检测到口径不一致：<br>" + issues.map(esc).join("<br>");
@@ -2819,7 +2855,7 @@ function renderMyAcct(){
     ["月度支出（9 月）", fb(U.E)],
     ["月度净流入", fb(U.R-U.E)],
     ["在贷情况", "经营贷月供 " + fb(U.biz) + "（每月 20 日）· 消费贷月供 ¥1,200（每月 8 日）"],
-    ["负债压力（DTI）", "约 " + Math.round((U.biz+U.cons)/U.R*100) + "%（月还款合计 " + fb(U.biz+U.cons) + " ÷ 月收入 " + fb(U.R) + "）"],
+    ["偿债能力（DTI / DSCR）", "DTI " + ((U.biz+U.cons)/(U.R-U.E)*100).toFixed(1) + "%（净现金流口径：" + fb(U.biz+U.cons) + " ÷ " + fb(U.R-U.E) + "）· DSCR " + ((U.R-U.E)/(U.biz+U.cons)).toFixed(2) + "×；还款额/月营收 " + ((U.biz+U.cons)/U.R*100).toFixed(1) + "% 仅作营收覆盖参考"],
     ["本季增值税（测算）", fb(U.vat) + "（Q3 销售额 " + fb(U.q3) + " × 1%）"],
     ["保障缺口", fb(U.gap) + "（责任 " + fb(U.gap+160000) + " − 已有 ¥160,000，示意）"]
   ] : (m==="personal") ? [
@@ -2843,7 +2879,7 @@ function renderMyAcct(){
     ["保障缺口", fb(U.gap) + "（责任 " + fb(U.gap+800000) + " − 已有 ¥800,000）"]
   ];
   var dims = [
-    ["负债压力","40%",H.debt,H.debtNote],
+    [m==="enterprise"?"偿债能力":"负债压力","40%",H.debt,H.debtNote],
     ["现金流缓冲","30%",H.cash,H.cashNote],
     ["保障充足度","30%",H.prot,H.protNote]
   ].map(function(d,i){
@@ -2864,7 +2900,7 @@ function renderMyAcct(){
     + '<div class="my-ring" style="--s:'+H.score+'"><div><div class="num">'+H.score+'</div><div class="unit">分</div></div></div>'
     + '<div class="my-info"><div class="g">财务健康分<i>'+H.grade+'</i></div>'
     + '<div class="t">'+H.concl+'</div>'
-    + '<div class="w">评分模型（演示）：总分 = 负债压力×40% + 现金流缓冲×30% + 保障充足度×30%，四舍五入取整；≥85 优秀 / 70–84 良好 / 50–69 一般 / &lt;50 需关注。这是原型自建的可解释评分，与银行、征信机构无关，不构成授信依据。</div></div></div>'
+    + '<div class="w">评分模型（演示）：总分 = 偿债能力/负债压力×40% + 现金流缓冲×30% + 保障充足度×30%，四舍五入取整；≥85 优秀 / 70–84 良好 / 55–69 需关注 / &lt;55 压力偏高。这是原型自建的可解释评分，与银行、征信机构无关，不构成授信依据。</div></div></div>'
     + '<div class="score-dims">'+dims+'</div>'
     + trendCard()
     + (hasPerm("write")
@@ -2872,10 +2908,10 @@ function renderMyAcct(){
           + '<p style="font-size:12px;color:var(--muted);line-height:1.7">拖动滑块，实时看「月供」与「DTI」怎么变（只做测算，不动真账）。</p>'
           + '<button class="btn ok" style="margin-top:10px" onclick="openPrepay()">打开反事实模拟器</button></div>'
         : '')
-    + '<div class="health-note"><b>与银行授信模型对比：</b>本评分模型为<b>原型自建</b>，与银行征信模型无关、不构成授信依据，但覆盖了银行授信关注的三大核心维度——<b>负债压力、现金流缓冲、保障充足度</b>，且每个维度的公式均可展开复算。</div>'
+    + '<div class="health-note"><b>与银行授信模型对比：</b>本评分模型为<b>原型自建</b>，与银行征信模型无关、不构成授信依据，但覆盖了银行授信关注的三大核心维度——<b>偿债能力、现金流缓冲、保障充足度</b>，且每个维度的公式均可展开复算。</div>'
     + '<div class="board-card"><h4>信息一览表（按当前身份过滤）</h4>'
     + '<table class="ov-table"><tbody>'+tr+'</tbody></table></div>'
-    + '<div class="board-note">口径说明：以上数字与对话、看板场景共用同一套演示口径（企业 DTI 分子含消费贷 ¥1,200；家庭保障缺口 = 责任 − 已有保障）。存款为值，与月度流水口径独立。健康分与一览表均不构成财务、税务、投资建议。</div>'
+    + '<div class="board-note">口径说明：以上数字与对话、看板场景共用同一套演示口径（企业 DTI 分子含消费贷 ¥1,200，分母用净现金流；家庭保障缺口 = 责任 − 已有保障）。存款为值，与月度流水口径独立。健康分与一览表均不构成财务、税务、投资建议。</div>'
     + '<div class="board-card"><h4>口径自检</h4>'
     + '<p style="font-size:12px;color:var(--muted);line-height:1.7">点击下方按钮，自动校验所有页面数字是否一致（DTI、增值税、保障缺口、个税、净流入）。</p>'
     + '<button class="btn ok" style="margin-top:10px" onclick="checkCalcs()">复核数据</button>'
@@ -2893,7 +2929,8 @@ var BOOK = {
     months:[["7 月",108000,58000],["8 月",114500,60000],["9 月",120000,62500]],
     cats:[["原材料",20000],["员工工资",18000],["房租",8000],["水电",3000],["其他",13500]],
     extras:[["Q3 增值税（测算）","¥3,425","342,500 × 1% · 小规模"],
-            ["DTI（含消费贷）","8.4%","10,100 ÷ 120,000 · 健康"],
+            ["DTI（净现金流，含消费贷）","17.6%","10,100 ÷ 57,500 · 健康"],
+            ["DSCR","5.69×","57,500 ÷ 10,100 · 偿债覆盖"],
             ["保障缺口（示意）","¥742,000","责任 − 已有保额"]],
     hidden:["员工薪资明细","供应商与客户户名","逐笔凭证号"],
     pending:[["流水#A004 · ¥9,600","缺票据凭证，点击左侧对话中的凭证编号可看证据"],
@@ -3768,7 +3805,7 @@ function cxqFundPlan(){
 }
 /* 2) 写操作意图（需二次确认，而非直接答） */
 function cxqDetectWrite(v){
-  return /转.{0,5}\d|转账|挂失|冻结卡|停用卡|停卡|申购|赎回|退订|取消.{0,6}(订阅|会员|自动续费|月卡|续费)|买.{0,6}(理财|基金)/.test(v);
+  return /转.{0,5}\d|转账|挂失|冻结卡|停用卡|停卡|申购|赎回|退订|取消.{0,6}(订阅|会员|自动续费|月卡|续费)/.test(v);
 }
 function cxqBlockInjection(v){
   getAppended().push({r:"bot", c:mkCard({
@@ -4818,13 +4855,17 @@ function loadSuggState(){ try{ return JSON.parse(localStorage.getItem(suggKey())
 function saveSuggState(o){ try{ localStorage.setItem(suggKey(), JSON.stringify(o)); }catch(e){} }
 function renderSugg(){
   var el = document.getElementById("sugg"); if(!el) return;
+  /* 对了一轮之后就把建议条收起，把纵向空间让给对话内容（小窗口/手机上也够用） */
+  var hasContent = ((curSess() || {}).msgs || []).length + getAppended().length > 0;
+  var collapsed = SUGG_OPEN===null ? hasContent : !SUGG_OPEN;
+  el.classList.toggle("collapsed", collapsed);
   var st = loadSuggState();
   var items = AGENT_SUGG.filter(function(s){ return st[s.id]!=="ok"; });
   if(!items.length){
-    el.innerHTML = '<div class="sugg-head">💡 今日建议</div><div class="sugg-empty">今天的建议都处理完了，明天我再帮你盯着。</div>';
+    el.innerHTML = '<div class="sugg-head" onclick="toggleSugg()">💡 今日建议</div><div class="sugg-empty">今天的建议都处理完了，明天我再帮你盯着。</div>';
     return;
   }
-  var h = '<div class="sugg-head">💡 今日建议 · 财小全会主动关心你的财务（'+items.length+'）</div><div class="sugg-row">';
+  var h = '<div class="sugg-head" onclick="toggleSugg()">💡 今日建议 · 财小全会主动关心你的财务（'+items.length+'）</div><div class="sugg-row">';
   items.forEach(function(s){
     var later = st[s.id]==="later";
     h += '<div class="sugg-card'+(later?" done":"")+'">'
@@ -4837,6 +4878,11 @@ function renderSugg(){
   });
   h += '</div>';
   el.innerHTML = h;
+}
+function toggleSugg(){
+  var el = document.getElementById("sugg"); if(!el) return;
+  SUGG_OPEN = el.classList.contains("collapsed");
+  renderSugg();
 }
 function handleSugg(id, act){
   var st = loadSuggState();
@@ -5179,12 +5225,9 @@ logAudit("系统就绪", "财小全改进版 · 本环境");
     {R:110000,E:52800,biz:8100,cons:1200,vat:3150,q3:315000,dep:72000,gap:680000,famI:36600,famE:26400,mort:6200,tax:5700},
     {R:145000,E:81000,biz:10800,cons:1200,vat:4150,q3:415000,dep:110000,gap:890000,famI:48200,famE:34000,mort:8200,tax:7500}
   ];
-  var idx;
-  try{ idx = parseInt(localStorage.getItem("cxf-shop-idx")||"",10); }catch(e){}
-  if(isNaN(idx) || idx<0 || idx>=POOL.length){
-    idx = Math.floor(Math.random()*POOL.length);
-    try{ localStorage.setItem("cxf-shop-idx", String(idx)); }catch(e){}
-  }
+  /* 比赛演示固定使用标准演示数据集（idx = 0）：任何评委打开都看到同一套数字，
+     避免随机门店/金额导致与项目书、截图口径不一致。 */
+  var idx = 0;
   var p = POOL[idx], U = VARIANTS[idx];
   window.CXQ_PROFILE = p; window.CXQ_U = U; window.CXQ_VARIANTS = VARIANTS;
   var fb = function(n){ return n.toLocaleString("en-US"); };
@@ -5211,12 +5254,9 @@ logAudit("系统就绪", "财小全改进版 · 本环境");
       }
     }
   }
-  deepSwap(ACCOUNTS); deepSwap(SESSIONS);
-  try{ if(typeof QUICK!=="undefined") deepSwap(QUICK); }catch(e){}
-  try{ deepSwap(CARDS); }catch(e){}
-  try{ deepSwap(AUTHORIZED); }catch(e){}
-  try{ deepSwap(PENDING); }catch(e){}
-  try{ deepSwap(APPROVED); }catch(e){}
+  /* 说明：标准数据集下不再做字符串/数字替换。原先的 deepSwap 会在 idx=0 时
+     把「暖阳烘焙」替换成「暖阳烘焙工作室」造成重名，并把家庭 1,540,000 / 740,000
+     映射成企业口径，导致家庭数字失真。 */
   logAudit("载入演示用户", p.shop+" · "+p.owner);
 })();
 
