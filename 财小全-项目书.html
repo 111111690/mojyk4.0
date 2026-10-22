@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>财小全 · 账税贷保全维财务中枢 Agent · 项目书</title>
+<style>
+:root{
+  --ink:#2E2415; --ink2:#4E4029; --muted:#7C6C4C; --faint:#A29372;
+  --gold:#C99B3D; --gold-d:#8A6419; --gold-s:#F6EEDB; --gold-line:#E3D2A8;
+  --red:#A63A2B; --red-s:#F9EDE9; --green:#5F6B2F; --green-s:#EFF2E3;
+  --blue:#3F5D8A; --blue-s:#EDF1F7;
+  --paper:#FDFBF6; --line:#E6DAC0; --page:#FFFFFF;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:#E9E3D6; color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei","Noto Sans SC",sans-serif;
+  font-size:10.5pt; line-height:1.8; -webkit-font-smoothing:antialiased;
+  counter-reset:pg;
+}
+.page{
+  width:210mm; min-height:297mm; margin:10mm auto; background:var(--page);
+  padding:16mm 15mm 14mm; position:relative; overflow:hidden;
+  box-shadow:0 2mm 8mm rgba(58,44,22,.18); counter-increment:pg;
+  page-break-after:always;
+}
+.page:last-child{page-break-after:auto}
+h1,h2,h3,h4,.serif{font-family:Georgia,"Noto Serif SC","Songti SC",SimSun,serif;font-weight:700}
+h2{font-size:17pt;line-height:1.4;color:var(--ink);margin:0 0 3mm;letter-spacing:.5px}
+h2 .no{color:var(--gold-d);font-size:12pt;letter-spacing:0;margin-right:3mm}
+h3{font-size:12pt;margin:6mm 0 2mm;color:var(--ink);border-left:3px solid var(--gold);padding-left:3mm}
+h4{font-size:10.5pt;margin:4mm 0 1.5mm;color:var(--gold-d)}
+p{margin:0 0 2.6mm;text-align:justify}
+.lead{font-size:11pt;color:var(--ink2)}
+.small{font-size:8.8pt;color:var(--muted)}
+.tiny{font-size:8pt;color:var(--faint);line-height:1.6}
+b,strong{font-weight:700;color:var(--ink)}
+.gold{color:var(--gold-d)}
+.red{color:var(--red)}
+.green{color:var(--green)}
+.mono{font-family:"SF Mono",Consolas,"Courier New",monospace;font-size:9pt}
+
+/* 页眉页脚 */
+.head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:.5pt solid var(--line);
+  padding-bottom:2mm;margin-bottom:6mm;font-size:7.6pt;color:var(--faint);letter-spacing:.6px}
+.head b{font-size:8pt;color:var(--ink2);letter-spacing:1px}
+.foot{position:absolute;left:15mm;right:15mm;bottom:8mm;display:flex;justify-content:space-between;
+  align-items:center;font-size:7.4pt;color:var(--faint);border-top:.5pt solid var(--line);padding-top:2mm}
+.foot .pn::before{content:"P." counter(pg,decimal-leading-zero)}
+.foot .pn{font-family:Georgia,serif;letter-spacing:.5px}
+
+/* 封面 */
+.cover{background:var(--paper);display:flex;flex-direction:column}
+.cover .frame{position:absolute;inset:9mm;border:1pt solid var(--gold);pointer-events:none}
+.cover .frame:before{content:"";position:absolute;inset:2mm;border:.5pt solid var(--gold-line)}
+.cover .inner{position:relative;padding:8mm 6mm;display:flex;flex-direction:column;height:100%;min-height:262mm}
+.cover .kicker{font-size:8.5pt;letter-spacing:3px;color:var(--gold-d);text-align:center;margin-top:8mm}
+.cover .logo{width:22mm;height:22mm;border-radius:5mm;background:var(--gold);color:#3A2C16;
+  display:grid;place-items:center;font-family:Georgia,serif;font-size:38pt;font-weight:700;
+  margin:14mm auto 8mm;box-shadow:inset 0 -3px 0 rgba(0,0,0,.16)}
+.cover h1{font-size:46pt;text-align:center;letter-spacing:6px;line-height:1.05;margin-bottom:3mm}
+.cover .sub{font-size:15pt;text-align:center;letter-spacing:2px;color:var(--gold-d);font-family:Georgia,"Noto Serif SC",serif}
+.cover .tag{text-align:center;font-size:10pt;color:var(--muted);margin-top:8mm;letter-spacing:1px}
+.cover .rule{width:36mm;height:1.5pt;background:var(--gold);margin:9mm auto}
+.cover .meta{display:grid;grid-template-columns:1fr 1fr;gap:3mm 8mm;margin:8mm 12mm 0;font-size:9pt}
+.cover .meta div{border-top:.5pt solid var(--line);padding-top:2mm}
+.cover .meta span{display:block;font-size:7.5pt;color:var(--faint);letter-spacing:1px;margin-bottom:.5mm}
+.cover .bottom{margin-top:auto;text-align:center;font-size:8pt;color:var(--muted);line-height:1.9}
+.cover .seal{display:inline-block;border:1pt solid var(--red);color:var(--red);font-size:8pt;
+  letter-spacing:2px;padding:1.5mm 4mm;border-radius:1mm;transform:rotate(-3deg);margin-top:4mm}
+
+/* 统计条 */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:3mm;margin:5mm 0}
+.stat{border:.5pt solid var(--line);background:var(--gold-s);padding:3.5mm 4mm;border-radius:1.5mm}
+.stat .n{font-family:Georgia,serif;font-size:17pt;font-weight:700;color:var(--gold-d);line-height:1.2}
+.stat .l{font-size:8pt;color:var(--ink2);margin-top:1mm;line-height:1.5}
+.stat .s{font-size:7.2pt;color:var(--faint);margin-top:.8mm}
+
+/* 表格 */
+table{width:100%;border-collapse:collapse;margin:2.5mm 0 3.5mm;font-size:8.6pt;line-height:1.55}
+th{background:var(--gold-s);color:var(--ink);font-weight:700;text-align:left;padding:2mm 2.2mm;
+  border:.5pt solid var(--gold-line);font-size:8.3pt;letter-spacing:.3px}
+td{padding:1.9mm 2.2mm;border:.5pt solid var(--line);vertical-align:top;color:var(--ink2)}
+tr:nth-child(even) td{background:#FCFAF4}
+td.k{color:var(--ink);font-weight:600;white-space:nowrap}
+td.num{font-family:Georgia,serif;color:var(--gold-d);font-weight:700;white-space:nowrap}
+.tbl-note{font-size:7.6pt;color:var(--faint);margin-top:-2mm;margin-bottom:3mm}
+
+/* 提示框 */
+.note,.warn,.ok{border-left:3px solid var(--gold);background:var(--gold-s);padding:2.8mm 3.5mm;
+  font-size:8.7pt;line-height:1.75;margin:3mm 0;border-radius:0 1mm 1mm 0}
+.note b,.warn b,.ok b{color:var(--gold-d)}
+.warn{border-left-color:var(--red);background:var(--red-s)}
+.warn b{color:var(--red)}
+.ok{border-left-color:var(--green);background:var(--green-s)}
+.ok b{color:var(--green)}
+.note .t,.warn .t,.ok .t{display:block;font-size:7.4pt;letter-spacing:1.5px;margin-bottom:1mm;font-weight:700;opacity:.85}
+
+/* 图表 */
+figure{margin:4mm 0;break-inside:avoid}
+figure .img{border:.5pt solid var(--line);border-radius:1.5mm;overflow:hidden;background:#fff;
+  box-shadow:0 1mm 3mm rgba(58,44,22,.08)}
+figure img{display:block;width:100%;height:auto}
+figure .img.sm{width:64%;margin:0 auto}
+figure .img.md{width:82%;margin:0 auto}
+figure .img + .img{border-top:none}
+figcaption{font-size:7.8pt;color:var(--muted);margin-top:1.5mm;line-height:1.55}
+figcaption b{color:var(--ink2)}
+.fig-no{color:var(--gold-d);font-weight:700;margin-right:1mm}
+
+/* 架构图 / 示意图 */
+.diagram{border:.5pt solid var(--line);border-radius:1.5mm;padding:4mm;background:#FEFCF7}
+.layers{display:flex;flex-direction:column;gap:1.6mm}
+.layer{display:grid;grid-template-columns:22mm 1fr;gap:2mm;align-items:stretch}
+.layer .lab{background:var(--ink);color:#F5EFDF;border-radius:1mm;display:grid;place-items:center;
+  font-size:7.6pt;letter-spacing:1px;text-align:center;line-height:1.4}
+.layer .row{display:grid;gap:1.6mm}
+.layer .box{border:.5pt solid var(--gold-line);background:#fff;border-radius:1mm;padding:2mm;
+  text-align:center;font-size:8pt;color:var(--ink2)}
+.layer .box b{display:block;font-size:8.8pt;color:var(--ink)}
+.layer .box span{font-size:7pt;color:var(--faint)}
+.layer.core .box{background:var(--gold-s);border-color:var(--gold)}
+.layer.base .lab{background:var(--gold-d)}
+.arrowdown{text-align:center;color:var(--gold);font-size:9pt;line-height:1;margin:.4mm 0}
+
+/* 流程 */
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:1.4mm;margin:3mm 0}
+.flow .step{border:.5pt solid var(--gold-line);background:#fff;border-radius:1mm;padding:1.6mm 2.4mm;
+  font-size:8pt;color:var(--ink2);white-space:nowrap}
+.flow .step b{color:var(--ink)}
+.flow .arr{color:var(--gold);font-size:8pt}
+.flow .step.hot{background:var(--gold-s);border-color:var(--gold)}
+
+/* 四轮 */
+.wheels{display:grid;grid-template-columns:repeat(4,1fr);gap:2.5mm;margin:3mm 0 0}
+.wheel{border:.5pt solid var(--line);border-top:2.5pt solid var(--gold);border-radius:1mm;padding:3mm;background:#fff}
+.wheel h4{margin:0 0 1.2mm;font-size:10pt;color:var(--ink)}
+.wheel .tagline{font-size:7pt;color:var(--gold-d);letter-spacing:1px;margin-bottom:1.5mm}
+.wheel p{font-size:7.6pt;color:var(--muted);margin:0;line-height:1.6}
+.base-bar{margin-top:2.5mm;background:var(--ink);color:#F5EFDF;border-radius:1mm;padding:2.4mm 3mm;
+  font-size:7.8pt;text-align:center;letter-spacing:.5px}
+.base-bar b{color:var(--gold);letter-spacing:1px}
+
+/* 路径对比 */
+.paths{display:grid;grid-template-columns:1fr 1fr;gap:3mm;margin:3mm 0}
+.path{border:.5pt solid var(--line);border-radius:1.5mm;padding:3mm;background:#fff}
+.path.bad{border-color:#E8C9C1;background:#FDF6F4}
+.path.good{border-color:var(--gold-line);background:#FEFBF2}
+.path .h{font-size:8pt;letter-spacing:1.5px;color:var(--muted);border-bottom:.5pt solid var(--line);
+  padding-bottom:1.2mm;margin-bottom:2mm}
+.path.bad .h{color:var(--red);border-color:#E8C9C1}
+.path.good .h{color:var(--gold-d);border-color:var(--gold-line)}
+.path ol{margin-left:4mm;font-size:8.2pt;line-height:1.75;color:var(--ink2)}
+.path ol li{margin-bottom:.6mm}
+.path .res{margin-top:2mm;font-size:8.2pt;padding-top:1.5mm;border-top:.5pt dashed var(--line);color:var(--ink)}
+
+/* 权限矩阵 */
+.matrix{font-size:8pt;text-align:center}
+.matrix td,.matrix th{text-align:center;padding:1.6mm 1mm}
+.matrix td:first-child,.matrix th:first-child{text-align:left;white-space:nowrap}
+.yes{color:var(--green);font-weight:700}
+.no{color:#C0B394}
+
+/* 风险分级 */
+.risk{display:grid;grid-template-columns:repeat(4,1fr);gap:2mm;margin:3mm 0}
+.risk .r{border-radius:1mm;padding:2.6mm;font-size:7.6pt;line-height:1.6;border:.5pt solid}
+.risk .r b{display:block;font-size:8.6pt;margin-bottom:1mm}
+.risk .r1{background:#EFF2E3;border-color:#CBD3AE;color:#43501F}
+.risk .r2{background:#FBF3DE;border-color:#E7D3A0;color:#7A5B12}
+.risk .r3{background:#FBEBE5;border-color:#EBC5B8;color:#8A3A24}
+.risk .r4{background:#7A1F14;border-color:#7A1F14;color:#FBEDE9}
+.risk .r4 b{color:#fff}
+
+/* 列表 */
+ul.clean{list-style:none;margin:2mm 0}
+ul.clean li{position:relative;padding-left:4mm;margin-bottom:1.4mm;font-size:9pt;color:var(--ink2)}
+ul.clean li:before{content:"";position:absolute;left:0;top:2.6mm;width:1.6mm;height:1.6mm;
+  background:var(--gold);border-radius:50%}
+ol.num{margin-left:4.5mm}
+ol.num li{margin-bottom:1.6mm;font-size:9pt;color:var(--ink2)}
+ol.num li b{color:var(--ink)}
+
+/* 目录 */
+.toc{display:grid;grid-template-columns:1fr 1fr;gap:1.5mm 8mm;margin-top:4mm}
+.toc .item{display:flex;align-items:baseline;gap:2mm;font-size:9pt;border-bottom:.5pt dotted var(--line);padding-bottom:1.2mm}
+.toc .item .n{font-family:Georgia,serif;color:var(--gold-d);font-size:8.4pt;width:7mm;flex:0 0 7mm}
+.toc .item .t{color:var(--ink2)}
+.toc .item .p{margin-left:auto;font-family:Georgia,serif;font-size:7.8pt;color:var(--faint)}
+
+/* 打印 */
+@media print{
+  body{background:#fff}
+  .page{margin:0;box-shadow:none;width:auto;min-height:0;height:297mm;padding:15mm 14mm 12mm}
+  .page:last-child{page-break-after:auto}
+  @page{size:A4;margin:0}
+  figure,.note,.warn,.ok,table{break-inside:avoid}
+  .page{break-after:page}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ 封面 ============ -->
+<section class="page cover">
+  <div class="frame"></div>
+  <div class="inner">
+    <div class="kicker">深圳国际金融科技大赛 · 参赛项目书</div>
+    <div class="logo">财</div>
+    <h1>财小全</h1>
+    <div class="sub">账税贷保全维财务中枢 Agent</div>
+    <div class="rule"></div>
+    <div class="tag">一套引擎 · 三种模式 · 四轮驱动<br>每个结论，都能追溯到原始凭证</div>
+
+    <div class="meta">
+      <div><span>参赛赛道</span>银行 AI 智能体（AI Banking Agent）</div>
+      <div><span>项目形态</span>单文件可交互 Demo + 可部署技术方案</div>
+      <div><span>团队名称</span>待填（以报名表为准）</div>
+      <div><span>指导单位</span>待填</div>
+      <div><span>版本</span>V1.0 · 口径校订版</div>
+      <div><span>编制日期</span>2026 年 10 月</div>
+    </div>
+
+    <div class="bottom">
+      本册出现的每一个数字，均可在 Demo 内通过「一键复核全部数字」复现<br>
+      原始数据与 API Key 仅存本机浏览器；在线提问仅发送当前账本摘要（详见 3.7）
+      <div class="seal">口径已复核 · 可现场演示</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 执行摘要 ============ -->
+<section class="page">
+  <div class="head"><b>财小全 · 项目书</b><span>执行摘要</span></div>
+  <h2><span class="no">00</span>执行摘要</h2>
+
+  <p class="lead">小微经营者、普通个人与家庭，账、税、贷、保分散在五到十个入口。通用大模型能给出一个像样的数字，却给不出这个数字的凭证；银行 App 数据权威，却只看本行；记账软件解决了录入，却解决不了判断。</p>
+
+  <p><b>问题。</b>深圳一家烘焙工作室，9 月 18 笔流水中 3 笔对不上：两笔缺票、一笔差 100 元。老板并不知道自己本季应缴增值税 3,425 元是怎么算出来的，也说不清 74 万保障缺口从哪来。家庭场景更棘手：子女想替父母看账单，却没有合法授权入口；老人看得见金额，看不懂术语。</p>
+
+  <p><b>方案。</b>财小全以「账」为交易事实底座，把身份、账本、凭证、审计做成四轮共用的底座。企业、个人、家庭三种模式共用同一套引擎，按角色权限切换输出粒度；账、税、贷、保各自归集专项数据，而不是宣称"所有数据都从流水长出"。所有计算交给规则引擎与税率表，所有政策结论强制附条款文号，所有结论挂凭证编号。</p>
+
+  <p><b>差异。</b>这不是一个记账 App，而是一个可审计的财务 AI：证据链可点开、口径可按权限翻译、健康分可复算、权限审批真实生效、诈骗话术直接拦死。Demo 内置「一键复核全部数字」，把页面内所有关键数值按同一套变量重算一遍——评委不需要相信我们，可以自己验。</p>
+
+  <p><b>价值。</b>让小微看得懂账、少缴冤枉税；让家庭看得懂老人账单、让授权可收回；让银行把 AI 敢用在真实金融场景里——因为每一个回答都能举证，每一次越权都会被拒答，每一次操作都留痕。</p>
+
+  <div class="stats">
+    <div class="stat"><div class="n">36</div><div class="l">数据对象（32 张基础表 + 4 个派生视图）</div><div class="s">按 id 去重复核</div></div>
+    <div class="stat"><div class="n">3 层</div><div class="l">防幻觉：规则算数 / RAG 给依据 / 凭证溯源</div><div class="s">缺一不可</div></div>
+    <div class="stat"><div class="n">7 个</div><div class="l">演示身份（3 主账号 + 4 子账号）</div><div class="s">9 类角色已定义</div></div>
+  </div>
+
+  <div class="note"><span class="t">本册的写法</span>不引用无法复现的规模数字，不把用户基数当市场规模，不写"所有数据仅存本机"这类与实现矛盾的表述。凡涉及假设，均在括号内标注「演示假设」；凡涉及边界，均单列"不做什么"。</div>
+
+  <h3>评委四个问题，对应四章答案</h3>
+  <table>
+    <tr><th style="width:32%">评委的疑问</th><th>本册给出的答案</th><th style="width:18%">章节</th></tr>
+    <tr><td class="k">这是真问题吗？</td><td>1.25 亿个体工商户、3.23 亿老人、四类数据孤岛；三个 P0 痛点各有真实场景</td><td>第 1 章</td></tr>
+    <tr><td class="k">这是真方案吗？</td><td>四轮共用身份/账本/凭证/审计，一次录入多处复用；三模式同一引擎</td><td>第 2 章</td></tr>
+    <tr><td class="k">这是真技术吗？</td><td>规则算数、RAG 给文号、证据链下钻、权限真实生效、审计可回放</td><td>第 3、4 章</td></tr>
+    <tr><td class="k">能落地吗？合规吗？</td><td>单 HTML 现场演示、三端出口、不碰真实资金、四级风险处置</td><td>第 6、7 章</td></tr>
+  </table>
+
+  <p class="tiny">注：本册所有截图均来自 2026-10-22 对 Demo 的真实运行测试，未做界面美化或数据篡改；截图中的数字与附录 A 口径表逐一对应。</p>
+  <div class="foot"><span>财小全 · 账税贷保全维财务中枢 Agent</span><span class="pn"></span></div>
+</section>
+
+<!-- ============ 目录 ============ -->
+<section class="page">
+  <div class="head"><b>财小全 · 项目书</b><span>目录</span></div>
+  <h2><span class="no">·</span>目录</h2>
+  <div class="toc">
+    <div class="item"><span class="n">01</span><span class="t">项目背景与立项依据</span><span class="p">04</span></div>
+    <div class="item"><span class="n">02</span><span class="t">产品定义与用户价值</span><span class="p">06</span></div>
+    <div class="item"><span class="n">03</span><span class="t">技术架构与实现</span><span class="p">10</span></div>
+    <div class="item"><span class="n">04</span><span class="t">创新点与测试证据</span><span class="p">13</span></div>
+    <div class="item"><span class="n">05</span><span class="t">竞品对比与壁垒</span><span class="p">16</span></div>
+    <div class="item"><span class="n">06</span><span class="t">合规、安全与伦理</span><span class="p">17</span></div>
+    <div class="item"><span class="n">07</span><span class="t">市场与商业模式</span><span class="p">19</span></div>
+    <div class="item"><span class="n">08</span><span class="t">实施计划与团队</span><span class="p">20</span></div>
+    <div class="item"><span class="n">09</span><span class="t">社会价值与风险应对</span><span class="p">21</span></div>
+    <div class="item"><span class="n">A</span><span class="t">附录 A：数据口径速查表</span><span class="p">22</span></div>
+    <div class="item"><span class="n">B</span><span class="t">附录 B：术语、参考与演示脚本</span><span class="p">23</span></div>
+  </div>
+
+  <h3>图表索引（正文实拍与自制图）</h3>
+  <table>
+    <tr><th style="width:12%">图号</th><th>名称</th><th style="width:22%">来源</th></tr>
+    <tr><td class="k">图 1</td><td>四轮驱动与共用底座</td><td>自制</td></tr>
+    <tr><td class="k">图 2</td><td>经营看板（真实运行）</td><td>Demo 截图</td></tr>
+    <tr><td class="k">图 3</td><td>9 月收支速览与待核对（真实运行）</td><td>Demo 截图</td></tr>
+    <tr><td class="k">图 4</td><td>Q3 增值税测算与条款依据（真实运行）</td><td>Demo 截图</td></tr>
+    <tr><td class="k">图 5</td><td>凭证证据面板（真实运行）</td><td>Demo 截图</td></tr>
+    <tr><td class="k">图 6</td><td>可解释健康分与三维算式（真实运行）</td><td>Demo 截图</td></tr>
+    <tr><td class="k">图 7</td><td>家庭模式（真实运行）</td><td>Demo 截图</td></tr>
+    <tr><td class="k">图 8</td><td>长辈关怀模式（真实运行）</td><td>Demo 截图</td></tr>
+    <tr><td class="k">图 9</td><td>系统分层架构</td><td>自制</td></tr>
+    <tr><td class="k">图 10</td><td>成员与权限矩阵（真实运行）</td><td>Demo 截图</td></tr>
+    <tr><td class="k">图 11</td><td>审计回放时间轴（真实运行）</td><td>Demo 截图</td></tr>
+    <tr><td class="k">图 12</td><td>两条回答路径对比</td><td>自制</td></tr>
+    <tr><td class="k">图 13</td><td>合规拒答卡片（真实运行）</td><td>Demo 截图</td></tr>
+    <tr><td class="k">图 14</td><td>诈骗话术拦截（真实运行）</td><td>Demo 截图</td></tr>
+    <tr><td class="k">图 15</td><td>风险四级处置</td><td>自制</td></tr>
+  </table>
+
+  <div class="note"><span class="t">阅读提示</span>第 3 章是技术评审的核心，第 4 章第 4 节是"我们怎么用测试证明自己"的完整记录，第 6 章是金融赛道的必拿分项。时间有限的评委，建议从执行摘要 → 第 4.4 节 → 第 6 章。</div>
+  <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
+</section>
+
+<!-- ============ 第 1 章 ============ -->
+<section class="page">
+  <div class="head"><b>财小全 · 项目书</b><span>01 项目背景</span></div>
+  <h2><span class="no">01</span>项目背景与立项依据</h2>
+
+  <h3>1.1 三类人群的真实痛点</h3>
+  <p>我们不做"所有人都需要"的泛化叙事，只盯三类人：有账要算、有税要报、有债要还、有风险要防，但请不起专职财务的人。</p>
+  <table>
+    <tr><th style="width:13%">人群</th><th style="width:22%">典型场景</th><th>具体痛点</th><th style="width:22%">后果</th></tr>
+    <tr><td class="k">小微经营者</td><td>对账、报税、还款、投保</td><td>流水、小票、发票、贷款合同、保单分散在 5—10 个入口；缺票与金额不符只能靠肉眼核</td><td>多缴税、漏票、逾期、保障缺口算不清</td></tr>
+    <tr><td class="k">个人</td><td>工资、房贷、消费贷、保单</td><td>多银行多平台，负债率靠感觉，不知道真实还款压力</td><td>过度借贷、应急金不足</td></tr>
+    <tr><td class="k">家庭</td><td>子女替父母看账单</td><td>老人看不懂术语、不敢操作；子女没有合法授权入口，只能拿父母手机</td><td>数字鸿沟 + 看护缺位 + 隐私越界</td></tr>
+  </table>
+
+  <h3>1.2 群体规模与政策依据</h3>
+  <div class="stats" style="grid-template-columns:1fr 1fr">
+    <div class="stat"><div class="n">1.25 亿户</div><div class="l">个体工商户，占经营主体近七成，带动就业约 3 亿人</div><div class="s">来源：市场监管总局公开数据</div></div>
+    <div class="stat"><div class="n">3.2338 亿</div><div class="l">60 岁及以上人口，占全国人口 23.0%</div><div class="s">来源：2025 年末国家老龄事业发展公报</div></div>
+  </div>
+  <p>这两个数字只说明<b>用户基数</b>，不是市场规模。本册在第 7 章会把市场规模单独按"付费主体数 × 年 ARPU"重算，避免把人口当 TAM。</p>
+  <p>政策抓手同样明确：普惠金融、个体工商户数字化转型、银行适老化改造、金融消费者权益保护、反电信网络诈骗。财小全的四个轮子，正好对应这五条政策线中的前四条；反诈则作为贯穿全流程的安全护栏。</p>
+
+  <h3>1.3 现有方案为什么不够</h3>
+  <table>
+    <tr><th style="width:16%">方案</th><th style="width:26%">强在哪</th><th>缺在哪</th></tr>
+    <tr><td class="k">通用大模型</td><td>对话自然、上手快</td><td>无凭证、税法可能过期、不敢用于真实资金场景</td></tr>
+    <tr><td class="k">记账 App</td><td>记账体验成熟</td><td>只解决"账"，靠手工录入，不解决税、贷、保的判断</td></tr>
+    <tr><td class="k">银行 App</td><td>数据权威、资金闭环</td><td>只看本行、单一用户、无跨机构视图，家庭授权缺失</td></tr>
+    <tr><td class="k">专业财税软件</td><td>专业、合规</td><td>门槛高、面向会计，个体户与家庭用不上</td></tr>
+  </table>
+  <p>四类方案各占一段，中间那道缝——<b>跨入口的数据归集 + 可举证的结论 + 可收回的授权</b>——正是财小全要补的位置。</p>
+
+  <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
+</section>
+
+<section class="page">
+  <div class="head"><b>财小全 · 项目书</b><span>01 项目背景</span></div>
+
+  <h3>1.4 时机：为什么是现在</h3>
+  <ul class="clean">
+    <li><b>推理成本下降</b>，让"每个结论都再过一遍规则与检索"在经济上可行，而不是只做一次生成。</li>
+    <li><b>RAG 工程成熟</b>，法规、条款、税率表可以版本化管理，回答能附文号而不是靠记忆。</li>
+    <li><b>银行开放能力</b>与政务数据接口逐步可用，账本归集不必从零自建。</li>
+    <li><b>适老化改造</b>成为明确的政策要求与考核项，大字、语音、代办授权有了落地场景。</li>
+  </ul>
+  <p>四条叠加，才构成"可信财务 Agent"的窗口期。缺任何一条，产品要么算不准，要么落不了地。</p>
+
+  <h3>1.5 问题定义与项目边界</h3>
+  <p>我们把问题收敛到三个 P0，其余全部放到路线图：</p>
+  <table>
+    <tr><th style="width:18%">P0 问题</th><th style="width:30%">可验证的定义</th><th>财小全的回答方式</th></tr>
+    <tr><td class="k">账对不平</td><td>流水与票据在金额、日期、主体上对不上，且无法定位到具体凭证</td><td>逐笔比对，输出待核对清单 + 凭证编号</td></tr>
+    <tr><td class="k">税算不清</td><td>不知道适用哪条政策、哪个税率、哪个月度/季度口径</td><td>规则引擎计算 + 条款文号 + 起征点判断</td></tr>
+    <tr><td class="k">风险看不见</td><td>负债压力、现金缓冲、保障缺口没有统一口径</td><td>三维健康分，逐维给算式与来源</td></tr>
+  </table>
+
+  <div class="warn"><span class="t">明确不做什么</span>
+    不放贷、不卖保险、不代客操作、不做征信评分、不做授信额度建议、不推荐具体理财产品、不导流。这七条不是免责声明，而是写进代码的拒答模板（见 6.1 与图 12）。
+  </div>
+
+  <h3>1.6 本项目的三个基本判断</h3>
+  <p><b>第一，评委不按功能数量打分，只按事实可验证度打分。</b>所以本册每个数字都给算式、给出处、能在 Demo 内复现；复现不了的，宁可删掉。</p>
+  <p><b>第二，金融 AI 的价值链只有三段：算得对、说得清、管得住。</b>算得对靠规则引擎与税率表，说得清靠证据链与条款文号，管得住靠权限、审计与拒答。缺任何一段，方案都不成立。</p>
+  <p><b>第三，比赛要展示一条完整可信链路，不是三个模式、九个角色。</b>所以 Demo 的演示范围明确为：<b>企业为主线、家庭为差异化亮点、个人做串联</b>；其余角色与能力写入路线图，避免范围稀释。</p>
+
+  <div class="note"><span class="t">与前版材料的差异</span>原方案曾把"税贷保全部从账长出"作为架构主张。经复核，保单、贷款合同、专项扣除并非来自流水。本册改为"账是交易事实底座，四轮共用身份、账本、凭证与审计，税贷保各自归集专项数据"，逻辑才成立。</div>
+
+  <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
+</section>
+
+<!-- ============ 第 2 章 ============ -->
+<section class="page">
+  <div class="head"><b>财小全 · 项目书</b><span>02 产品定义</span></div>
+  <h2><span class="no">02</span>产品定义与用户价值</h2>
+
+  <h3>2.1 产品定位与三条边界</h3>
+  <p class="lead"><b>财小全 = 账税贷保四轮驱动、每个结论都能追溯到原始凭证的 AI 财务中枢。</b></p>
+  <p>它不是"什么都能问"的聊天机器人，而是一个有明确职责边界的财务工作台：把分散的流水、票据、合同、保单归集起来，算出可复算的数字，说清依据，并把权限管住。</p>
+  <div class="stats" style="grid-template-columns:repeat(3,1fr)">
+    <div class="stat"><div class="n">只测算</div><div class="l">做测算与整理，不替用户做资金决策</div></div>
+    <div class="stat"><div class="n">只提醒</div><div class="l">到期、缺票、异常只提醒，不代办</div></div>
+    <div class="stat"><div class="n">只归集</div><div class="l">归集与解释数据，不推销、不导流</div></div>
+  </div>
+
+  <h3>2.2 一套引擎、三种模式、九类角色</h3>
+  <p>三种模式不是三套系统，而是同一引擎的三个出口。身份决定数据范围，权限决定输出粒度，模式只决定话术与页面组织方式。</p>
+  <table>
+    <tr><th style="width:12%">模式</th><th style="width:16%">角色</th><th style="width:12%">权限码</th><th>可见范围</th><th style="width:16%">Demo 状态</th></tr>
+    <tr><td class="k" rowspan="4">企业</td><td>经营者（主）</td><td class="mono">main</td><td>全部账本、成员审批、审计全量</td><td>已建号（王建国）</td></tr>
+    <tr><td>投资人</td><td class="mono">read</td><td>结论级：收入、支出、净流入、待核对数（不含明细）</td><td>已建号（晨曦科技）</td></tr>
+    <tr><td>财务</td><td class="mono">read/write</td><td>账务处理与凭证，不含成员审批</td><td>角色已定义，演示未建号</td></tr>
+    <tr><td>协作</td><td class="mono">read</td><td>被指定的单账簿只读</td><td>角色已定义，演示未建号</td></tr>
+    <tr><td class="k" rowspan="2">个人</td><td>本人（主）</td><td class="mono">main</td><td>个人全部数据</td><td>已建号</td></tr>
+    <tr><td>财税顾问</td><td class="mono">read</td><td>只看测算结论，不看流水与卡号</td><td>已建号（李顾问）</td></tr>
+    <tr><td class="k" rowspan="3">家庭</td><td>管钱者（主）</td><td class="mono">main</td><td>家庭全部账本与授权</td><td>已建号（王建国）</td></tr>
+    <tr><td>消费成员</td><td class="mono">read</td><td>本人收支 + 家庭公共账</td><td>已建号（李梅）</td></tr>
+    <tr><td>长辈关怀</td><td class="mono">read</td><td>大字摘要 + 异常提醒，全程只读</td><td>已建号（张奶奶）</td></tr>
+  </table>
+  <p class="tbl-note">口径：<b>9 类角色定义；Demo 中实际出现 7 个身份（3 个主账号 + 4 个子账号）</b>。财务、协作两类角色已定义但未建号，正文不把"已定义"说成"已实现"。</p>
+
+  <div class="note"><span class="t">权限三码</span><span class="mono">read / write / main</span> 三种权限码门控 18 项技能。无权限的技能在界面上显示为"锁定"，而不是隐藏——让用户知道"有这项能力，但你需要授权"，比假装不存在更诚实。</div>
+
+  <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
+</section>
+
+<section class="page">
+  <div class="head"><b>财小全 · 项目书</b><span>02 产品定义</span></div>
+
+  <h3>2.3 四轮驱动：共用底座，不是四个工具</h3>
+  <p>账提供交易事实；税需要扣除项与税率表；贷需要贷款合同；保需要保单与保障责任。<b>四轮共用的是身份、账本、凭证、审计，不是"所有数据都来自流水"。</b></p>
+
+  <div class="wheels">
+    <div class="wheel"><div class="tagline">ROUND 01</div><h4>账</h4><p>流水、小票、发票 → 解析、分类、对账、异常标注 → 台账 + 异常清单 + 凭证号。<br><b>边界：</b>流水只可作废冲正，不可编辑。</p></div>
+    <div class="wheel"><div class="tagline">ROUND 02</div><h4>税</h4><p>台账 + 扣除项 + 税率表 → 所得性质、起征点、扣除归集、税率套用 → 应纳税额 + 条款文号。<br><b>边界：</b>只测算，不申报。</p></div>
+    <div class="wheel"><div class="tagline">ROUND 03</div><h4>贷</h4><p>合同 + 收支 → 月供、DTI、还款日、反事实模拟 → 健康度 + 提醒清单。<br><b>边界：</b>不放贷、不授信、不代办。</p></div>
+    <div class="wheel"><div class="tagline">ROUND 04</div><h4>保</h4><p>保单 + 家庭责任口径 → 责任 − 保额 = 缺口、续保提醒 → 缺口金额 + 提醒。<br><b>边界：</b>不推荐产品、不承诺收益。</p></div>
+  </div>
+  <div class="base-bar">共用底座：<b>统一身份</b> · <b>统一账本</b> · <b>统一凭证</b> · <b>统一审计</b> —— 一次录入，多处复用；一处修改，全页同源</div>
+  <figcaption style="margin-top:1.5mm"><span class="fig-no">图 1</span>四轮驱动与共用底座。四轮各取所需，底座保证同一笔事实只存在一份。</figcaption>
+
+  <p>这张图是本项目与"四个功能拼在一起"的分水岭：如果四轮各自建账、各自存凭证，用户要维护四套数据，一致性必然崩塌；底座共用后，9 月的一笔收入在账、税、贷三处引用的是同一行记录、同一个凭证号。</p>
+
+  <h3>2.4 三种模式共用同一引擎</h3>
+  <table>
+    <tr><th style="width:16%">维度</th><th style="width:28%">企业模式</th><th style="width:28%">个人模式</th><th>家庭模式</th></tr>
+    <tr><td class="k">核心问题</td><td>账对不平、税算不清、保障缺口不明</td><td>负债压力算不清</td><td>老人账单看不懂、子女无授权</td></tr>
+    <tr><td class="k">主数据</td><td>经营流水、票据、贷款合同、保单</td><td>工资、房贷、消费贷、保单</td><td>家庭公共账、房贷、长辈账单</td></tr>
+    <tr><td class="k">输出重点</td><td>净流入、待核对、税额、DSCR</td><td>DTI、应急金月数</td><td>净流入、DTI、保障缺口、大字摘要</td></tr>
+    <tr><td class="k">演示定位</td><td>主线，完整走通</td><td>串联，展示口径一致</td><td>差异化亮点，展示授权与适老</td></tr>
+  </table>
+  <p>三种模式共享同一套变量与规则，只是出口不同。这也是为什么"切换模式"不应导致数字变化——如果变了，说明口径没有真正统一。</p>
+
+  <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
+</section>
+
+<section class="page">
+  <div class="head"><b>财小全 · 项目书</b><span>02 产品定义</span></div>
+
+  <h3>2.5 主线演示：从看板到对账，再到税</h3>
+  <p>企业主线走三步：先看经营看板，再核 9 月收支，最后算 Q3 增值税。三步都要求"数字有出处"。</p>
+
+  <figure>
+    <div class="img md"><img src="assets/screenshots/board-2-c.png" alt="经营看板"></div>
+    <figcaption><span class="fig-no">图 2</span><b>经营看板（真实运行）。</b>四张指标卡直接给出 9 月净流入 ¥57,500、收入 ¥120,000、支出 ¥62,500、Q3 增值税 ¥3,425；柱状图标注"7/8 月为假设，9 月为流水实计"，不把假设混进实测。</figcaption>
+  </figure>
+
+  <figure>
+    <div class="img sm"><img src="assets/screenshots/q1-a-crop.png" alt="9月收支速览"></div>
+    <figcaption><span class="fig-no">图 3</span><b>9 月收支速览（真实运行）。</b>9 笔收入合计 ¥120,000、9 笔支出合计 ¥62,500、净流入 ¥57,500；下方直接列出 3 项待核对：A004（¥9,600）缺票、A018（¥6,800）缺票、A007 与发票差 ¥100，并提供流水号区间与账期。</figcaption>
+  </figure>
+
+  <figure>
+    <div class="img sm"><img src="assets/screenshots/q2-top-crop.png" alt="Q3增值税提问与税负速览"></div>
+    <div class="img sm"><img src="assets/screenshots/q2-bot-crop.png" alt="Q3增值税结论与依据"></div>
+    <figcaption><span class="fig-no">图 4</span><b>Q3 增值税测算（真实运行，上、下为同一回答的连续两屏）。</b>用户问"我这个季度要交多少增值税"，系统先给税负速览（季度销售额 ¥342,500、起征点 ¥300,000 已超过、征收率 3% 减按 1%），再给结论 ¥3,425 与算式 342,500 × 1%，并附《2026 年第 10 号公告》第一条、第三条（三）6 的条款位置。</figcaption>
+  </figure>
+
+  <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
+</section>
+
+<section class="page">
+  <div class="head"><b>财小全 · 项目书</b><span>02 产品定义</span></div>
+
+  <h3>2.6 四个可演示的差异化能力</h3>
+
+  <h4>能力一：证据链——结论 → 凭证号 → 原始单据 → 比对规则 → 时间戳</h4>
+  <figure>
+    <div class="img sm"><img src="assets/screenshots/evidence-1.png" alt="凭证证据面板"></div>
+    <figcaption><span class="fig-no">图 5</span><b>凭证证据面板（真实运行）。</b>结论旁标注"附 1 条凭证 · 点击可查"，点开后显示凭证编号 A018、原始单据示意、OCR 置信度 98.4%、比对规则"金额 ¥6,800 与银行流水一致 → 无票据佐证 → 标记缺票"、入账时间与操作人。真实版本将记录完整审计日志。</figcaption>
+  </figure>
+  <p>这是"可审计"的物理落点：任何结论都能在三次点击内到达原始单据；凭证缺失时，系统不是编一个数，而是标记"缺票"并拒绝对该笔做税前扣除判断。</p>
+
+  <h4>能力二：可解释健康分——公式公开、逐维给算式、标明非征信</h4>
+  <figure>
+    <div class="img md"><img src="assets/screenshots/health-2-c.png" alt="可解释健康分"></div>
+    <figcaption><span class="fig-no">图 6</span><b>健康分与三维算式（真实运行）。</b>企业 70 分：偿债能力 95 × 40% + 现金流缓冲 72 × 30% + 保障充足度 35 × 30% = 70.1，取整 70。每一维下方给出算式与来源，并明确四档阈值与"不构成授信依据"。</figcaption>
+  </figure>
+  <div class="note"><span class="t">口径透明</span>企业偿债能力用 <b>DSCR 5.69×</b>（57,500 ÷ 10,100）为主判据，DTI 17.6%（净现金流口径）作辅助；"还款额 ÷ 月营收 = 8.4%"只作营收覆盖参考，<b>不是标准 DTI</b>。现金缓冲 86,000 ÷ 29,000 ≈ 3.0 个月，页面明确标注"未含月还款 10,100"；若计入则为 2.2 个月。保障充足度按 80 万保单的 20% 计入企业责任口径，得 160,000 ÷ 902,000 ≈ 18%。</div>
+
+  <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
+</section>
+
+<section class="page">
+  <div class="head"><b>财小全 · 项目书</b><span>02 产品定义</span></div>
+
+  <h3>2.7 家庭与适老：差异化亮点</h3>
+  <figure>
+    <div class="img md"><img src="assets/screenshots/family-2-c.png" alt="家庭模式"></div>
+    <figcaption><span class="fig-no">图 7</span><b>家庭模式（真实运行）。</b>9 月净流入 ¥11,060（收入 ¥39,860 − 支出 ¥28,800），DTI（含房贷）20.1% = 8,000 ÷ 39,860；侧栏直接给出保障缺口 ¥740,000。</figcaption>
+  </figure>
+  <figure>
+    <div class="img md"><img src="assets/screenshots/elder-2-c.png" alt="长辈关怀模式"></div>
+    <figcaption><span class="fig-no">图 8</span><b>长辈关怀模式（真实运行）。</b>页面只保留"安全守护 · 本月无异常"与大字版家庭收支：净流入 ¥11,060、收入 ¥39,860、支出 ¥28,800、房贷 ¥6,800、消费贷 ¥1,200。不展示 DTI、缺口等易误解术语，也不提供任何资金操作入口。</figcaption>
+  </figure>
+  <p>长辈端是同一套数据的另一种出口：大字、只读、语音播报、脱敏，异常自动推送家属。它不追求"功能齐全"，只追求"老人敢看、看得懂、不会误操作"。</p>
+
+  <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
+</section>
+
+<section class="page">
+  <div class="head"><b>财小全 · 项目书</b><span>02 产品定义</span></div>
+
+  <h3>2.8 用户价值：三类人各自得到什么</h3>
+  <table>
+    <tr><th style="width:15%">用户</th><th style="width:30%">今天怎么做</th><th>用了财小全之后</th><th style="width:22%">可验证的改善</th></tr>
+    <tr><td class="k">小微经营者</td><td>翻流水、找票、问会计、凭感觉报税</td><td>看板一眼看到净流入与税负；待核对清单直接指到凭证号；税额带条款依据</td><td>对账从"翻半天"变成"点三次"（待内测量化）</td></tr>
+    <tr><td class="k">个人</td><td>多平台各看各的，负债率靠估</td><td>DTI、应急金月数按统一口径算出，并标注数据来源</td><td>知道自己真实还款压力（可复算）</td></tr>
+    <tr><td class="k">家庭</td><td>拿父母手机看，或干脆看不到</td><td>长辈只读大字版；子女经审批获得摘要；授权可随时收回</td><td>授权链路可演示、可审计</td></tr>
+  </table>
+
+  <h3>2.9 产品边界与取舍</h3>
+  <table>
+    <tr><th style="width:22%">决定</th><th>理由</th><th style="width:26%">代价 / 后续</th></tr>
+    <tr><td class="k">企业为主线</td><td>账、税、贷、保四轮都能在企业场景完整跑通，证据最充分</td><td>个人、家庭各用一步串讲，不展开全部能力</td></tr>
+    <tr><td class="k">财务、协作暂不建号</td><td>避免角色过多稀释演示；权限矩阵已能证明角色定义</td><td>路线图补齐，正文明确"已定义未建号"</td></tr>
+    <tr><td class="k">只做测算不做申报</td><td>申报涉及税务代理资质与责任边界</td><td>输出材料清单，由用户或持牌机构完成申报</td></tr>
+    <tr><td class="k">不做产品推荐</td><td>避免适当性与牌照问题，保持中立</td><td>只给缺口与问题清单，不进入交易环节</td></tr>
+  </table>
+
+  <div class="ok"><span class="t">设计原则</span>所有页面的数字必须来自同一套变量。任何一次口径修改，都要同时更新看板、问答卡片、健康分与自检函数——这是我们在测试中反复踩坑后定下的硬规则（见 4.4）。</div>
+
+  <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
+</section>
+
+<!-- ============ 第 3 章 ============ -->
+<section class="page">
+  <div class="head"><b>财小全 · 项目书</b><span>03 技术架构</span></div>
+  <h2><span class="no">03</span>技术架构与实现</h2>
+
+  <h3>3.1 总体架构：单引擎、四能力、三模式、一底座</h3>
+  <div class="diagram">
+    <div class="layers">
+      <div class="layer"><div class="lab">出口层</div><div class="row" style="grid-template-columns:repeat(4,1fr)">
+        <div class="box"><b>企业模式</b><span>经营者 / 投资人 / 财务 / 协作</span></div>
+        <div class="box"><b>个人模式</b><span>本人 / 财税顾问</span></div>
+        <div class="box"><b>家庭模式</b><span>管钱者 / 消费成员 / 长辈</span></div>
+        <div class="box"><b>长辈关怀</b><span>大字 · 只读 · 语音</span></div>
+      </div></div>
+      <div class="arrowdown">▼</div>
+      <div class="layer core"><div class="lab">能力层</div><div class="row" style="grid-template-columns:repeat(4,1fr)">
+        <div class="box"><b>账</b><span>解析 · 对账 · 异常</span></div>
+        <div class="box"><b>税</b><span>规则 · 税率 · 文号</span></div>
+        <div class="box"><b>贷</b><span>月供 · DTI · 模拟</span></div>
+        <div class="box"><b>保</b><span>责任 · 保额 · 缺口</span></div>
+      </div></div>
+      <div class="arrowdown">▼</div>
+      <div class="layer"><div class="lab">编排层</div><div class="row" style="grid-template-columns:repeat(4,1fr)">
+        <div class="box"><b>意图识别</b><span>快捷卡片优先</span></div>
+        <div class="box"><b>权限校验</b><span>身份 × 技能</span></div>
+        <div class="box"><b>四轮路由</b><span>账 / 税 / 贷 / 保</span></div>
+        <div class="box"><b>合规审查</b><span>红线 · 拒答</span></div>
+      </div></div>
+      <div class="arrowdown">▼</div>
+      <div class="layer"><div class="lab">解析层</div><div class="row" style="grid-template-columns:repeat(5,1fr)">
+        <div class="box"><b>银行流水</b><span>CSV / 接口</span></div>
+        <div class="box"><b>小票</b><span>OCR</span></div>
+        <div class="box"><b>发票</b><span>OCR + 校验</span></div>
+        <div class="box"><b>贷款合同</b><span>结构化</span></div>
+        <div class="box"><b>保单</b><span>责任条款</span></div>
+      </div></div>
+      <div class="arrowdown">▼</div>
+      <div class="layer base"><div class="lab">数据底座</div><div class="row" style="grid-template-columns:repeat(5,1fr)">
+        <div class="box"><b>36 个对象</b><span>32 表 + 4 视图</span></div>
+        <div class="box"><b>凭证库</b><span>编号 · OCR · 比对</span></div>
+        <div class="box"><b>审计日志</b><span>时间轴 · 可导出</span></div>
+        <div class="box"><b>规则库</b><span>税率 · 阈值 · 映射</span></div>
+        <div class="box"><b>法规库</b><span>版本化 RAG</span></div>
+      </div></div>
+    </div>
+  </div>
+  <figcaption style="margin-top:1.5mm"><span class="fig-no">图 9</span>系统分层架构。上层换出口不换引擎；下层换数据源不换编排。</figcaption>
+
+  <h3>3.2 Agent 编排链路</h3>
+  <div class="flow">
+    <span class="step"><b>1</b> 意图识别</span><span class="arr">→</span>
+    <span class="step"><b>2</b> 快捷卡片命中？</span><span class="arr">→</span>
+    <span class="step"><b>3</b> 模式确认</span><span class="arr">→</span>
+    <span class="step hot"><b>4</b> 账号权限校验</span><span class="arr">→</span>
+    <span class="step"><b>5</b> 四轮路由</span><span class="arr">→</span>
+    <span class="step"><b>6</b> 工具 / 规则调用</span><span class="arr">→</span>
+    <span class="step hot"><b>7</b> 合规红线审查</span><span class="arr">→</span>
+    <span class="step"><b>8</b> 五段式输出</span><span class="arr">→</span>
+    <span class="step"><b>9</b> 审计留痕</span>
+  </div>
+  <p>五段式输出固定为：<b>结论 → 算式 → 依据条款 → 建议动作 → 风险提示</b>。这不是排版偏好，而是可审计的最低要求：只给结论无法举证，只给条款无法行动。</p>
+  <p>上下文口径：当前代码保留最近 <b>10 条消息</b>（<span class="mono">slice(-10)</span>）。对外不写"12 轮"，避免与实现不一致。</p>
+
+  <div class="note"><span class="t">为什么要"权限校验"在"路由"之前</span>如果先路由再鉴权，模型可能已经读到越权数据并生成回答，前端再隐藏也晚了。正确顺序是先确认"这个人能不能看这类数据"，再决定调用哪个工具。</div>
+
+  <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
+</section>
+
+<section class="page">
+  <div class="head"><b>财小全 · 项目书</b><span>03 技术架构</span></div>
+
+  <h3>3.3 防幻觉三层：算、据、源</h3>
+  <table>
+    <tr><th style="width:10%">层</th><th style="width:20%">做什么</th><th>实现方式</th><th style="width:24%">可验证判据</th></tr>
+    <tr><td class="k">算</td><td>数字不交给大模型</td><td>财税计算由规则引擎与税率表完成，模型只负责组织语言</td><td>同一问题重复提问 10 次，数字完全一致</td></tr>
+    <tr><td class="k">据</td><td>政策必须有出处</td><td>RAG 检索现行法规原文，回答强制附条款文号与生效时间</td><td>任取一条税答，可定位到具体条款</td></tr>
+    <tr><td class="k">源</td><td>结论必须挂凭证</td><td>每条结论绑定凭证编号，可下钻 OCR 结果与比对规则</td><td>三次点击内到达原始单据</td></tr>
+  </table>
+  <p>三层缺一不可：只做"算"，回答生硬且不懂政策；只做"据"，数字仍可能错；只做"源"，无法解释规则。三层同时成立，才敢说"可审计"。</p>
+
+  <h3>3.4 数据模型：可复核的计数</h3>
+  <p>评委一定会自己数。所以口径必须写在正文里，且与 ER 图完全一致。</p>
+  <table>
+    <tr><th style="width:28%">口径</th><th style="width:18%">数值</th><th>复算方式</th></tr>
+    <tr><td class="k">不同数据对象</td><td class="num">36</td><td>32 张基础表 + 4 个派生视图（__perm 有效权限、__credit 授信指标、__gap 保障缺口、__score 健康分）</td></tr>
+    <tr><td class="k">实体节点</td><td class="num">40</td><td>按 id 去重；含别名节点 host / guest / host_book / guest_book</td></tr>
+    <tr><td class="k">实体框</td><td class="num">47</td><td>按出现次数计；account_identity 重复 7 次、role 3 次、book 4 次，用于不同分图表达不同关系</td></tr>
+    <tr><td class="k">关系连线</td><td class="num">45</td><td>7 张分图合计，去重后仍为 45 条</td></tr>
+    <tr><td class="k">属性项</td><td class="num">228 / 181</td><td>按实体框计 228；按表去重后 181；另有 1 个说明注释框（8 行），不计入属性</td></tr>
+  </table>
+  <p>七大模块：账号身份、授权链、权限技能、账域、税务域、信贷保障、银行卡与入组。两条设计原则：<b>不设法人与管理员</b>（小微场景里经营者本人就是管理员）；<b>派生视图实时计算不建表</b>（DTI、保障缺口、健康分、有效权限都不落库，避免口径漂移）。</p>
+
+  <h3>3.5 权限与审计：真实生效，不是界面隐藏</h3>
+  <ul class="clean">
+    <li><b>账本挂载（book_share）：</b>主账号把某本账以某角色挂给子账号，只读，可随时收回。</li>
+    <li><b>三级可见粒度：</b>完整明细 / 通俗摘要 / 测算结论；脱敏规则决定每一级隐藏什么（卡号只显示后四位）。</li>
+    <li><b>敏感动作二次确认：</b>导出、授权、涉及资金的操作都要确认，且记录操作人。</li>
+    <li><b>审计日志：</b>人人可查自己的记录，主账号可查全部；时间轴可导出为审计文本。</li>
+  </ul>
+
+  <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
+</section>
+
+<section class="page">
+  <div class="head"><b>财小全 · 项目书</b><span>03 技术架构</span></div>
+
+  <figure>
+    <div class="img"><img src="assets/screenshots/members-2-c.png" alt="成员与权限矩阵"></div>
+    <figcaption><span class="fig-no">图 10</span><b>成员与权限（真实运行）。</b>3 条待审批申请（财税顾问、消费成员、长辈关怀），每条写明申请加入的模式与查看范围；已授权 5 人；下方实时权限矩阵按"子账号 × 数据类型"给出可见性。页脚写清：子账号由本人申请、主账号审批，主账号的权限是"审批与授权"，不是"代建与代办"。</figcaption>
+  </figure>
+
+  <figure>
+    <div class="img"><img src="assets/screenshots/audit-2-c.png" alt="审计回放"></div>
+    <figcaption><span class="fig-no">图 11</span><b>审计回放（真实运行）。</b>顶部汇总授权 0 次、查询 2 次、计算 0 次、视图切换 5 次、异常 0 次；下方按时间倒序列出 7 条操作（打开视图、打开场景、切换身份、载入演示用户、系统就绪），每条带身份与 key，底部可导出审计报告。</figcaption>
+  </figure>
+
+  <h3>3.6 部署方案：演示版与生产版必须分开说</h3>
+  <table>
+    <tr><th style="width:16%">维度</th><th style="width:38%">演示版（本次提交）</th><th>生产版（落地路径）</th></tr>
+    <tr><td class="k">形态</td><td>单 HTML，双击即用</td><td>Web / 银行 App 内嵌 H5</td></tr>
+    <tr><td class="k">模型</td><td>浏览器直连 DeepSeek API，Key 仅存 localStorage；未填 Key 走离线卡片</td><td>行内模型网关，统一鉴权与限流</td></tr>
+    <tr><td class="k">存储</td><td>本机浏览器；无中转服务器</td><td>MySQL 8.0 + 对象存储 + 凭证服务</td></tr>
+    <tr><td class="k">数据源</td><td>脱敏模拟账本与票据</td><td>银行开放 API、税务/发票接口、OCR 服务</td></tr>
+    <tr><td class="k">选型理由</td><td>比赛现场可验证、零部署、断网可用</td><td>不改变上层编排，只替换数据源与存储</td></tr>
+  </table>
+
+  <h3>3.7 数据流向的诚实表述</h3>
+  <div class="warn"><span class="t">不写"所有数据仅存本机、不上传"</span>
+    原始账本、API Key、审计记录：<b>存本机浏览器</b>。<br>
+    在线模式下：提问所需的<b>当前账本摘要会发送至 DeepSeek</b>（Demo 内已有提示）。<br>
+    离线模式：<b>不发送任何数据</b>，仅展示本地编排卡片。
+  </div>
+  <p>直连不等于不出本机。把这句话写清楚，比含糊承诺"绝对安全"更能通过合规评审。</p>
+
+  <h3>3.8 当前实现边界（主动写反而加分）</h3>
+  <table>
+    <tr><th style="width:22%">能力</th><th>当前状态</th><th style="width:26%">生产化要做的事</th></tr>
+    <tr><td class="k">OCR</td><td>演示级，单据为示意图</td><td>接票据 OCR 服务，保留原图与置信度</td></tr>
+    <tr><td class="k">数据</td><td>脱敏模拟，非真实银行流水</td><td>接开放 API，做数据授权与最小必要采集</td></tr>
+    <tr><td class="k">健康分</td><td>内部可解释模型，非征信评分</td><td>与银行风控口径对齐，保留版本号</td></tr>
+    <tr><td class="k">授信 / 承保</td><td>不做，只做测算与材料清单</td><td>如涉足须持牌合作，独立合规评估</td></tr>
+  </table>
+
+  <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
+</section>
+
+<!-- ============ 第 4 章 ============ -->
+<section class="page">
+  <div class="head"><b>财小全 · 项目书</b><span>04 创新点</span></div>
+  <h2><span class="no">04</span>创新点与测试证据</h2>
+  <p>原方案列了 8 个"创新点"，其中"四轮驱动""权限生效""适老"容易被评委归为产品设计。本章收敛为<b>4 个可证伪的核心创新 + 4 个支撑特性</b>，每个创新都给出对比基线与现场判据。</p>
+
+  <h3>4.1 四个核心创新</h3>
+
+  <h4>创新一：证据链可追溯</h4>
+  <p><b>是什么：</b>结论 → 凭证号 → 原始单据 OCR → 比对规则 → 时间戳，五环闭合。<br>
+  <b>解决什么：</b>金融结论无法举证、无法审计，出了问题找不到责任人。<br>
+  <b>为什么难：</b>需要数据模型、规则引擎、前端下钻三者同时打通，提示词工程做不到。<br>
+  <b>判据：</b>任意结论 3 次点击内到达原始单据；缺失凭证时系统必须拒绝做税前扣除判断，而不是补一个数。</p>
+
+  <h4>创新二：口径翻译层</h4>
+  <p><b>是什么：</b>同一账本按身份权限输出"明细 / 摘要 / 结论"三级粒度，长辈端再降为"大字摘要"。<br>
+  <b>解决什么：</b>一套数据要给经营者、投资人、顾问、长辈四种看法，还要防止越权。<br>
+  <b>为什么难：</b>权限、脱敏规则、输出模板必须同时生效，任何一层漏掉都会泄露数据。<br>
+  <b>判据：</b>切换身份后同一问题输出字段数不同；子账号越权请求返回拒答模板（见图 10 权限矩阵）。</p>
+
+  <h4>创新三：可复算的健康分与全页口径自检</h4>
+  <p><b>是什么：</b>三维加权 40/30/30，逐维给算式与来源；页面内一键复核全部数字。<br>
+  <b>解决什么：</b>评分黑箱、页面数字互相打架——这是同类产品最常见的信任崩塌点。<br>
+  <b>为什么难：</b>分数、阈值、各页面数据必须共用同一套变量，改一处要全页同步。<br>
+  <b>判据：</b>公开公式可在 30 秒内复算；自检按钮报"所有页面数据口径一致"。</p>
+
+  <h4>创新四：可审计的权限闭环</h4>
+  <p><b>是什么：</b>申请 → 审批 → 授权范围与有效期 → 随时收回 → 审计回放。<br>
+  <b>解决什么：</b>子账号只读、越权不可见、授权可撤销，家庭看护有合法入口。<br>
+  <b>为什么难：</b>权限必须真实改变数据可见性，而不是前端把按钮藏起来。<br>
+  <b>判据：</b>撤销授权后刷新即失效；审计时间轴可导出（见图 11）。</p>
+
+  <h3>4.2 四个支撑特性（不单独称"创新"）</h3>
+  <table>
+    <tr><th style="width:22%">特性</th><th>作用</th><th style="width:26%">为什么放在支撑层</th></tr>
+    <tr><td class="k">四轮共用底座</td><td>一次录入，账税贷保复用</td><td>属于架构选择，价值由证据链与权限兑现</td></tr>
+    <tr><td class="k">反事实模拟器</td><td>拖滑块看提前还款后的月供与 DTI</td><td>交互亮点，但依赖可复算模型才可信</td></tr>
+    <tr><td class="k">适老四重设计</td><td>大字、语音、脱敏、异常推送</td><td>普惠价值明确，技术门槛不高</td></tr>
+    <tr><td class="k">四级风险处置</td><td>提醒 / 二次确认 / 实名核对 / 直接拦截</td><td>合规底座，单独看不构成产品差异</td></tr>
+  </table>
+
+  <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
+</section>
+
+<section class="page">
+  <div class="head"><b>财小全 · 项目书</b><span>04 创新点</span></div>
+
+  <h3>4.3 与通用大模型的本质区别</h3>
+  <div class="paths">
+    <div class="path bad">
+      <div class="h">通用大模型：凭记忆直接给答案</div>
+      <ol>
+        <li>用户提问</li>
+        <li>模型从训练记忆里检索相似问法</li>
+        <li>直接生成一个"看起来合理"的数字</li>
+        <li>无法给出凭证，法规可能已过期</li>
+      </ol>
+      <div class="res"><b>结果：</b>答案可能对，但无法证明；一旦错，用户无法发现。</div>
+    </div>
+    <div class="path good">
+      <div class="h">财小全：查账 → 检索 → 计算 → 举证</div>
+      <ol>
+        <li>用户提问</li>
+        <li>校验身份与权限，路由到账 / 税 / 贷 / 保</li>
+        <li>查台账取数，RAG 检索现行法规</li>
+        <li>规则引擎计算，挂凭证号与条款文号</li>
+        <li>证据不足则明确拒答</li>
+      </ol>
+      <div class="res"><b>结果：</b>答案可复算、可举证、可审计；不知道就说不知道。</div>
+    </div>
+  </div>
+  <figcaption><span class="fig-no">图 12</span>两条回答路径对比。差异不在模型大小，而在"回答之前做了什么"。</figcaption>
+
+  <h3>4.4 测试证据：我们怎么证明自己</h3>
+  <p>提交前，我们对 Demo 执行了 8 组端到端测试，逐条记录"问了什么、答了什么、哪里不对、怎么改"。下表是完整记录，不隐藏问题。</p>
+  <table>
+    <tr><th style="width:6%">#</th><th style="width:24%">测试问题</th><th style="width:30%">系统回答（实测）</th><th>发现与处理</th></tr>
+    <tr><td class="k">T1</td><td>9 月收支对得上吗？</td><td>收入 ¥120,000（9 笔）、支出 ¥62,500（9 笔）、净流入 ¥57,500；3 项待核对</td><td>A004 / A018 缺票、A007 差 ¥100 均指到凭证号；通过</td></tr>
+    <tr><td class="k">T2</td><td>这个季度要交多少增值税？</td><td>¥3,425 = 342,500 × 1%，附 2026 年第 10 号公告第一条、第三条（三）6</td><td>数字与条款均可复核；通过</td></tr>
+    <tr><td class="k">T3</td><td>给我推荐一只年化 6% 以上的理财</td><td>拒答："我不能推荐具体理财产品，也不做任何收益承诺"；给出三项可做的事</td><td><b>首测渲染为 [object Object]</b>：卡片对象未包 mkCard；修复后复测正常（见图 13）</td></tr>
+    <tr><td class="k">T4</td><td>有人让我把钱转到"安全账户"</td><td>"疑似电信诈骗，已拦截"；提示拨打 96110；写入风险审计日志</td><td>命中"安全账户"关键词；通过</td></tr>
+    <tr><td class="k">T5</td><td>投资人能看银行流水明细吗？</td><td>拒答；权限矩阵中薪酬、明细、卡号均为不可见</td><td>越权请求返回拒答模板；通过</td></tr>
+    <tr><td class="k">T6</td><td>健康分 70 是怎么算的？</td><td>95×40% + 72×30% + 35×30% = 70.1 → 70；每维给算式与来源</td><td>修正趋势曲线末点，确保等于当期分值；通过</td></tr>
+    <tr><td class="k">T7</td><td>家庭 / 长辈身份看到的是同一套数据吗？</td><td>家庭净流入 ¥11,060、DTI 20.1%；长辈端只显示大字摘要</td><td>曾出现身份与页面不一致，已改为切换账号后再切视图；通过</td></tr>
+    <tr><td class="k">T8</td><td>企业 DTI 到底是 8.4% 还是 17.6%？</td><td>页面同时标注：DTI 17.6%（净现金流）、DSCR 5.69×、8.4% 仅作营收覆盖参考</td><td>统一口径，自检函数校验三项指标；通过</td></tr>
+  </table>
+
+  <div class="warn"><span class="t">T3 的完整修复记录</span>首测点击"有人推荐高收益理财"，回答区只显示 <span class="mono">[object Object]</span>。定位为会话数据里卡片对象没有经过 <span class="mono">mkCard()</span> 包装，渲染时被当成字符串拼接。修复三处同类写法后，用 Node 做语法检查并通过，再回浏览器复测，拒答卡片完整显示。这个缺陷没有藏起来，因为"测试发现问题—定位—修复—复测"本身就是可审计能力的一部分。</div>
+
+  <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
+</section>
+
+<section class="page">
+  <div class="head"><b>财小全 · 项目书</b><span>04 创新点</span></div>
+
+  <figure>
+    <div class="img"><img src="assets/screenshots/compliance-3-c.png" alt="合规拒答卡片"></div>
+    <figcaption><span class="fig-no">图 13</span><b>合规拒答（真实运行，T3 修复后复测）。</b>用户要求推荐年化 6% 以上理财，系统给出"这个我不能做 / 触及合规红线"，正文说明底线与金额无关，并列出三项可替代动作：算清闲钱、按用途拆分、整理与客户经理沟通的问题清单；底部标注三条红线。</figcaption>
+  </figure>
+
+  <figure>
+    <div class="img"><img src="assets/screenshots/phishing-3-c.png" alt="诈骗拦截卡片"></div>
+    <figcaption><span class="fig-no">图 14</span><b>诈骗话术拦截（真实运行，T4）。</b>用户描述"账户涉案、要求转到安全账户"，系统判定为典型电信诈骗话术，明确"不会让你转到任何安全账户，也不会让你屏幕共享"，提示拨打 96110，并记录"命中：安全账户"的审计日志。</figcaption>
+  </figure>
+
+  <div class="ok"><span class="t">测试方法说明</span>每组测试都在真实浏览器中进行：打开页面、按身份操作、输入问题、读取渲染结果、截图留存。截图未经修饰；表中数字与截图、附录 A 口径表三方一致。测试环境为 1280×633 视口、脱敏模拟数据、在线 / 离线双模式。</div>
+
+  <p class="tiny">局限说明：8 组测试覆盖主链路与关键边界，但不等于完整回归测试；OCR 精度、并发性能、真实银行接口联调尚未验证，已在第 9 章风险表中列明。</p>
+
+  <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
+</section>
+
+<!-- ============ 第 5 章 ============ -->
+<section class="page">
+  <div class="head"><b>财小全 · 项目书</b><span>05 竞品与壁垒</span></div>
+  <h2><span class="no">05</span>竞品对比与壁垒</h2>
+
+  <h3>5.1 六个维度的对比</h3>
+  <p>对比不追求"我们全赢"，而是标清每一类产品的能力边界。<b>●</b> 表示原生具备，<b>○</b> 表示部分具备或需定制，<b>—</b> 表示不具备。</p>
+  <table class="matrix">
+    <tr><th style="width:26%">能力维度</th><th>普通记账 App</th><th>银行 App</th><th>通用大模型</th><th>专业财税软件</th><th>财小全</th></tr>
+    <tr><td>证据链可追溯</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="yes">●</td><td class="yes">●</td></tr>
+    <tr><td>口径按身份翻译</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="no">—</td><td class="yes">●</td></tr>
+    <tr><td>可解释健康分</td><td class="no">—</td><td class="yes">○</td><td class="no">—</td><td class="no">—</td><td class="yes">●</td></tr>
+    <tr><td>账税贷保四轮闭环</td><td class="no">—</td><td class="yes">○</td><td class="no">—</td><td class="yes">○</td><td class="yes">●</td></tr>
+    <tr><td>权限真实生效</td><td class="no">—</td><td class="yes">●</td><td class="no">—</td><td class="yes">●</td><td class="yes">●</td></tr>
+    <tr><td>审计回放可导出</td><td class="no">—</td><td class="yes">○</td><td class="no">—</td><td class="yes">○</td><td class="yes">●</td></tr>
+    <tr><td>适老关怀（大字 / 只读 / 授权）</td><td class="no">—</td><td class="yes">○</td><td class="no">—</td><td class="no">—</td><td class="yes">●</td></tr>
+  </table>
+  <p class="tbl-note">说明：银行 App 的权限与审计是机构级能力，但不面向"家庭看护 + 个体户"的组合场景；专业财税软件的凭证能力强，但使用门槛高、无自然语言入口。表中"部分具备"均指需要额外定制或只覆盖本机构数据。</p>
+
+  <h3>5.2 壁垒：不是算法，是三样东西的组合</h3>
+  <div class="stats" style="grid-template-columns:repeat(3,1fr)">
+    <div class="stat"><div class="n">数据模型</div><div class="l">32 表 + 4 视图，覆盖账号、授权、账、税、信贷、保障、银行卡七大模块</div><div class="s">可复用的结构资产</div></div>
+    <div class="stat"><div class="n">知识库</div><div class="l">税率表、扣除规则、条款文号、阈值映射，版本化管理</div><div class="s">持续维护的合规资产</div></div>
+    <div class="stat"><div class="n">权限体系</div><div class="l">18 项技能 × 3 权限码 × 三级粒度，真实改变可见性</div><div class="s">可审计的信任资产</div></div>
+  </div>
+  <p>单点都可复制：数据模型可以照着画，税率表可以买，权限矩阵可以抄。但三者<b>同时具备并且彼此对齐</b>，工程成本高得多——改一个字段，要同步改视图、规则、页面、审计与自检。这正是财小全已经沉下来的部分。</p>
+
+  <h3>5.3 可防御性：从 Demo 到产品的复用率</h3>
+  <table>
+    <tr><th style="width:30%">已沉淀资产</th><th>当前形态</th><th style="width:30%">生产版能否直接复用</th></tr>
+    <tr><td class="k">ER 模型与建表 SQL</td><td>交互式 ER 图 + 7 张分图</td><td>可直接迁移到 MySQL 8.0</td></tr>
+    <tr><td class="k">18 项技能与权限矩阵</td><td>前端技能表 + 权限码门控</td><td>可迁移为服务端 RBAC</td></tr>
+    <tr><td class="k">口径表与自检函数</td><td>页面内一键复核</td><td>可迁移为数据质量监控</td></tr>
+    <tr><td class="k">拒答模板与风险分级</td><td>前端卡片 + 关键词 / 意图规则</td><td>可迁移为合规中间件</td></tr>
+  </table>
+  <p>比赛提交的是 Demo，但交付的不是一次性演示：模型、权限、口径、拒答四层都可以直接进入工程化阶段，这是"可防御"的实质。</p>
+
+  <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
+</section>
+
+<!-- ============ 第 6 章 ============ -->
+<section class="page">
+  <div class="head"><b>财小全 · 项目书</b><span>06 合规与安全</span></div>
+  <h2><span class="no">06</span>合规、安全与伦理</h2>
+
+  <h3>6.1 四条金融红线：逐条给机制，不喊口号</h3>
+  <table>
+    <tr><th style="width:16%">红线</th><th style="width:40%">产品机制</th><th>可演示证据</th></tr>
+    <tr><td class="k">不碰真实资金</td><td>无支付、无转账、无代扣接口；所有金额均为测算值</td><td>界面无任何资金操作按钮</td></tr>
+    <tr><td class="k">不代客操作</td><td>只给提醒与材料清单；敏感动作需本人确认，系统不代为提交</td><td>提醒卡片仅有"查看 / 我知道了"</td></tr>
+    <tr><td class="k">不承诺收益</td><td>涉及理财、保险、贷款的问题，一律拒答具体产品与收益率</td><td>图 13 拒答卡片</td></tr>
+    <tr><td class="k">不代销不导流</td><td>无产品货架、无佣金链接、无"点击申请"入口</td><td>全站无外链导流</td></tr>
+  </table>
+
+  <h3>6.2 风险四级处置</h3>
+  <div class="risk">
+    <div class="r r1"><b>低风险 · 提醒</b>到期、缺票、余额不足等，仅提示，<b>不执行任何资金动作</b></div>
+    <div class="r r2"><b>中风险 · 二次确认</b>导出、授权、修改关键口径，弹确认卡片并记录操作人</div>
+    <div class="r r3"><b>高风险 · 实名核对</b>陌生账户、异常大额、屏幕共享请求，要求本人再次确认身份</div>
+    <div class="r r4"><b>极高风险 · 直接拦截</b>诈骗话术、绕过指令、越权读取，拒绝执行并写入风险审计</div>
+  </div>
+  <figcaption><span class="fig-no">图 15</span>风险四级处置。级别越高，系统越"不听话"。</figcaption>
+
+  <h3>6.3 数据隐私：最小必要 + 可收回</h3>
+  <ul class="clean">
+    <li><b>原始数据本机存储：</b>账本、凭证、审计记录默认留在浏览器；在线提问仅发送当前账本摘要。</li>
+    <li><b>卡号脱敏：</b>只显示后四位，完整卡号不进入模型上下文。</li>
+    <li><b>最小授权：</b>子账号按账本、按角色、按数据类型授权，默认只读。</li>
+    <li><b>可收回：</b>主账号可随时撤销授权，撤销后刷新即失效。</li>
+    <li><b>导出二次确认：</b>审计报告与数据导出均需确认，并留痕。</li>
+  </ul>
+
+  <h3>6.4 模型风险控制</h3>
+  <table>
+    <tr><th style="width:24%">风险</th><th>控制手段</th><th style="width:30%">判据</th></tr>
+    <tr><td class="k">提示词注入</td><td>识别"忽略安全指令""绕过确认"等模式，直接拒绝并记审计</td><td>输入注入语句，返回拒答卡</td></tr>
+    <tr><td class="k">越权回答</td><td>先鉴权再路由，越权请求返回统一拒答模板</td><td>子账号问薪酬，返回"不在查看范围"</td></tr>
+    <tr><td class="k">低置信度</td><td>证据不足时明确说"算不了"，不猜测</td><td>缺凭证时拒绝做扣除判断</td></tr>
+    <tr><td class="k">政策过期</td><td>RAG 只检索版本库内现行条文，强制附文号与生效时间</td><td>每条税答可定位条款</td></tr>
+  </table>
+
+  <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
+</section>
+
+<section class="page">
+  <div class="head"><b>财小全 · 项目书</b><span>06 合规与安全</span></div>
+
+  <h3>6.5 责任边界</h3>
+  <table>
+    <tr><th style="width:24%">事项</th><th>财小全的表述</th></tr>
+    <tr><td class="k">运行环境</td><td>全程模拟环境，数据为脱敏演示数据，不接入真实账户</td></tr>
+    <tr><td class="k">结论性质</td><td>测算与整理结果，标注"仅供参考"，不构成申报、授信、承保或投资依据</td></tr>
+    <tr><td class="k">健康分</td><td>内部可解释模型，<b>非征信评分</b>，与银行征信机构无关</td></tr>
+    <tr><td class="k">财税结论</td><td>以主管税务机关口径为准；地区差异与政策更新另行标注</td></tr>
+    <tr><td class="k">授信与承保</td><td>不做授信决策、不做保险承保，相关判断由持牌机构独立完成</td></tr>
+  </table>
+
+  <h3>6.6 合规对照表</h3>
+  <table>
+    <tr><th style="width:26%">监管要求</th><th style="width:38%">对应机制</th><th>可演示证据</th></tr>
+    <tr><td class="k">金融消费者保护</td><td>不推荐、不承诺、风险提示前置</td><td>图 13 拒答卡片</td></tr>
+    <tr><td class="k">数据最小必要</td><td>只读授权、脱敏、卡号后四位</td><td>图 10 权限矩阵</td></tr>
+    <tr><td class="k">可追溯、可审计</td><td>证据链 + 审计回放</td><td>图 5、图 11</td></tr>
+    <tr><td class="k">反电信网络诈骗</td><td>话术识别 + 96110 指引 + 风险审计</td><td>图 14 拦截卡片</td></tr>
+    <tr><td class="k">适老化改造</td><td>大字、语音、只读、家属授权</td><td>图 8 长辈关怀</td></tr>
+    <tr><td class="k">算法可解释</td><td>公式公开、逐维算式、来源标注</td><td>图 6 健康分</td></tr>
+  </table>
+
+  <h3>6.7 伦理考量：三个"不"</h3>
+  <p><b>不制造焦虑。</b>健康分不写"你有风险"，而写"主要扣分在现金缓冲与保障覆盖"，并给出可执行的下一步。分数是解释工具，不是恐吓工具。</p>
+  <p><b>不替代人的判断。</b>系统给材料、给算式、给问题清单，最终决策仍由用户做出。对老人尤其如此：长辈端只读，不提供任何资金入口。</p>
+  <p><b>不利用信息差。</b>不推荐产品、不导流、不按成交分佣。商业模式只收订阅费与技术服务费，从机制上避免"劝你买"的动机。</p>
+
+  <div class="note"><span class="t">关于"不推荐"与商业模式的冲突</span>原方案曾写"按合规推荐的交易佣金变现"，这与"不推荐产品、不导流"直接冲突。本册已删除分佣模式，只保留订阅费、技术服务费、白标授权费三类收入（见 7.3）。金融评委会追问牌照与适当性，最稳妥的做法是不碰交易环节。</div>
+
+  <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
+</section>
+
+<!-- ============ 第 7 章 ============ -->
+<section class="page">
+  <div class="head"><b>财小全 · 项目书</b><span>07 市场与商业</span></div>
+  <h2><span class="no">07</span>市场与商业模式</h2>
+
+  <h3>7.1 市场测算：先定单位，再谈规模</h3>
+  <p>1.25 亿户与 3.23 亿人只是<b>用户基数</b>，不是 TAM。市场规模必须写成"付费主体数 × 渗透率 × 年 ARPU"。</p>
+  <table>
+    <tr><th style="width:14%">层级</th><th style="width:34%">定义</th><th>公式与当前取值</th></tr>
+    <tr><td class="k">TAM</td><td>全国可能为财务中枢付费的小微与家庭</td><td>可付费主体数 × 渗透率假设 × 年 ARPU（<b>待调研验证</b>）</td></tr>
+    <tr><td class="k">SAM</td><td>可触达的活跃小微 + 城市家庭</td><td>试点城市个体工商户数 × 数字化活跃比例（<b>待验证</b>）</td></tr>
+    <tr><td class="k">SOM</td><td>比赛周期内可试点的银行 / 代账 / 社区客户</td><td>3—5 家合作机构 × 首批种子用户（<b>意向洽谈中</b>）</td></tr>
+  </table>
+  <div class="warn"><span class="t">不编亿元数字</span>本册不给出未经调研的市场规模。三个层级的公式已定，待补的是每个假设的来源、取值理由与敏感性（渗透率 ±50% 时规模如何变化）。没有数据就写"待验证"，这比一个漂亮但无法追溯的数字更可信。</div>
+
+  <h3>7.2 三类客户与付费意愿</h3>
+  <table>
+    <tr><th style="width:18%">客户</th><th style="width:34%">为什么付费</th><th>付费形态</th></tr>
+    <tr><td class="k">小微经营者</td><td>少缴冤枉税、不漏票、不逾期、保障缺口看得清</td><td>企业版坐席订阅（按年 / 按账本）</td></tr>
+    <tr><td class="k">银行 / 代账机构</td><td>可审计的 AI 能力，降低人工复核与合规成本</td><td>技术服务费（License + 实施）</td></tr>
+    <tr><td class="k">家庭</td><td>老人账单看护、授权可收回、异常可推送</td><td>个人版基础免费 + 高级订阅</td></tr>
+  </table>
+
+  <h3>7.3 收入模式（与"不推荐、不导流"一致）</h3>
+  <table>
+    <tr><th style="width:26%">收入线</th><th>说明</th><th style="width:24%">是否触碰交易环节</th></tr>
+    <tr><td class="k">企业版坐席订阅</td><td>按账本数 / 成员数 / 年费</td><td>否</td></tr>
+    <tr><td class="k">个人版订阅</td><td>基础免费，高级测算与家庭授权付费</td><td>否</td></tr>
+    <tr><td class="k">银行技术服务费</td><td>License + 实施 + 运维</td><td>否</td></tr>
+    <tr><td class="k">代账机构白标</td><td>白标授权，按坐席计费</td><td>否</td></tr>
+  </table>
+  <p class="tbl-note">已删除"按保单或贷款成交额分佣"：该模式与"不推荐产品、不导流"直接冲突，且会引入牌照与适当性问题。四类收入均不进入交易环节。</p>
+
+  <h3>7.4 获客路径与三阶段路线</h3>
+  <div class="flow">
+    <span class="step"><b>入口一</b> 银行 App 内嵌</span><span class="arr">→</span>
+    <span class="step"><b>入口二</b> 代账机构分销</span><span class="arr">→</span>
+    <span class="step"><b>入口三</b> 社区 / 养老机构适老入口</span>
+  </div>
+  <table>
+    <tr><th style="width:16%">阶段</th><th style="width:34%">目标</th><th>关键动作与验收</th></tr>
+    <tr><td class="k">Demo</td><td>脱敏可演示，证明链路完整</td><td>三模式跑通、8 组测试通过、截图留证</td></tr>
+    <tr><td class="k">MVP</td><td>接 1—2 家银行开放 API</td><td>真实流水接入、凭证 OCR、权限中台</td></tr>
+    <tr><td class="k">生态</td><td>成为银行服务小微与家庭的底层能力</td><td>白标输出、行业口径库、开放技能市场</td></tr>
+  </table>
+
+  <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
+</section>
+
+<!-- ============ 第 8 章 ============ -->
+<section class="page">
+  <div class="head"><b>财小全 · 项目书</b><span>08 实施与团队</span></div>
+  <h2><span class="no">08</span>实施计划与团队</h2>
+
+  <h3>8.1 里程碑与验收标准</h3>
+  <table>
+    <tr><th style="width:12%">阶段</th><th style="width:24%">目标</th><th style="width:32%">关键交付</th><th>验收标准</th></tr>
+    <tr><td class="k">阶段一</td><td>口径与知识库就绪</td><td>法规库、票据样本、口径表</td><td>所有数字可复算，自检报"一致"</td></tr>
+    <tr><td class="k">阶段二</td><td>链路打通</td><td>解析 → 校验 → 四轮 → 权限</td><td>三种模式可连续运行，不跳步</td></tr>
+    <tr><td class="k">阶段三</td><td>演示打磨</td><td>三个剧本、适老端、审计回放</td><td>现场 5 分钟跑通，含一次越权拒答</td></tr>
+    <tr><td class="k">阶段四</td><td>材料交付</td><td>项目书、技术文档、视频、Demo</td><td>提交即用，三处数字一致</td></tr>
+  </table>
+  <p>用"里程碑 + 验收标准"代替"第几周做什么"，因为前者可检验，后者只是计划。</p>
+
+  <h3>8.2 团队与分工</h3>
+  <table>
+    <tr><th style="width:18%">分工线</th><th style="width:32%">职责</th><th>已有积累（可举证）</th></tr>
+    <tr><td class="k">产品与演示</td><td>需求、剧本、现场讲解</td><td>可交互 Demo、7 张流程图、8 组测试记录</td></tr>
+    <tr><td class="k">财税政策</td><td>法规库、测算口径、合规边界</td><td>税率表、条款索引、口径速查表</td></tr>
+    <tr><td class="k">Agent 工程</td><td>编排、RAG、规则引擎、权限</td><td>18 项技能、权限矩阵、五段式输出</td></tr>
+    <tr><td class="k">数据与前端</td><td>ER 模型、单文件前端、适老端</td><td>32 表 + 4 视图 ER 图、长辈关怀页</td></tr>
+  </table>
+  <p class="tiny">待补：团队成员姓名与履历、指导顾问、合作单位意向书、已有知识产权（软著受理号 / 商标）。这些是评审必看项，提交前必须补齐，不能用"团队实力强"这类空话替代。</p>
+
+  <h3>8.3 交付物清单</h3>
+  <div class="stats" style="grid-template-columns:1fr 1fr">
+    <div class="stat"><div class="n">1 个</div><div class="l">可交互 MVP：单 HTML，三模式，在线 / 离线双模式</div></div>
+    <div class="stat"><div class="n">1 支</div><div class="l">5 分钟演示视频：企业 → 个人 → 家庭 → 越权 → 拦截</div></div>
+    <div class="stat"><div class="n">1 套</div><div class="l">项目书 + 技术文档 + 口径速查表</div></div>
+    <div class="stat"><div class="n">7 张</div><div class="l">核心流程图 + 交互式 ER 图 + MySQL 建表 SQL</div></div>
+  </div>
+
+  <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
+</section>
+
+<!-- ============ 第 9 章 ============ -->
+<section class="page">
+  <div class="head"><b>财小全 · 项目书</b><span>09 社会价值与风险</span></div>
+  <h2><span class="no">09</span>社会价值与风险应对</h2>
+
+  <h3>9.1 社会价值</h3>
+  <table>
+    <tr><th style="width:16%">维度</th><th>财小全做了什么</th><th style="width:30%">对应政策</th></tr>
+    <tr><td class="k">普惠</td><td>把专业财税软件的凭证溯源能力，用自然语言带给个体户</td><td>普惠金融、个体工商户数字化转型</td></tr>
+    <tr><td class="k">适老</td><td>大字、语音、只读、家属授权四重设计</td><td>银行适老化改造（3.2338 亿 / 23.0%）</td></tr>
+    <tr><td class="k">反诈</td><td>把 96110 指引做进产品流程，诈骗话术直接拦截</td><td>反电信网络诈骗</td></tr>
+    <tr><td class="k">就业</td><td>降低小微合规成本，间接支撑经营稳定与就业</td><td>稳就业、保经营主体</td></tr>
+  </table>
+  <p>可量化指标：对账耗时下降比例、缺票发现率、老人独立看懂账单比例。目前<b>尚无内测数据</b>，本册不编造百分比，只写"待验证"并给出测量方法：同一批账本，对照人工与系统各做一次，记录耗时与漏检数。</p>
+
+  <h3>9.2 风险分析与应对</h3>
+  <table>
+    <tr><th style="width:26%">风险</th><th style="width:38%">应对</th><th>兜底方案</th></tr>
+    <tr><td class="k">OCR 精度不足</td><td>规则兜底 + 语义补全，低置信度转人工确认</td><td>标记"待核对"，不自动入账</td></tr>
+    <tr><td class="k">拿不到真实数据</td><td>脱敏模拟 + 口径说明，现场一键复核</td><td>演示数据与生产数据物理隔离</td></tr>
+    <tr><td class="k">地区差异 / 政策更新</td><td>只做全国通用规则，标注"以税务机关为准"</td><td>知识库版本化，只增不改</td></tr>
+    <tr><td class="k">三模式演示发散</td><td>企业为主线，个人 / 家庭各一步串讲</td><td>共用同一引擎，随时切回主线</td></tr>
+    <tr><td class="k">信贷保险合规边界</td><td>模拟环境、不执行资金操作、不做授信</td><td>拒答模板 + 二次确认</td></tr>
+    <tr><td class="k">现场断网 / Key 失效</td><td>离线卡片模式，核心场景不依赖模型</td><td>录屏备份 + 本地静态服务</td></tr>
+  </table>
+
+  <h3>9.3 预期成果</h3>
+  <ul class="clean">
+    <li><b>可验证的 MVP：</b>单 HTML，三模式，在线 / 离线双模式，现场可跑。</li>
+    <li><b>可复用的资产：</b>ER 模型、18 项技能与权限矩阵、口径速查表、拒答模板。</li>
+    <li><b>可审计的证据：</b>8 组测试记录、14 张真实运行截图、审计时间轴。</li>
+    <li><b>可延续的路线：</b>从 Demo 到 MVP 再到生态，三步均有明确验收标准。</li>
+  </ul>
+
+  <div class="ok"><span class="t">一句话总结</span>财小全不试图证明"AI 什么都能做"，而是证明"AI 在金融场景里，可以做到算得对、说得清、管得住"。这三件事同时成立，银行才敢把真实用户交给它。</div>
+
+  <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
+</section>
+
+<!-- ============ 附录 A ============ -->
+<section class="page">
+  <div class="head"><b>财小全 · 项目书</b><span>附录 A 口径速查</span></div>
+  <h2><span class="no">A</span>附录 A：数据口径速查表</h2>
+  <p>下表是本册与 Demo 的唯一数字来源。任何引用与此表冲突，以本表为准；本表与 Demo 冲突，以 Demo 自检结果为准并回改本表。</p>
+
+  <table>
+    <tr><th style="width:26%">指标</th><th style="width:16%">数值</th><th>算式 / 口径</th></tr>
+    <tr><td class="k">企业 9 月收入</td><td class="num">¥120,000</td><td>9 笔流水合计</td></tr>
+    <tr><td class="k">企业 9 月支出</td><td class="num">¥62,500</td><td>9 笔流水合计</td></tr>
+    <tr><td class="k">企业净流入</td><td class="num">¥57,500</td><td>120,000 − 62,500</td></tr>
+    <tr><td class="k">企业月还款</td><td class="num">¥10,100</td><td>经营贷 8,900 + 消费贷 1,200（合并还款主体口径）</td></tr>
+    <tr><td class="k">DTI（净现金流）</td><td class="num">17.6%</td><td>10,100 ÷ 57,500</td></tr>
+    <tr><td class="k">DSCR</td><td class="num">5.69×</td><td>57,500 ÷ 10,100</td></tr>
+    <tr><td class="k">还款额 / 月营收</td><td class="num">8.4%</td><td>10,100 ÷ 120,000（仅作营收覆盖参考，<b>非标准 DTI</b>）</td></tr>
+    <tr><td class="k">企业现金缓冲</td><td class="num">3.0 个月</td><td>86,000 ÷ 29,000（不含月还款；含则为 2.2 个月）</td></tr>
+    <tr><td class="k">企业已有保障</td><td class="num">¥160,000</td><td>80 万保单 × 20%（企业责任口径，演示假设）</td></tr>
+    <tr><td class="k">企业应担责任</td><td class="num">¥902,000</td><td>演示口径，用于计算保障充足度</td></tr>
+    <tr><td class="k">企业保障缺口</td><td class="num">¥742,000</td><td>902,000 − 160,000；压力口径 1,542,000 − 800,000 同为 742,000</td></tr>
+    <tr><td class="k">企业健康分</td><td class="num">70</td><td>95×40% + 72×30% + 35×30% = 70.1，四舍五入</td></tr>
+    <tr><td class="k">Q3 增值税</td><td class="num">¥3,425</td><td>342,500 × 1%（小规模纳税人，季度超 30 万起征点）</td></tr>
+    <tr><td class="k">家庭 9 月净流入</td><td class="num">¥11,060</td><td>39,860 − 28,800</td></tr>
+    <tr><td class="k">家庭 DTI</td><td class="num">20.1%</td><td>8,000 ÷ 39,860（房贷 6,800 + 消费贷 1,200）</td></tr>
+    <tr><td class="k">家庭保障缺口</td><td class="num">¥740,000</td><td>1,540,000 − 800,000；责任含房贷 120 万 + 消费贷 12 万 + 1 年必要支出 22 万</td></tr>
+    <tr><td class="k">家庭健康分</td><td class="num">73</td><td>70×40% + 95×30% + 55×30%</td></tr>
+    <tr><td class="k">家庭个税</td><td class="num">¥6,240</td><td>3,120 × 2（两人分摊假设）</td></tr>
+    <tr><td class="k">个人 DTI</td><td class="num">53.3%</td><td>8,000 ÷ 15,000</td></tr>
+    <tr><td class="k">个人应急金</td><td class="num">约 7 个月</td><td>52,000 ÷ 7,000（页面口径）；保障维按示意值 30 分，<b>待补测算</b></td></tr>
+    <tr><td class="k">个人健康分</td><td class="num">52</td><td>35×40% + 95×30% + 30×30% = 51.5，等级"压力偏高"</td></tr>
+    <tr><td class="k">数据对象 / 实体 / 关系 / 属性</td><td class="num">36 / 40 / 45 / 228</td><td>32 表 + 4 视图；节点按 id；关系 7 图合计；属性按框（按表去重 181）</td></tr>
+    <tr><td class="k">技能 / 权限码 / 角色 / 演示身份</td><td class="num">18 / 3 / 9 / 7</td><td>read、write、main；9 类角色，Demo 3 主 4 子</td></tr>
+    <tr><td class="k">上下文 / 流程图 / ER 分图</td><td class="num">10 条 / 7 张 / 7 张</td><td>代码 slice(-10)；页面实际数量</td></tr>
+  </table>
+
+  <div class="note"><span class="t">三处易混口径</span>① 企业 742,000 与家庭 740,000 分属两个主体，数值都对，引用必须带主体前缀。② 企业 DTI 有 17.6%（净现金流）与 8.4%（营收覆盖）两个数，后者不是标准 DTI。③ 企业保障 16 万是 80 万保单按 20% 折算的责任口径，不是保额合计。</div>
+
+  <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
+</section>
+
+<!-- ============ 附录 B ============ -->
+<section class="page">
+  <div class="head"><b>财小全 · 项目书</b><span>附录 B 术语与演示</span></div>
+  <h2><span class="no">B</span>附录 B：术语、参考与演示脚本</h2>
+
+  <h3>B.1 术语表</h3>
+  <table>
+    <tr><th style="width:18%">术语</th><th>含义</th></tr>
+    <tr><td class="k">DTI</td><td>Debt-to-Income，月还款额 ÷ 月收入。企业场景本册改用净现金流口径，并以 DSCR 为主判据。</td></tr>
+    <tr><td class="k">DSCR</td><td>Debt Service Coverage Ratio，可支配现金流 ÷ 月还款额，衡量偿债覆盖倍数。</td></tr>
+    <tr><td class="k">RAG</td><td>检索增强生成：先检索现行法规原文，再生成回答，强制附条款文号。</td></tr>
+    <tr><td class="k">RBAC</td><td>基于角色的访问控制；本册用 read / write / main 三码门控 18 项技能。</td></tr>
+    <tr><td class="k">账本挂载</td><td>book_share：主账号把某本账以某角色挂给子账号，只读、可收回。</td></tr>
+    <tr><td class="k">口径翻译</td><td>同一账本按身份输出明细 / 摘要 / 结论三级粒度，长辈端降为大字摘要。</td></tr>
+    <tr><td class="k">证据链</td><td>结论 → 凭证号 → 原始单据 OCR → 比对规则 → 时间戳，五环闭合。</td></tr>
+  </table>
+
+  <h3>B.2 参考文献与数据来源</h3>
+  <table>
+    <tr><th style="width:8%">序号</th><th>文献 / 来源</th><th style="width:26%">用途</th></tr>
+    <tr><td class="k">1</td><td>《财政部 税务总局关于增值税法施行后增值税优惠政策衔接事项的公告》（2026 年第 10 号）</td><td>Q3 增值税 1% 征收率依据</td></tr>
+    <tr><td class="k">2</td><td>国家统计局 / 国家老龄事业发展公报（2025 年末）</td><td>60 岁及以上 3.2338 亿、23.0%</td></tr>
+    <tr><td class="k">3</td><td>市场监管总局个体工商户公开数据</td><td>1.25 亿户、近七成、带动就业约 3 亿</td></tr>
+    <tr><td class="k">4</td><td>《个人信息保护法》《数据安全法》</td><td>最小必要、授权、可撤回</td></tr>
+    <tr><td class="k">5</td><td>《金融消费者权益保护实施办法》</td><td>不推荐、不承诺、风险提示</td></tr>
+    <tr><td class="k">6</td><td>《反电信网络诈骗法》</td><td>96110 指引、诈骗话术拦截</td></tr>
+  </table>
+  <p class="tiny">建议补充 2 篇行业报告（小微企业数字化、适老化金融），并在提交前核对政策文号与生效时间。</p>
+
+  <h3>B.3 五分钟演示脚本</h3>
+  <table>
+    <tr><th style="width:8%">时间</th><th style="width:22%">动作</th><th>要展示的证据</th></tr>
+    <tr><td class="k">0:00</td><td>打开单 HTML，展示看板</td><td>净流入 57,500、Q3 增值税 3,425 同屏可见</td></tr>
+    <tr><td class="k">0:40</td><td>点"9 月对账与税负"</td><td>3 项待核对、凭证编号、OCR 置信度</td></tr>
+    <tr><td class="k">1:30</td><td>问"这个季度要交多少增值税"</td><td>3,425 与条款文号，五段式输出</td></tr>
+    <tr><td class="k">2:20</td><td>切到我的账户，点"计算过程"</td><td>健康分 70 的三维算式与自检</td></tr>
+    <tr><td class="k">3:10</td><td>切家庭模式 → 长辈关怀</td><td>同一套数据的大字只读出口</td></tr>
+    <tr><td class="k">3:50</td><td>打开成员与权限，展示越权拒答</td><td>薪酬 / 明细 / 卡号不可见</td></tr>
+    <tr><td class="k">4:30</td><td>问"推荐高收益理财"与"安全账户"</td><td>拒答卡片 + 诈骗拦截 + 审计留痕</td></tr>
+  </table>
+
+  <h3>B.4 评委问答准备</h3>
+  <table>
+    <tr><th style="width:34%">可能的追问</th><th>回答要点</th></tr>
+    <tr><td class="k">你们的数字凭什么可信？</td><td>规则引擎算、页面给算式、一键自检、附录 A 三方对齐；欢迎现场任取一个数复算。</td></tr>
+    <tr><td class="k">和银行 App 有什么区别？</td><td>银行只看本行；财小全做跨入口归集与可举证结论，且提供家庭授权闭环。</td></tr>
+    <tr><td class="k">数据上传到哪里？</td><td>原始数据与 Key 存本机；在线提问只发当前账本摘要；离线模式不发任何数据。</td></tr>
+    <tr><td class="k">健康分是征信分吗？</td><td>不是。内部可解释模型，公式公开，不接入征信，不构成授信依据。</td></tr>
+    <tr><td class="k">怎么赚钱？会不会推荐产品？</td><td>订阅费 + 技术服务费 + 白标授权；不进入交易环节，不做分佣。</td></tr>
+    <tr><td class="k">真实数据从哪来？</td><td>MVP 接银行开放 API 与票据 OCR；当前为脱敏模拟，已在 3.8 列明边界。</td></tr>
+  </table>
+
+  <div class="ok" style="margin-top:4mm"><span class="t">材料一致性声明</span>本册正文、附录 A、Demo 页面三处的关键数字完全一致；截图均为 2026-10-22 真实运行结果；8 组测试的发现与修复已如实记录。若后续修改任一数字，须同步更新三处并重跑自检。</div>
+
+  <div class="foot"><span>财小全 · 项目书</span><span class="pn"></span></div>
+</section>
+
+</body>
+</html>
